@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 from django.core.cache import cache
 from rest_framework.test import APIClient
@@ -5,6 +7,7 @@ from rest_framework.test import APIClient
 
 @pytest.fixture(autouse=True)
 def _test_settings(settings):
+    settings.GOOGLE_PAY_SIMULATED = True
     settings.THROTTLE_RATES = dict.fromkeys(settings.THROTTLE_RATES)  # all off
 
 
@@ -23,6 +26,10 @@ class Client(APIClient):
 
     def patch_json(self, path, data=None, **extra):
         return self.patch(path, data or {}, format="json", **extra)
+
+    def pay(self, path, data=None, key=None):
+        """POST that moves money: sends an Idempotency-Key."""
+        return self.post_json(path, data, HTTP_IDEMPOTENCY_KEY=key or str(uuid.uuid4()))
 
 
 @pytest.fixture
