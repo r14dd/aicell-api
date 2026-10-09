@@ -117,7 +117,8 @@ it (in Azerbaijani).
 
 **Not real yet.** Usage comes from seed data (there is no network feed), top-ups
 do not reach a payment provider, sign-in (OTP) is not built, and the support
-inbox assistant still answers by keywords in English. See
+inbox assistant needs a Gemini key (`GEMINI_API_KEY`); without one it answers by
+keywords in English. See
 [Known limitations](#known-limitations).
 
 ## Run it
@@ -202,7 +203,7 @@ for now:
 
 `DEMO_AUTH` is off by default and does not follow `DJANGO_DEBUG`. With it on,
 anyone who can reach the server can use that account, so keep it for local work
-and demos. `.env.example` enables it.
+and demos. `.env.example` leaves it off; set `DEMO_AUTH=true` in `.env` to use it.
 
 ## Languages
 
@@ -253,7 +254,7 @@ savings come from rows an hourly task recomputes (`api/usage/insights.py`).
 |---|---|
 | `ready` | Implemented and tested |
 | `:todo` | Routed at its final path; answers `501 not_implemented` with the notice text the app shows |
-| `:dummy` | The assistant: works end to end with a keyword responder |
+| `:dummy` | The assistant: works end to end; Gemini when `GEMINI_API_KEY` is set, a keyword responder otherwise |
 
 `/api/health/` and `/api/health/ready/` exist in addition to the documented
 endpoints.
@@ -264,6 +265,10 @@ endpoints.
 config/            settings, celery, admin menu
 api/common/        errors, auth, routing, schema, throttling, cache, health, admin bases
 api/<domain>/      urls, views, services, catalogue, texts, models, translation, admin, tasks
+api/usage/         usage per day and app, recommendations, personal offers, statistics
+api/insights/      detectors, metrics, offers, advisor
+api/laya/          plan and narrate; Gemini or Claude brain, keyword fallback, number guard
+api/assistant/     inbox assistant: text, SSE, voice; Gemini agent, knowledge, per-subscriber memory
 api/seeding/       catalogue data, translations, seeded subscribers, staff roles
 locale/            az and ru catalogues
 docs/api/          endpoint reference
@@ -378,7 +383,10 @@ DATABASE_URL=postgres://user:password@127.0.0.1:5432/name uv run pytest tests/te
 | `test_statistics.py` | every statistics figure against a hand-built data set; period boundaries; filters; 403 without the permission; a query-count ceiling |
 | `test_insights.py` | the figures; each detector firing and not firing on hand-built data; one open insight per kind; the delivery policy; the advisor's arithmetic |
 | `test_tariff_actions.py` | subscribe, change, renew and redesign; nothing changes without the money |
-| `test_throttling.py`, `test_health.py`, `test_security.py` | limits, probes, deployment settings |
+| `test_laya.py` | plan and narrate, the number guard, both brains |
+| `test_demo_login.py` | the passwordless admin login, off by default |
+| `test_billing.py`, `test_products.py`, `test_sim.py`, `test_content.py`, `test_upgrade.py` | the money, packs, SIM and content endpoints |
+| `test_throttling.py`, `test_health.py`, `test_security.py` | limits, probes, deployment settings, compose passes every setting |
 
 ## Operations
 
@@ -433,6 +441,13 @@ Read from the environment, and from `.env` when present.
 | `SEED_STAFF_PASSWORD` | `aicell-demo` | change it on anything public |
 | `THROTTLE_*` | see Limits | |
 | `CATALOGUE_CACHE_SECONDS` | `300` | |
+| `DEMO_ADMIN_LOGIN` | `false` | one passwordless button per seeded staff account on the admin login page |
+| `GEMINI_API_KEY` | none | the assistant and Laya use Gemini when set |
+| `GEMINI_MODEL`, `GEMINI_STT_MODEL`, `GEMINI_TTS_MODEL`, `GEMINI_EMBED_MODEL`, `GEMINI_VOICE` | see `config/settings.py` | text, speech-to-text, text-to-speech, embeddings, voice name |
+| `ANTHROPIC_API_KEY` | none | Laya uses Claude when set and no Gemini key is |
+| `LAYA_PLAN_MODEL`, `LAYA_NARRATE_MODEL` | Sonnet / Haiku | the Claude brain's models |
+| `MILVUS_URI` | `data/knowledge.db` | knowledge and memory store: a file (Milvus Lite) or `http://milvus:19530` |
+| `WEB_PORT`, `REDIS_PORT` | `8010`, `63799` | published ports in Docker |
 | `INSIGHTS_QUIET_HOURS` | `true` | `false` delivers insights at night too (23:00 to 08:00 Asia/Baku) |
 | `ASSISTANT_RESPONDER` | `api.assistant.responder.respond` | dotted path to a callable |
 
@@ -447,6 +462,8 @@ behind TLS.
 
 ## Known limitations
 
+A pre-deploy check of the demo configuration is in [docs/deploy-readiness.md](docs/deploy-readiness.md) (in Azerbaijani).
+
 - Insights rest on what is recorded per day. Signals that need hourly traffic
   (Teams during work hours, a gigabyte within an hour) are not built. How much
   of a pack is used is not tracked either: "a pack was used up in three days"
@@ -460,9 +477,9 @@ behind TLS.
 - The cost model is simple: one change per candidate, the window treated as one
   billing month, the tariff fee taken from the tariff record, roaming minutes
   not priced.
-- The assistant calls no model; it matches keywords and answers in English.
-  `ASSISTANT_RESPONDER` points at the callable, so a model-backed one with the
-  same signature can replace it.
+- Without `GEMINI_API_KEY` the assistant matches keywords and answers in
+  English. `ASSISTANT_RESPONDER` points at the callable, so another responder
+  with the same signature can replace it.
 - Some catalogue content is placeholder: where the docs abbreviate a list with
   `…`, the missing entries were written in the documented shape and are
   ordinary rows now.
@@ -489,5 +506,6 @@ Where the docs leave a shape open: `stories/` and `internet/top/` return
 ## Stack
 
 Django 5.2, Django REST framework, SimpleJWT, drf-spectacular, django-unfold,
-django-modeltranslation, Celery, Redis, SQLite, gunicorn, WhiteNoise, pytest.
+django-modeltranslation, Celery, Redis, SQLite, Gemini and Claude (Laya), Milvus,
+gunicorn, WhiteNoise, pytest.
 All data is synthetic.
