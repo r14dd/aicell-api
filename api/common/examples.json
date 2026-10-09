@@ -42,13 +42,13 @@
       {
         "content": "How much internet do I have left?",
         "created_at": "2026-10-06T14:00:00Z",
-        "id": 3,
+        "id": 1,
         "role": "user"
       },
       {
         "content": "You have 7.20 GB left until 25 October.",
         "created_at": "2026-10-06T14:01:00Z",
-        "id": 4,
+        "id": 2,
         "role": "assistant",
         "route": "usage"
       }
@@ -65,7 +65,7 @@
       {
         "brand": "mastercard",
         "expiry": "09/28",
-        "id": 2,
+        "id": 1,
         "is_default": true,
         "last4": "4471"
       }
@@ -119,7 +119,7 @@
     },
     "results": [
       {
-        "id": 2,
+        "id": 1,
         "last_amount": "10.00",
         "last_topped_at": "2026-10-08T09:00:00Z",
         "name": "gamer_01"
@@ -132,13 +132,13 @@
       {
         "amount": "15.00",
         "created_at": "2026-10-02T12:39:00Z",
-        "id": 4,
+        "id": 2,
         "method": "card"
       },
       {
         "amount": "1.00",
         "created_at": "2026-10-02T12:34:00Z",
-        "id": 3,
+        "id": 1,
         "method": "card"
       }
     ]
@@ -149,14 +149,14 @@
       {
         "amount": "15.00",
         "created_at": "2026-10-02T12:39:00Z",
-        "id": 4,
+        "id": 2,
         "kind": "top_up",
         "title": "Number balance"
       },
       {
         "amount": "1.00",
         "created_at": "2026-10-02T12:34:00Z",
-        "id": 3,
+        "id": 1,
         "kind": "top_up",
         "title": "Number balance"
       }
@@ -2224,7 +2224,7 @@
     ],
     "period_left": {
       "days": 15,
-      "hours": 16
+      "hours": 15
     },
     "remaining": {
       "data_gb": "7.20",
@@ -2264,11 +2264,206 @@
     ],
     "tariff": "IsteSen"
   },
+  "GET usage.recommend": {
+    "current_monthly_cost": "19.10",
+    "fits": false,
+    "insights": [
+      {
+        "category": "social",
+        "sells": [
+          {
+            "action": {
+              "action": "navigate",
+              "label": "See the pack",
+              "to": "/internet-packs/instagram-facebook"
+            },
+            "kind": "social_pack",
+            "target_id": "instagram-facebook",
+            "title": "Instagram & Facebook"
+          },
+          {
+            "action": {
+              "action": "navigate",
+              "label": "See the pack",
+              "to": "/internet-packs/tiktok"
+            },
+            "kind": "social_pack",
+            "target_id": "tiktok",
+            "title": "TikTok"
+          },
+          {
+            "action": {
+              "action": "navigate",
+              "label": "Redesign my tariff",
+              "to": "/my-tariff/redesign"
+            },
+            "kind": "redesign",
+            "target_id": "istesen",
+            "title": "Social network GB in your tariff"
+          }
+        ],
+        "share": 0.6,
+        "text": "Social networks: 60% of your data"
+      }
+    ],
+    "message": "You paid 19.10 ₼ in the last 30 days; with IsteSen, redesigned to your usage it would have been 17.60 ₼",
+    "offer": {
+      "action": {
+        "action": "navigate",
+        "label": "See the offer",
+        "to": "/offers/9001"
+      },
+      "expires_at": "2026-10-23T12:04:43Z",
+      "id": 9001,
+      "kind": "social_pack",
+      "normal_price": "3.00",
+      "offer_price": "2.00",
+      "reason": "Instagram & Facebook is most of your internet: 5 GB for less",
+      "status": "shown",
+      "target_id": "instagram-facebook:5gb",
+      "title": "Instagram & Facebook 5 GB"
+    },
+    "recommendations": [
+      {
+        "action": {
+          "action": "navigate",
+          "label": "Redesign my tariff",
+          "to": "/my-tariff/redesign"
+        },
+        "current_monthly_cost": "19.10",
+        "evidence": [
+          "Instagram & Facebook 55% of data",
+          "12.7 GB used in 30 days, tariff includes 16 GB"
+        ],
+        "kind": "redesign",
+        "projected_monthly_cost": "17.60",
+        "saving": "1.50",
+        "target_id": "istesen",
+        "title": "IsteSen, redesigned to your usage",
+        "values": {
+          "calls": 30,
+          "instagramFb": 5,
+          "internet": 5,
+          "tiktok": 1,
+          "youtube": 2
+        }
+      }
+    ],
+    "segment": {
+      "key": "balanced",
+      "label": "Balanced use"
+    },
+    "window_days": 30
+  },
+  "GET usage.summary": {
+    "daily_average": {
+      "data_mb": 433,
+      "minutes": 0.7,
+      "sms": 0.2
+    },
+    "data_by_app": [
+      {
+        "category": "social",
+        "data_mb": 7145,
+        "key": "instagram_facebook",
+        "label": "Instagram & Facebook",
+        "share": 0.55
+      },
+      {
+        "category": "other",
+        "data_mb": 2551,
+        "key": "other",
+        "label": "Other",
+        "share": 0.2
+      },
+      {
+        "category": "video",
+        "data_mb": 1922,
+        "key": "youtube",
+        "label": "YouTube",
+        "share": 0.15
+      },
+      {
+        "category": "messaging",
+        "data_mb": 751,
+        "key": "whatsapp",
+        "label": "WhatsApp",
+        "share": 0.06
+      },
+      {
+        "category": "social",
+        "data_mb": 631,
+        "key": "tiktok",
+        "label": "TikTok",
+        "share": 0.05
+      }
+    ],
+    "data_by_category": [
+      {
+        "data_mb": 7776,
+        "key": "social",
+        "label": "Social networks",
+        "share": 0.6
+      },
+      {
+        "data_mb": 2551,
+        "key": "other",
+        "label": "Other",
+        "share": 0.2
+      },
+      {
+        "data_mb": 1922,
+        "key": "video",
+        "label": "Video",
+        "share": 0.15
+      },
+      {
+        "data_mb": 751,
+        "key": "messaging",
+        "label": "Messaging",
+        "share": 0.06
+      }
+    ],
+    "data_ran_out": null,
+    "headline": "12.7 GB, 20 min. and 6 SMS in 30 days; 19.10 ₼ paid",
+    "segment": {
+      "key": "balanced",
+      "label": "Balanced use"
+    },
+    "services": [],
+    "spend": {
+      "addon_packs": {
+        "amount": "0.00",
+        "count": 0
+      },
+      "other": "0.00",
+      "roaming": {
+        "amount": "0.00",
+        "count": 0
+      },
+      "tariff_fee": "19.10",
+      "total": "19.10"
+    },
+    "totals": {
+      "data_gb": "12.70",
+      "data_mb": 13000,
+      "minutes": 20,
+      "roaming_data_mb": 0,
+      "roaming_days": 0,
+      "roaming_minutes": 0,
+      "sms": 6
+    },
+    "window": {
+      "days": 30,
+      "from": "2026-09-10",
+      "to": "2026-10-09"
+    }
+  },
   "GET users.me": {
     "app_version": null,
     "display_msisdn": "051 664 33 42",
     "display_name": "Qüdrət Abidzadə",
-    "id": 6,
+    "id": 1,
     "is_premium": false,
     "language": "en",
     "line_type": "prepaid",
@@ -2293,7 +2488,7 @@
     }
   },
   "PATCH sim.roaming_update": {
-    "changed_at": "2026-10-09T11:40:02Z",
+    "changed_at": "2026-10-09T12:04:43Z",
     "enabled": true,
     "texts": {
       "packs_title": "Roaming packs",
@@ -2324,7 +2519,7 @@
     }
   },
   "POST assistant.conversation_create": {
-    "created_at": "2026-10-09T11:40:02Z",
+    "created_at": "2026-10-09T12:04:43Z",
     "external_id": "#3513324",
     "id": 3513324,
     "status": "open"
@@ -2337,18 +2532,18 @@
     },
     "message": {
       "content": "You have 7.20 GB left until 25 October.",
-      "created_at": "2026-10-09T11:40:02Z",
-      "id": 6,
+      "created_at": "2026-10-09T12:04:43Z",
+      "id": 4,
       "role": "assistant",
       "route": "usage"
     },
-    "user_message_id": 5
+    "user_message_id": 3
   },
   "POST assistant.rate": {
     "message": "Thanks! Your rating helps us a lot"
   },
   "POST billing.steam_top_up": {
-    "balance": "71.21",
+    "balance": "6.21",
     "steam_top_up": {
       "account": "gamer_01",
       "amount": "10.00",
@@ -2356,26 +2551,26 @@
     },
     "transaction": {
       "amount": "-10.00",
-      "id": 8,
+      "id": 3,
       "title": "Steam balance gamer_01"
     }
   },
   "POST billing.top_up_akart": {
-    "balance": "61.21",
+    "balance": "36.21",
     "saved_akart": {
       "id": 1,
       "msisdn": "994516643342"
     },
     "top_up": {
       "amount": "20.00",
-      "created_at": "2026-10-09T11:40:02Z",
-      "id": 6,
+      "created_at": "2026-10-09T12:04:43Z",
+      "id": 3,
       "method": "akart",
       "status": "completed"
     },
     "transaction": {
       "amount": "20.00",
-      "id": 6,
+      "id": 3,
       "title": "Number balance"
     }
   },
@@ -2383,29 +2578,29 @@
     "balance": "41.21",
     "top_up": {
       "amount": "25.00",
-      "created_at": "2026-10-09T11:40:02Z",
-      "id": 5,
+      "created_at": "2026-10-09T12:04:43Z",
+      "id": 3,
       "method": "card",
       "status": "completed"
     },
     "transaction": {
       "amount": "25.00",
-      "id": 5,
+      "id": 3,
       "title": "Number balance"
     }
   },
   "POST billing.top_up_google_pay": {
-    "balance": "81.21",
+    "balance": "36.21",
     "top_up": {
       "amount": "20.00",
-      "created_at": "2026-10-09T11:40:02Z",
-      "id": 7,
+      "created_at": "2026-10-09T12:04:43Z",
+      "id": 3,
       "method": "google_pay",
       "status": "completed"
     },
     "transaction": {
       "amount": "20.00",
-      "id": 7,
+      "id": 3,
       "title": "Number balance"
     }
   },
@@ -2426,66 +2621,218 @@
   },
   "POST packs.internet_purchase": {
     "activation": {
-      "activated_at": "2026-10-09T11:40:02Z",
+      "activated_at": "2026-10-09T12:04:43Z",
       "auto_renew": false,
-      "expires_at": "2026-10-09T12:40:02Z",
+      "expires_at": "2026-10-09T13:04:43Z",
       "id": 1,
       "label": "Unlimited 1 hour",
       "pack_id": "unlimited-1h",
       "status": "active"
     },
-    "balance": "70.22",
+    "balance": "15.22",
     "transaction": {
       "amount": "-0.99",
-      "id": 9,
+      "id": 3,
       "title": "Unlimited 1 hour pack"
     }
   },
   "POST packs.roaming_purchase": {
     "activation": {
-      "activated_at": "2026-10-09T11:40:02Z",
+      "activated_at": "2026-10-09T12:04:43Z",
       "auto_renew": false,
-      "expires_at": "2026-10-12T11:40:02Z",
-      "id": 3,
+      "expires_at": "2026-10-12T12:04:43Z",
+      "id": 1,
       "label": "Roaming 500 MB",
       "pack_id": "r-500mb",
       "status": "active"
     },
-    "balance": "50.32",
+    "balance": "6.21",
     "transaction": {
       "amount": "-10.00",
-      "id": 11,
+      "id": 3,
       "title": "Roaming 500 MB pack"
     }
   },
   "POST packs.social_activate": {
     "activation": {
-      "activated_at": "2026-10-09T11:40:02Z",
+      "activated_at": "2026-10-09T12:04:43Z",
       "auto_renew": true,
-      "expires_at": "2026-11-08T11:40:02Z",
-      "id": 2,
+      "expires_at": "2026-11-08T12:04:43Z",
+      "id": 1,
       "label": "Tehsil 100 GB",
       "pack_id": "tehsil",
       "status": "active"
     },
-    "balance": "60.32",
+    "balance": "6.31",
     "transaction": {
       "amount": "-9.90",
-      "id": 10,
+      "id": 3,
       "title": "Tehsil 100 GB"
     }
   },
   "POST sim.service_subscribe": {
-    "balance": "49.42",
+    "balance": "15.31",
     "subscription": {
       "id": 1,
-      "next_payment_at": "2026-11-08T11:40:02Z",
+      "next_payment_at": "2026-11-08T12:04:43Z",
       "service": "missed-call",
       "status": "active"
     },
     "transaction": {
       "amount": "-0.90",
       "title": "Buraxılmış zəng service"
+    }
+  },
+  "POST tariffs.change_to": {
+    "balance": "7.21",
+    "tariff": {
+      "activated_at": "2026-10-09T16:04:43+04:00",
+      "family": "digimax",
+      "next_payment_at": "2026-11-06T16:04:43+04:00",
+      "plan_id": "digimax-3gb",
+      "price": "9.00",
+      "title": "DigiMax 3GB",
+      "validity_days": 28
+    },
+    "transaction": {
+      "amount": "-9.00",
+      "id": 3,
+      "title": "DigiMax 3GB tariff"
+    }
+  },
+  "POST tariffs.redesign_save": {
+    "estimate": "21.00",
+    "pricing": {
+      "base": "19.10",
+      "per_gb": "0.50",
+      "per_minute": "0.02"
+    },
+    "sliders": [
+      {
+        "key": "internet",
+        "label": "Internet GB",
+        "max": 16,
+        "min": 0,
+        "step": 1,
+        "value": 10
+      },
+      {
+        "key": "calls",
+        "label": "Local calls min.",
+        "max": 350,
+        "min": 30,
+        "step": 10,
+        "value": 100
+      },
+      {
+        "key": "instagramFb",
+        "label": "Instagram & FB GB",
+        "max": 5,
+        "min": 0,
+        "step": 1,
+        "value": 5
+      },
+      {
+        "key": "youtube",
+        "label": "YouTube GB",
+        "max": 10,
+        "min": 0,
+        "step": 1,
+        "value": 2
+      },
+      {
+        "key": "tiktok",
+        "label": "TikTok GB",
+        "max": 10,
+        "min": 0,
+        "step": 1,
+        "value": 0
+      }
+    ]
+  },
+  "POST tariffs.renew": {
+    "balance": "30.90",
+    "tariff": {
+      "activated_at": "2026-09-24T00:00:00+04:00",
+      "family": "istesen",
+      "next_payment_at": "2026-11-08T16:04:43+04:00",
+      "plan_id": null,
+      "price": "19.10",
+      "title": "IsteSen",
+      "validity_days": 30
+    },
+    "transaction": {
+      "amount": "-19.10",
+      "id": 3,
+      "title": "IsteSen tariff renewal"
+    }
+  },
+  "POST tariffs.subscribe": {
+    "balance": "4.21",
+    "tariff": {
+      "activated_at": "2026-10-09T16:04:43+04:00",
+      "family": "digimax",
+      "next_payment_at": "2026-11-06T16:04:43+04:00",
+      "plan_id": "digimax-5",
+      "price": "12.00",
+      "title": "DigiMax 5GB",
+      "validity_days": 28
+    },
+    "transaction": {
+      "amount": "-12.00",
+      "id": 3,
+      "title": "DigiMax 5GB tariff"
+    }
+  },
+  "POST usage.offer_accept": {
+    "activation": {
+      "activated_at": "2026-10-09T12:04:43Z",
+      "auto_renew": false,
+      "expires_at": "2026-11-08T12:04:43Z",
+      "id": 1,
+      "label": "Instagram & Facebook 5 GB",
+      "pack_id": "instagram-facebook",
+      "status": "active"
+    },
+    "balance": "14.21",
+    "offer": {
+      "action": {
+        "action": "navigate",
+        "label": "See the offer",
+        "to": "/offers/9001"
+      },
+      "expires_at": "2026-10-23T12:04:43Z",
+      "id": 9001,
+      "kind": "social_pack",
+      "normal_price": "3.00",
+      "offer_price": "2.00",
+      "reason": "Instagram & Facebook is most of your internet: 5 GB for less",
+      "status": "accepted",
+      "target_id": "instagram-facebook:5gb",
+      "title": "Instagram & Facebook 5 GB"
+    },
+    "transaction": {
+      "amount": "-2.00",
+      "id": 3,
+      "title": "Instagram & Facebook 5 GB"
+    }
+  },
+  "POST usage.offer_decline": {
+    "offer": {
+      "action": {
+        "action": "navigate",
+        "label": "See the offer",
+        "to": "/offers/9001"
+      },
+      "expires_at": "2026-10-23T12:04:43Z",
+      "id": 9001,
+      "kind": "social_pack",
+      "normal_price": "3.00",
+      "offer_price": "2.00",
+      "reason": "Instagram & Facebook is most of your internet: 5 GB for less",
+      "status": "declined",
+      "target_id": "instagram-facebook:5gb",
+      "title": "Instagram & Facebook 5 GB"
     }
   }
 }

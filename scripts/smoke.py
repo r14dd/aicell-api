@@ -32,6 +32,7 @@ PARAMS = {
     "sim": {"<slug>": "missed-call"},
     "content": {"<key>": "especially", "<id>": "wingz", "<slug>": "ninja-saga-2"},
     "assistant": {"<id>": "3513323"},
+    "usage": {"<id>": "9001"},
 }
 # Bodies of the implemented writes; everything else is sent `{}`.
 BODIES = {

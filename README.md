@@ -50,10 +50,24 @@ uv run python manage.py seed
 uv run python manage.py runserver
 ```
 
-`seed` fills the catalogue (in three languages), the demo subscriber
-`994516643342` and the staff accounts. Running it again keeps existing rows, so
-edits made in the admin survive. `--refresh` restores the seeded catalogue rows
-and `--reset` recreates the demo subscriber.
+`seed` fills the catalogue (in three languages), five subscribers with a 30-day
+usage story each and the staff accounts. Running it again keeps existing rows,
+so edits made in the admin survive. `--refresh` restores the seeded catalogue
+rows and `--reset` recreates the five subscribers. `manage.py demo_token
+<msisdn>` prints a token for any of them.
+
+| Number | Story |
+|---|---|
+| `994516643342` | Demo subscriber on IsteSen: moderate use, more than half of it Instagram |
+| `994501000001` | Heavy YouTube user on DigiMax 5GB who keeps buying add-on packs |
+| `994501000002` | Calls only: has never used mobile data |
+| `994501000003` | Frequent roamer paying with small roaming packs |
+| `994501000004` | Balanced use: the current plan fits |
+
+`seed --crowd 300` also keeps 300 synthetic subscribers (`994559000001`…) with
+90 days of usage, top-ups and pack purchases, so the usage statistics have
+something to show. The same number always gives the same crowd; `--crowd 0`
+removes it.
 
 ## Signing in
 
@@ -103,6 +117,16 @@ Each role gets its own menu and dashboard. Transactions, top-ups and
 idempotency keys are read-only for everyone, because money changes only through
 the API.
 
+**Usage statistics** (`/admin/usage/dailyusage/statistics/`, menu "Usage and
+offers") shows how subscribers use the network: headline figures with the
+change against the previous period, data and call minutes per day, data by
+category and app, segments, personal-offer results and the top subscribers.
+The period, segment and line type are in the query string, so a filtered view
+is a link. It is open to accounts that may view usage data (`superadmin` and
+`support`), who also get a "Usage" tab on a subscriber's page. Every figure is
+one aggregation in the database (`api/usage/statistics.py`); segments and
+savings come from rows an hourly task recomputes (`api/usage/insights.py`).
+
 ## Endpoint status
 
 | Tag | Meaning |
@@ -120,7 +144,7 @@ endpoints.
 config/            settings, celery, admin menu
 api/common/        errors, auth, routing, schema, throttling, cache, health, admin bases
 api/<domain>/      urls, views, services, catalogue, texts, models, translation, admin, tasks
-api/seeding/       catalogue data, translations, demo subscriber, staff roles
+api/seeding/       catalogue data, translations, seeded subscribers, staff roles
 locale/            az and ru catalogues
 docs/api/          endpoint reference
 scripts/smoke.py   check of a running deployment
@@ -137,6 +161,35 @@ know:
 - A handler is described once with `@doc(...)`; `route()` builds the view, its
   permissions, throttling and Swagger entry from that.
 - The catalogue lives in the database. The seed files only fill empty tables.
+
+## Usage and recommendations
+
+`api/usage/` keeps usage per day and per app, builds a 30-day profile from it
+and turns the profile into ranked recommendations and personal offers
+([docs/api/usage.md](docs/api/usage.md)).
+
+- Every number is arithmetic. For each candidate (another plan, the current
+  plan plus one pack, other roaming packs, IsteSen slider values) the last 30
+  days are re-priced with the catalogue's included amounts and out-of-package
+  prices and compared with what was actually paid. No model is called. When
+  nothing is cheaper the answer says the plan fits.
+- Apps and categories live in one mapping (`api/usage/taxonomy.py`), with what
+  can be sold for each category. A category with nothing to sell is reported
+  as an insight only.
+- Personal offers come from rules staff define in the admin by segment; a
+  scheduled task applies them and announces each with a notification.
+- `api.usage.assistant.context(subscriber)` returns the profile, the top
+  recommendations and the open offer as one small dict for a model-backed
+  responder. The keyword responder already answers "which tariff suits me"
+  from the same numbers.
+
+## Tariffs
+
+`subscribe/`, `change/` and `my/renew/` charge the wallet and start a full
+period: remaining amounts go back to the total and the payment dates move on.
+`my/redesign/` stores the IsteSen slider values without charging; the next
+renewal applies them. `my/usage/` reports the tariff plus active internet
+packs, as the aggregation sheet describes.
 
 ## Money
 
@@ -176,6 +229,9 @@ uv run pytest
 | `test_swagger.py` | schema validity, recorded examples against live answers |
 | `test_admin.py` | every model's pages open, roles see their share, money is read-only |
 | `test_catalogue.py` | admin edits reach the API; the cache is per language |
+| `test_usage.py` | profile and top recommendation of each seeded persona; cost arithmetic by hand; offers charge once |
+| `test_statistics.py` | every statistics figure against a hand-built data set; period boundaries; filters; 403 without the permission; a query-count ceiling |
+| `test_tariff_actions.py` | subscribe, change, renew and redesign; nothing changes without the money |
 | `test_throttling.py`, `test_health.py`, `test_security.py` | limits, probes, deployment settings |
 
 ## Operations
@@ -202,7 +258,8 @@ cache is dropped when any catalogue row is saved or deleted. Subscriber data is
 never cached.
 
 **Scheduled work** (Celery beat): expired pack activations are switched off every
-minute; idempotency keys older than `IDEMPOTENCY_KEY_DAYS` are purged hourly.
+minute; personal offers are created and expired every 15 minutes and subscriber
+insights recomputed hourly; idempotency keys older than `IDEMPOTENCY_KEY_DAYS` are purged hourly.
 
 **Swagger examples.** Response examples come from `api/common/examples.json`,
 recorded from real answers by `manage.py record_examples` (it runs in a
@@ -242,6 +299,13 @@ behind TLS.
 
 ## Known limitations
 
+- Usage is synthetic. No network feed exists; the usage histories are written
+  by the seed, and nothing decrements a tariff's remaining amounts.
+  Recommendations are real arithmetic over that data, so they are only as
+  realistic as the seeded stories and the placeholder prices.
+- The cost model is simple: one change per candidate, the window treated as one
+  billing month, the tariff fee taken from the tariff record, roaming minutes
+  not priced.
 - The assistant calls no model; it matches keywords and answers in English.
   `ASSISTANT_RESPONDER` points at the callable, so a model-backed one with the
   same signature can replace it.
@@ -255,12 +319,12 @@ behind TLS.
 
 ## Where the server departs from the docs
 
-The docs contradict themselves in three places; the server picks one side:
+The docs contradict themselves in two places and one example was read differently; the server picks one side:
 
 | Docs | Server |
 |---|---|
 | `top-ups/` has ids like `"h01"`, `top-up/card/` returns `"id": 16` | integer ids everywhere |
-| `my/usage/` shows `data_total_gb: "20"`, `my/` shows a 16 GB total | `"16"`, from the same row as `my/` |
+| `my/usage/` shows `data_total_gb: "20"`, `my/` shows a 16 GB total | the tariff plus active internet packs, as the aggregation sheet says: `"16"` for the seeded subscriber, `"21"` with a 5 GB pack |
 | `renewal_label` says `00:00`, the next payment date says `08:00+04:00` | the label follows the payment date: `08:00` |
 
 Where the docs leave a shape open: `stories/` and `internet/top/` return
