@@ -28,7 +28,7 @@ class DailyUsageAdmin(ReadOnlyAdmin):
         "call_minutes",
         "sms",
         "roaming_data_mb",
-        "roaming_minutes",
+        "overage_mb",
     )
     list_filter = (("day", RangeDateFilter), ("subscriber", AutocompleteSelectFilter))
     search_fields = SUBSCRIBER_SEARCH

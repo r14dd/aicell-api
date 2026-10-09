@@ -47,6 +47,8 @@ class Day:
     sms: int = 0
     roaming_data_mb: int = 0
     roaming_minutes: int = 0
+    overage_mb: int = 0
+    overage_amount: Decimal = Decimal("0")
 
 
 @transaction.atomic
@@ -72,6 +74,8 @@ def record_days(subscriber, days: list[Day]) -> None:
             sms=entry.sms,
             roaming_data_mb=entry.roaming_data_mb,
             roaming_minutes=entry.roaming_minutes,
+            overage_mb=entry.overage_mb,
+            overage_amount=entry.overage_amount,
         )
         for entry in days
     )
