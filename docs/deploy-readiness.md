@@ -133,6 +133,7 @@ docker compose cp web:/app/data/backup.sqlite3 ./backup-$(date +%F).sqlite3
 | `CORS_ALLOWED_ORIGINS` | boş | brauzerdən çağıran saytların origin-ləri (mobil tətbiqə lazım deyil) | boş qalsa brauzer başqa origin-dən gələn sorğuları bloklayır; mobil tətbiqə təsir etmir |
 | `SECURE_SSL_REDIRECT` | `false` | TLS arxasında `true` | `false` qalsa HTTP-dən HTTPS-ə yönləndirmə və HSTS olmur. TLS olmadan `true` etsəniz hər sorğu `301` ilə işləməyən `https://`-ə gedir (health yolları istisna) |
 | `SECURE_COOKIES` | `false` | TLS arxasında `true` | `false` qalsa admin sessiya kuki-si şifrələnməmiş kanalla da göndərilir. TLS olmadan `true` etsəniz admin panelə girmək olmur |
+| `DEMO_ADMIN_LOGIN` | `false` | `true` (demo) | `true`: admin login səhifəsində dörd düymə (`superadmin`, `content`, `support`, `finance`) şifrəsiz daxil edir. Səhifəni açan hər kəs superadmin kimi girə bilər |
 | `GOOGLE_PAY_SIMULATED` | `true` | `true` (qərar) | `true`: `payment_token: "simulated"` ilə balans artır (real ödəniş yoxdur). `false`: Google Pay endpoint-i `501` qaytarır, çünki real token yoxlaması yazılmayıb |
 | `ANTHROPIC_API_KEY` | boş | Laya model ilə işləməlidirsə açar | boş: Laya açar sözlərlə cavab verir (`narrate` hər insight üçün eyni ümumi cümləni deyir). Yoxlama zamanı bu dəyişən konteynerə ötürülmürdü, düzəldildi (`21cbd68`) |
 | `INSIGHTS_QUIET_HOURS` | `true` | demo gecə göstəriləcəksə `false` | `true`: 23:00–08:00 (Bakı) arasında `GET /api/insights/` boş siyahı qaytarır |
