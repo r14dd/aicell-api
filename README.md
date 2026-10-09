@@ -1,13 +1,124 @@
 # aicell-api
 
-Backend API for the aicell mobile app, a mobile operator's self-service
-product: balance and top-ups, tariffs, packs, credit, SIM settings, a support
-assistant, and an admin panel for the people who run it. Built on Django and
-Django REST framework. The mobile client lives in a separate repository.
+<p align="center">
+  <a href="https://github.com/r14dd/aicell-api/actions/workflows/ci.yml"><img src="https://github.com/r14dd/aicell-api/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/python-3.13-blue.svg?logo=python&logoColor=white" alt="Python 3.13">
+  <img src="https://img.shields.io/badge/django-5.2-0C4B33.svg?logo=django" alt="Django 5.2">
+  <img src="https://img.shields.io/badge/DRF-3.18-A30000.svg" alt="Django REST framework 3.18">
+  <img src="https://img.shields.io/badge/tests-1470%20passing-brightgreen.svg" alt="1470 tests">
+  <img src="https://img.shields.io/badge/languages-az%20%7C%20ru%20%7C%20en-informational.svg" alt="az, ru, en">
+  <img src="https://img.shields.io/badge/docker-compose-2496ED.svg?logo=docker&logoColor=white" alt="Docker Compose">
+</p>
 
-The API follows the endpoint tables in [docs/api](docs/api/overview.md) and
-answers in Azerbaijani, Russian and English. [docs/mobile-integration.md](docs/mobile-integration.md)
-is the guide for wiring a client to it (in Azerbaijani).
+`aicell-api` is the backend of a mobile operator's self-service app. Besides the
+usual balance, tariffs, packs and SIM settings, it reads how each subscriber
+actually uses the number and tells them, in manats, where they are overpaying
+and what to switch to. An assistant called Laya says it in their language and
+does it for them in one tap.
+
+> Every number a subscriber sees is computed by the backend from their own
+> usage and the live catalogue. The AI only picks the intent and words the
+> sentence; an answer that contains a number the backend did not give it is
+> thrown away.
+
+## The problem
+
+A prepaid subscriber pays for a tariff and then, when the internet runs out,
+for packs on top. Nobody tells them that:
+
+- the tariff plus the packs they keep buying cost more than the next tariff
+  up, which already includes that much internet (32.98 ₼ against 30.00 ₼ for
+  one of the seeded subscribers);
+- most of their traffic is one app that has a much cheaper pack of its own;
+- half of the included internet is left over at the end of every month;
+- their internet will run out four days before the renewal at today's rate;
+- the renewal is tomorrow and the balance is 2.89 ₼ short.
+
+The operator has all of this data and shows none of it. The subscriber finds
+out from an empty balance or a per-megabyte charge (0.05 ₼/MB, about 51 ₼ for
+a gigabyte).
+
+**For whom.** Subscribers of a mobile operator who manage their line in the
+app (the screens are in [docs/api](docs/api/overview.md)), and the operator's
+staff, who see the same figures across all subscribers in the admin.
+
+## What it does about it
+
+| Problem | What the backend finds | What the subscriber gets |
+|---|---|---|
+| Packs bought on top of the tariff, again and again | `repeat_packs`: two or more add-on packs in one period | The cheapest catalogue plan that covers the monthly usage, with the monthly saving |
+| Internet will not last until the renewal | `forecast_gap`: 7-day burn rate × days left > what is left | The smallest pack that closes the gap, and a cheaper fallback |
+| Charged per megabyte right now | `overage`: tariff empty, out-of-package traffic today | A day pack now, a pack for the days left, with what it saves against 0.05 ₼/MB |
+| Paying for internet nobody uses | `underused`: half the tariff left over three periods running | IsteSen with fewer gigabytes, or a cheaper plan, with the yearly saving |
+| A big pack gone in three days, mostly video | `video_heavy` | The YouTube or TikTok pack sized to that use, priced against the same gigabytes in the general pack |
+| Most traffic is Instagram or TikTok | `social_heavy` | IsteSen sliders fitted to the usage ("IsteSen+"), or the app's own pack |
+| Renewal tomorrow, balance short | `renewal_shortfall` | A top-up of the exact shortfall, rounded up to a manat |
+| Roaming without a roaming pack | `roaming` | The roaming packs with the cheapest gigabyte |
+
+On the seeded data: the heavy YouTube user pays 32.98 ₼ in 30 days and is shown
+a 20 GB pack that would have cost 5.98 ₼ less; the frequent traveller is shown a
+roaming pack that saves 15.00 ₼; the subscriber whose plan already fits is told
+so, with no offer at all.
+
+## How it works
+
+```
+usage per day and app ─┐
+pack purchases         ├─► figures ──► detectors ──► insight { evidence, offers[], task }
+tariff, wallet         ┘   (burn rate,   (plain rules,     │
+live catalogue ──────────►  shares,       thresholds as    ├─► GET /api/insights/          the app's cards
+                            monthly cost)  constants)      ├─► GET /api/insights/advisor/  "IsteSen+" vs plans
+                                                           └─► POST /api/laya/narrate/     one spoken sentence
+```
+
+1. **Figures.** From daily and per-app usage, purchases, the tariff and the
+   wallet: burn rate, days left, the gap, video and social shares, the monthly
+   cost (`api/insights/metrics.py`).
+2. **Detectors.** Eight plain functions, each returns the facts it found and
+   the priced answers, or nothing (`api/insights/detectors.py`).
+3. **Offers from the live catalogue.** Packs and plans are read from the
+   tables and ranked by price and price per gigabyte; a pack added in the
+   admin is chosen by the same rules. No product is invented.
+4. **Delivery decided on the server.** Urgent insights always, one new
+   informational insight per 48 hours, nothing between 23:00 and 08:00 Baku
+   time, a dismissed kind silent for 14 days.
+5. **One tap to act.** Each offer carries a `task` the app runs through the
+   endpoint that sells it: `buyPack`, `activatePack`, `changeTariff`,
+   `applyRedesign`, `topUp`. Money moves only there, under an idempotency key.
+6. **Laya words it.** `POST /api/laya/narrate/` turns one insight into one
+   spoken sentence in az, ru or en; `POST /api/laya/plan/` turns what the user
+   said ("hə", "niyə?", "balansım") into a task. Claude is forced to answer
+   through a single tool call, and any number in the answer that is not in the
+   request is rejected. Without an API key Laya falls back to keyword rules.
+
+## What an answer means
+
+The backend can show that a cheaper option **existed for the last 30 days of
+usage**; it cannot promise next month looks the same. Every saving is the
+difference between what was actually paid and what the candidate would have
+cost for the same usage at catalogue prices. When nothing in the catalogue is
+cheaper the answer is "your plan fits", and when a change saves less than
+1 ₼ a month the advisor recommends staying.
+
+## At a glance
+
+| | |
+|---|---|
+| Endpoints | 126 documented in [docs/api](docs/api/overview.md): 81 working, 45 routed and answering `501` with the app's notice text (sign-in among them) |
+| Languages | Azerbaijani, Russian, English, from `Accept-Language` |
+| Tests | 1470, every documented endpoint checked against the docs in three languages |
+| Money | One code path for every balance change, row-locked, idempotent; parallel requests cannot overdraw |
+| Admin | django-unfold, four roles, a usage statistics page with trends, segments and offer results |
+| Run | `docker compose up -d --build` (API, Celery worker and beat, Redis, SQLite) |
+
+The mobile client lives in a separate repository;
+[docs/mobile-integration.md](docs/mobile-integration.md) is the guide for wiring
+it (in Azerbaijani).
+
+**Not real yet.** Usage comes from seed data (there is no network feed), top-ups
+do not reach a payment provider, sign-in (OTP) is not built, and the support
+inbox assistant still answers by keywords in English. See
+[Known limitations](#known-limitations).
 
 ## Run it
 
