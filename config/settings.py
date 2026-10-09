@@ -295,13 +295,32 @@ SPECTACULAR_SETTINGS = {
 # Google Pay: payment_token == "simulated" completes immediately when enabled.
 GOOGLE_PAY_SIMULATED = env.flag("GOOGLE_PAY_SIMULATED", DEBUG)
 
-ASSISTANT_RESPONDER = env.text("ASSISTANT_RESPONDER", "api.assistant.responder.respond")
+# The assistant: Gemini routes, retrieves and writes when GEMINI_API_KEY is set, keyword rules otherwise.
+GEMINI_API_KEY = env.text("GEMINI_API_KEY")
+GEMINI_MODEL = env.text("GEMINI_MODEL", "gemini-3.1-flash-lite")
+GEMINI_STT_MODEL = env.text("GEMINI_STT_MODEL", "gemini-3.8-flash")
+GEMINI_TTS_MODEL = env.text("GEMINI_TTS_MODEL", "gemini-3.8-flash-tts")
+GEMINI_EMBED_MODEL = env.text("GEMINI_EMBED_MODEL", "gemini-embedding-001")
+GEMINI_VOICE = env.text("GEMINI_VOICE", "Kore")
+# Milvus Lite file by default; set to http://host:19530 for a Milvus server.
+MILVUS_URI = env.text("MILVUS_URI", str(BASE_DIR / "data" / "knowledge.db"))
+ASSISTANT_RESPONDER = env.text(
+    "ASSISTANT_RESPONDER",
+    "api.assistant.agent.respond" if GEMINI_API_KEY else "api.assistant.responder.respond",
+)
 ASSISTANT_RATE_LIMIT = 20  # user messages per minute per subscriber
 ASSISTANT_STREAM_DELAY = float(env.text("ASSISTANT_STREAM_DELAY", "0.04"))
 
-# Laya's brain: a model when ANTHROPIC_API_KEY is set, keyword rules otherwise.
+# Laya's brain: Gemini when GEMINI_API_KEY is set, else Claude when ANTHROPIC_API_KEY is set, else keyword rules.
 ANTHROPIC_API_KEY = env.text("ANTHROPIC_API_KEY")
-LAYA_BRAIN = env.text("LAYA_BRAIN", "api.laya.claude" if ANTHROPIC_API_KEY else "api.laya.offline")
+LAYA_BRAIN = env.text(
+    "LAYA_BRAIN",
+    "api.laya.gemini"
+    if GEMINI_API_KEY
+    else "api.laya.claude"
+    if ANTHROPIC_API_KEY
+    else "api.laya.offline",
+)
 LAYA_PLAN_MODEL = env.text("LAYA_PLAN_MODEL", "claude-sonnet-5-5")
 LAYA_NARRATE_MODEL = env.text("LAYA_NARRATE_MODEL", "claude-haiku-5-5")
 

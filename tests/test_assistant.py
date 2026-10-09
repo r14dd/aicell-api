@@ -237,3 +237,116 @@ def test_inbox_query_count_does_not_grow_with_conversations(client, django_asser
     with django_assert_max_num_queries(8):
         body = client.get("/api/assistant/inbox/").json()
     assert len(body["items"]) == 50
+
+
+# --- voice and the Gemini responder (Gemini itself is always faked) ---------
+
+
+def _wav():
+    from django.core.files.uploadedfile import SimpleUploadedFile
+
+    return SimpleUploadedFile("q.wav", b"RIFFxxxxWAVE", content_type="audio/wav")
+
+
+def test_voice_message_returns_transcript_answer_and_audio(client, monkeypatch):
+    from api.assistant import gemini
+
+    monkeypatch.setattr(gemini, "transcribe", lambda audio, mime: "how much internet is left")
+    monkeypatch.setattr(gemini, "speak", lambda text: b"WAVDATA")
+    conversation = start(client)
+    response = client.post(
+        f"/api/assistant/conversations/{conversation}/voice/", {"audio": _wav()}, format="multipart"
+    )
+    body = response.json()
+    assert response.status_code == 201, body
+    assert body["transcript"] == "how much internet is left"
+    assert body["message"]["route"] == "usage"
+    assert body["audio"] == "V0FWREFUQQ=="
+    stored = client.get(f"/api/assistant/conversations/{conversation}/messages/").json()
+    assert [m["role"] for m in stored["results"]] == ["user", "assistant"]
+
+
+def test_voice_message_survives_speech_synthesis_failure(client, monkeypatch):
+    from api.assistant import gemini
+
+    def broken(text):
+        raise gemini.GeminiError("down")
+
+    monkeypatch.setattr(gemini, "transcribe", lambda audio, mime: "balance")
+    monkeypatch.setattr(gemini, "speak", broken)
+    response = client.post(
+        f"/api/assistant/conversations/{start(client)}/voice/",
+        {"audio": _wav()},
+        format="multipart",
+    )
+    assert response.status_code == 201
+    assert response.json()["audio"] is None
+
+
+def test_unintelligible_voice_message_is_a_400(client, monkeypatch):
+    from api.assistant import gemini
+
+    monkeypatch.setattr(gemini, "transcribe", lambda audio, mime: "")
+    response = client.post(
+        f"/api/assistant/conversations/{start(client)}/voice/",
+        {"audio": _wav()},
+        format="multipart",
+    )
+    assert response.status_code == 400
+
+
+def test_voice_message_to_a_foreign_conversation_is_a_404(client):
+    from api.assistant.models import Conversation
+    from api.users.models import Subscriber
+
+    foreign = Conversation.objects.create(subscriber=Subscriber.objects.create_user("994500000001"))
+    response = client.post(
+        f"/api/assistant/conversations/{foreign.id}/voice/", {"audio": _wav()}, format="multipart"
+    )
+    assert response.status_code == 404
+
+
+def test_agent_routes_with_gemini_and_writes_from_facts(subscriber, monkeypatch):
+    from api.assistant import agent, gemini
+
+    calls = []
+
+    def fake(system, prompt, *, schema=None):
+        calls.append(prompt)
+        return ('{"route": "balance"}' if schema else "Balansınız 5 manatdır."), 10, 5
+
+    monkeypatch.setattr(gemini, "generate", fake)
+    answer = agent.respond(subscriber, "Balansım nə qədərdir?")
+    assert answer.route == "balance"
+    assert answer.text == "Balansınız 5 manatdır."
+    assert answer.action["to"] == "/top-up"
+    assert (answer.tokens_in, answer.tokens_out) == (20, 10)
+    assert "Your balance is" in calls[1]  # the model is given the facts, not the question alone
+
+
+def test_agent_answers_from_knowledge_chunks(subscriber, monkeypatch):
+    from api.assistant import agent, gemini, knowledge
+
+    seen = {}
+
+    def fake(system, prompt, *, schema=None):
+        seen["prompt"] = prompt
+        return ('{"route": "service"}' if schema else "Kod yığın."), 1, 1
+
+    monkeypatch.setattr(gemini, "generate", fake)
+    monkeypatch.setattr(
+        knowledge, "retrieve", lambda q, kinds: [{"title": "Call forwarding", "text": "Dial *21*"}]
+    )
+    answer = agent.respond(subscriber, "zəngi yönləndirməni necə qoşum")
+    assert answer.route == "service"
+    assert "Dial *21*" in seen["prompt"]
+
+
+def test_agent_falls_back_to_keyword_rules_when_gemini_fails(subscriber, monkeypatch):
+    from api.assistant import agent, gemini
+
+    def down(*args, **kwargs):
+        raise gemini.GeminiError("down")
+
+    monkeypatch.setattr(gemini, "generate", down)
+    assert agent.respond(subscriber, "balance").route == "balance"

@@ -57,7 +57,7 @@ ROWS = rows()
 
 
 def test_docs_tables_were_parsed():
-    assert len(ROWS) == 126  # every endpoint row in docs/api/*.md
+    assert len(ROWS) == 127  # every endpoint row in docs/api/*.md
     assert {status for _, _, status in ROWS} == {"ready", ":todo", ":dummy"}
 
 

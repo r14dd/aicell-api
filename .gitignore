@@ -10,3 +10,6 @@ staticfiles/*
 .DS_Store
 HANDOFF.md
 HANDOFF-*.md
+
+# Milvus Lite knowledge base (built by azercell-crawl/embed_gemini.py)
+/data/
