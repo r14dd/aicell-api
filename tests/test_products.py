@@ -1,5 +1,8 @@
 """tariffs, packs, kredit, referral."""
 
+import pytest
+
+from api.tariffs.models import SubscriberTariff, TariffFamily
 
 # --- tariffs ----------------------------------------------------------------
 
@@ -96,6 +99,33 @@ def test_redesign_defaults_estimate_the_base_price(client):
     }
     assert body["pricing"] == {"base": "19.10", "per_gb": "0.50", "per_minute": "0.02"}
     assert body["estimate"] == "19.10"
+
+
+@pytest.mark.parametrize(
+    "field, kind",
+    [
+        ("data_total_gb", "internet"),
+        ("messaging_total_gb", "messaging"),
+        ("minutes_total", "calls"),
+    ],
+)
+def test_a_zero_total_gives_a_zero_ratio(client, subscriber, field, kind):
+    SubscriberTariff.objects.filter(subscriber=subscriber).update(**{field: 0})
+    usage = {row["kind"]: row for row in client.get("/api/tariffs/my/").json()["usage"]}
+    assert usage[kind]["ratio"] == 0
+    assert client.get("/api/tariffs/my/usage/").status_code == 200
+
+
+def test_a_partial_redesign_estimates_from_the_included_amounts(client, subscriber):
+    SubscriberTariff.objects.filter(subscriber=subscriber).update(redesign={"internet": 20})
+    assert client.get("/api/tariffs/my/").status_code == 200
+    assert client.get("/api/tariffs/my/redesign/").json()["estimate"] == "21.10"
+
+
+def test_a_family_without_plans_is_left_out_of_the_catalogue(client):
+    TariffFamily.objects.create(slug="empty", name="Empty")
+    assert len(client.get("/api/tariffs/catalogue/").json()["results"]) == 2
+    assert client.get("/api/tariffs/catalogue/empty/").status_code == 404
 
 
 def test_change_and_premium(client):
@@ -240,6 +270,15 @@ def test_kredit_take_keeps_the_app_notice(client):
     }
     assert client.post_json("/api/kredit/products/nope/take/").status_code == 404
     assert client.get("/api/billing/balance/").json()["balance"] == "16.21"
+
+
+@pytest.mark.parametrize(
+    "body", [{"amount": "1e999999999"}, {"amount": "1e100000"}, {"amount": "NaN"}, [1], "x"]
+)
+def test_kredit_take_keeps_the_default_for_an_unusable_amount(client, body):
+    response = client.post_json("/api/kredit/products/simtaksit/take/", body)
+    assert response.status_code == 501
+    assert response.json()["detail"] == "SimTaksit 2.00 ₼ will be added to your balance (prototype)"
 
 
 def test_tamamla(client):

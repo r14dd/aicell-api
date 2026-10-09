@@ -1,3 +1,4 @@
+import pytest
 from django.utils import timezone
 
 
@@ -43,6 +44,12 @@ def test_top_ups_date_range_is_inclusive_in_baku_time(client):
     assert [row["amount"] for row in inside["results"]] == ["15.00", "1.00"]
     assert client.get("/api/billing/top-ups/?from=2026-10-03&to=2026-10-06").json()["results"] == []
     assert client.get("/api/billing/top-ups/?from=nope").status_code == 400
+
+
+@pytest.mark.parametrize("path", ["/api/billing/top-ups/", "/api/content/notifications/"])
+@pytest.mark.parametrize("query", ["from=0001-01-01", "to=9999-12-31"])
+def test_the_first_and_last_days_are_open_ends(client, path, query):
+    assert client.get(f"{path}?{query}").json()["results"] == client.get(path).json()["results"]
 
 
 def test_card_top_up(client):
