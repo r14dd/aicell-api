@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/python-3.13-blue.svg?logo=python&logoColor=white" alt="Python 3.13">
   <img src="https://img.shields.io/badge/django-5.2-0C4B33.svg?logo=django" alt="Django 5.2">
   <img src="https://img.shields.io/badge/DRF-3.18-A30000.svg" alt="Django REST framework 3.18">
-  <img src="https://img.shields.io/badge/tests-1506%20passing-brightgreen.svg" alt="1470 tests">
+  <img src="https://img.shields.io/badge/tests-1506%20passing-brightgreen.svg" alt="1506 tests">
   <img src="https://img.shields.io/badge/languages-az%20%7C%20ru%20%7C%20en-informational.svg" alt="az, ru, en">
   <img src="https://img.shields.io/badge/docker-compose-2496ED.svg?logo=docker&logoColor=white" alt="Docker Compose">
 </p>
