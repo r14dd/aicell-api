@@ -1,0 +1,2491 @@
+{
+  "GET assistant.conversations": {
+    "results": [
+      {
+        "created_at": "2026-10-06T14:00:00Z",
+        "external_id": "#3513323",
+        "id": 3513323,
+        "status": "closed"
+      }
+    ]
+  },
+  "GET assistant.inbox": {
+    "actions": [
+      {
+        "body": "We're here to help, just ask away!",
+        "key": "ask",
+        "title": "Ask a question"
+      },
+      {
+        "body": "Your feedback helps us improve!",
+        "key": "ideas",
+        "title": "Share your ideas for new features"
+      }
+    ],
+    "greeting": "How can we support you?",
+    "items": [
+      {
+        "by": "AI Chat Bot",
+        "conversation_id": 3513323,
+        "external_id": "#3513323",
+        "kind": "rate_prompt",
+        "last_message_at": "2026-10-06T14:01:00Z",
+        "title": "Rate your conversation",
+        "unread": true
+      }
+    ],
+    "unread": 1
+  },
+  "GET assistant.messages": {
+    "next": null,
+    "results": [
+      {
+        "content": "How much internet do I have left?",
+        "created_at": "2026-10-06T14:00:00Z",
+        "id": 3,
+        "role": "user"
+      },
+      {
+        "content": "You have 7.20 GB left until 25 October.",
+        "created_at": "2026-10-06T14:01:00Z",
+        "id": 4,
+        "role": "assistant",
+        "route": "usage"
+      }
+    ]
+  },
+  "GET billing.balance": {
+    "balance": "16.21",
+    "currency": "AZN",
+    "month": "2026-10",
+    "top_ups_this_month": "16.00"
+  },
+  "GET billing.cards": {
+    "results": [
+      {
+        "brand": "mastercard",
+        "expiry": "09/28",
+        "id": 2,
+        "is_default": true,
+        "last4": "4471"
+      }
+    ]
+  },
+  "GET billing.methods": {
+    "banner": {
+      "alt": "Instant loan with akart! Complete your payments up to 50 ₼ with akart loan",
+      "deep_link": "/kredit/tamamla",
+      "image": "http://localhost/media/content/banner-akart.png"
+    },
+    "google_pay": {
+      "available": true,
+      "max": "500.00",
+      "min": "1.00",
+      "note": "We don't charge any fees for Google Pay top-ups"
+    },
+    "methods": [
+      {
+        "deep_link": "/top-up/card",
+        "key": "card",
+        "label": "Top up from bank card"
+      },
+      {
+        "deep_link": "/top-up/akart",
+        "key": "akart",
+        "label": "akart"
+      },
+      {
+        "deep_link": "/top-up/voucher",
+        "key": "voucher",
+        "label": "Voucher"
+      },
+      {
+        "deep_link": "/kredit",
+        "key": "kredit",
+        "label": "Get Kredit"
+      }
+    ]
+  },
+  "GET billing.steam_accounts": {
+    "chips": [
+      "5",
+      "10",
+      "25",
+      "50"
+    ],
+    "limits": {
+      "max": "50.00",
+      "min": "1.00"
+    },
+    "results": [
+      {
+        "id": 2,
+        "last_amount": "10.00",
+        "last_topped_at": "2026-10-08T09:00:00Z",
+        "name": "gamer_01"
+      }
+    ]
+  },
+  "GET billing.top_ups": {
+    "next": null,
+    "results": [
+      {
+        "amount": "15.00",
+        "created_at": "2026-10-02T12:39:00Z",
+        "id": 4,
+        "method": "card"
+      },
+      {
+        "amount": "1.00",
+        "created_at": "2026-10-02T12:34:00Z",
+        "id": 3,
+        "method": "card"
+      }
+    ]
+  },
+  "GET billing.transactions": {
+    "next": null,
+    "results": [
+      {
+        "amount": "15.00",
+        "created_at": "2026-10-02T12:39:00Z",
+        "id": 4,
+        "kind": "top_up",
+        "title": "Number balance"
+      },
+      {
+        "amount": "1.00",
+        "created_at": "2026-10-02T12:34:00Z",
+        "id": 3,
+        "kind": "top_up",
+        "title": "Number balance"
+      }
+    ]
+  },
+  "GET content.app_offers": {
+    "results": [
+      {
+        "deep_link": null,
+        "id": "kinon",
+        "image": "http://localhost/media/content/offer-kinon.png",
+        "name": "Kinon",
+        "price": "4.99",
+        "sub": "Films and series online"
+      },
+      {
+        "deep_link": null,
+        "id": "yandex-plus",
+        "image": "http://localhost/media/content/offer-yandex-plus.png",
+        "name": "Yandex Plus",
+        "price": "5.90",
+        "sub": "Music, films and cashback"
+      },
+      {
+        "deep_link": null,
+        "id": "litres",
+        "image": "http://localhost/media/content/offer-litres.png",
+        "name": "Litres",
+        "price": "3.99",
+        "sub": "E-books and audiobooks"
+      }
+    ]
+  },
+  "GET content.aztelekom_offers": {
+    "results": [
+      {
+        "deep_link": null,
+        "id": "fiber-optical",
+        "image": "http://localhost/media/content/offer-aztelekom.png",
+        "name": "Fiber Optical",
+        "sub": "Home internet from Aztelekom"
+      }
+    ]
+  },
+  "GET content.banners": {
+    "results": [
+      {
+        "alt": "Instant loan with akart! Complete your payments up to 50 ₼ with akart loan",
+        "deep_link": "/kredit/tamamla",
+        "image": "http://localhost/media/content/banner-akart.png",
+        "key": "akart"
+      },
+      {
+        "alt": "Spin the Gift Wheel! A new gift every day",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-spin.png",
+        "key": "spin"
+      },
+      {
+        "alt": "Unlimited entertainment is waiting for you!",
+        "deep_link": "/internet-packs",
+        "image": "http://localhost/media/content/banner-unlimited.png",
+        "key": "unlimited"
+      },
+      {
+        "alt": "30 il səninlə: collect chances and win",
+        "deep_link": "/lottery-rules",
+        "image": "http://localhost/media/content/banner-lottery.png",
+        "key": "lottery"
+      },
+      {
+        "alt": "DigiMax: everything in one tariff",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-digimax.png",
+        "key": "digimax"
+      },
+      {
+        "alt": "Stay online abroad with roaming packs",
+        "deep_link": "/sim/roaming",
+        "image": "http://localhost/media/content/banner-roaming.png",
+        "key": "roaming"
+      },
+      {
+        "alt": "Switch to eSIM in a few minutes",
+        "deep_link": "/esim",
+        "image": "http://localhost/media/content/banner-esim.png",
+        "key": "esim"
+      },
+      {
+        "alt": "Top up Steam with your balance",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-steam.png",
+        "key": "steam"
+      },
+      {
+        "alt": "Share Azercell app and get 3.00 ₼ bonus!",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-referral.png",
+        "key": "referral"
+      },
+      {
+        "alt": "Premium: a personal curator for all your needs",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-premium.png",
+        "key": "premium"
+      }
+    ]
+  },
+  "GET content.campaign_offers": {
+    "results": [
+      {
+        "deep_link": null,
+        "id": "azercellim",
+        "image": "http://localhost/media/content/campaign-azercellim.png",
+        "name": "Azercellim.com",
+        "sub": "Order a new number online"
+      }
+    ]
+  },
+  "GET content.games": {
+    "games": [
+      {
+        "id": "ninja-saga-2",
+        "image": "http://localhost/media/content/game-ninja-saga-2.png",
+        "name": "Ninja Saga 2"
+      },
+      {
+        "id": "fruit-slice",
+        "image": "http://localhost/media/content/game-fruit-slice.png",
+        "name": "Fruit Slice"
+      },
+      {
+        "id": "road-rush",
+        "image": "http://localhost/media/content/game-road-rush.png",
+        "name": "Road Rush"
+      },
+      {
+        "id": "penalty-kings",
+        "image": "http://localhost/media/content/game-penalty-kings.png",
+        "name": "Penalty Kings"
+      },
+      {
+        "id": "block-puzzle",
+        "image": "http://localhost/media/content/game-block-puzzle.png",
+        "name": "Block Puzzle"
+      },
+      {
+        "id": "space-miner",
+        "image": "http://localhost/media/content/game-space-miner.png",
+        "name": "Space Miner"
+      },
+      {
+        "id": "jungle-run",
+        "image": "http://localhost/media/content/game-jungle-run.png",
+        "name": "Jungle Run"
+      },
+      {
+        "id": "chess-master",
+        "image": "http://localhost/media/content/game-chess-master.png",
+        "name": "Chess Master"
+      }
+    ],
+    "reward_games": [
+      {
+        "id": "battle-for-gb",
+        "image": "http://localhost/media/content/game-battle-for-gb.png",
+        "name": "Battle for GB"
+      }
+    ],
+    "tournament": {
+      "cta": "Participate in the tournament",
+      "ends_at": "2026-10-08T15:17:02Z",
+      "game": "ninja-saga-2",
+      "participants": 6708,
+      "prize": "5 GB",
+      "title": "Tournament"
+    }
+  },
+  "GET content.home": {
+    "banners": [
+      {
+        "alt": "Instant loan with akart! Complete your payments up to 50 ₼ with akart loan",
+        "deep_link": "/kredit/tamamla",
+        "image": "http://localhost/media/content/banner-akart.png",
+        "key": "akart"
+      },
+      {
+        "alt": "Spin the Gift Wheel! A new gift every day",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-spin.png",
+        "key": "spin"
+      },
+      {
+        "alt": "Unlimited entertainment is waiting for you!",
+        "deep_link": "/internet-packs",
+        "image": "http://localhost/media/content/banner-unlimited.png",
+        "key": "unlimited"
+      },
+      {
+        "alt": "30 il səninlə: collect chances and win",
+        "deep_link": "/lottery-rules",
+        "image": "http://localhost/media/content/banner-lottery.png",
+        "key": "lottery"
+      },
+      {
+        "alt": "DigiMax: everything in one tariff",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-digimax.png",
+        "key": "digimax"
+      },
+      {
+        "alt": "Stay online abroad with roaming packs",
+        "deep_link": "/sim/roaming",
+        "image": "http://localhost/media/content/banner-roaming.png",
+        "key": "roaming"
+      },
+      {
+        "alt": "Switch to eSIM in a few minutes",
+        "deep_link": "/esim",
+        "image": "http://localhost/media/content/banner-esim.png",
+        "key": "esim"
+      },
+      {
+        "alt": "Top up Steam with your balance",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-steam.png",
+        "key": "steam"
+      },
+      {
+        "alt": "Share Azercell app and get 3.00 ₼ bonus!",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-referral.png",
+        "key": "referral"
+      },
+      {
+        "alt": "Premium: a personal curator for all your needs",
+        "deep_link": null,
+        "image": "http://localhost/media/content/banner-premium.png",
+        "key": "premium"
+      }
+    ],
+    "lottery": {
+      "cta": "Learn more about the lottery",
+      "deep_link": "/lottery-rules",
+      "starts_at": "2026-10-19",
+      "subtitle": "Chance collection starts on 19 October 2026",
+      "title": "30 il səninlə"
+    },
+    "quick_actions": [
+      {
+        "deep_link": "/kredit",
+        "key": "simkredit",
+        "label": "SimKredit"
+      },
+      {
+        "deep_link": "/internet-packs",
+        "key": "buy-internet",
+        "label": "Buy internet"
+      },
+      {
+        "deep_link": "/sim-settings",
+        "key": "sim-settings",
+        "label": "SIM settings"
+      }
+    ],
+    "stories": [
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-gift-wheel.png",
+        "key": "gift-wheel",
+        "label": "Gift Wheel",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-roaming.png",
+        "key": "roaming",
+        "label": "Roaming",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-especially.png",
+        "key": "especially",
+        "label": "Especially for you",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-applications.png",
+        "key": "applications",
+        "label": "Applications",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-tariffs.png",
+        "key": "tariffs",
+        "label": "Tariffs",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-kredit.png",
+        "key": "kredit",
+        "label": "Kredit",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-lottery.png",
+        "key": "lottery",
+        "label": "30 il səninlə",
+        "viewed": false
+      }
+    ]
+  },
+  "GET content.lottery_rules": {
+    "sections": [
+      {
+        "blocks": [
+          {
+            "kind": "p",
+            "text": "We are launching the “30 il səninlə” lottery to celebrate 30 years together with our subscribers."
+          },
+          {
+            "kind": "p",
+            "text": "Collect chances from 19 October 2026 and take part in the draws."
+          }
+        ],
+        "icon": null,
+        "title": "About the lottery"
+      },
+      {
+        "blocks": [
+          {
+            "bold": "Top up your balance with 5 AZN or more",
+            "kind": "p",
+            "num": "1.",
+            "text": "and get 1 chance for every 5 AZN."
+          },
+          {
+            "items": [
+              {
+                "label": "Top-up of 5 AZN",
+                "value": "1 chance"
+              },
+              {
+                "label": "Top-up of 12 AZN",
+                "value": "2 chances"
+              }
+            ],
+            "kind": "example"
+          },
+          {
+            "bold": "Buy an internet pack in the app",
+            "kind": "p",
+            "num": "2.",
+            "text": "and get 2 chances for each purchase."
+          }
+        ],
+        "icon": "Diamond",
+        "title": "How to earn chances?"
+      },
+      {
+        "blocks": [
+          {
+            "kind": "p",
+            "text": "Smartphones, internet packs and the main prize are drawn among all participants."
+          }
+        ],
+        "icon": "Gift",
+        "title": "Prizes"
+      },
+      {
+        "blocks": [
+          {
+            "kind": "p",
+            "text": "Draws are held weekly while the campaign lasts."
+          }
+        ],
+        "icon": "Calendar",
+        "title": "Draw dates"
+      },
+      {
+        "blocks": [
+          {
+            "kind": "p",
+            "text": "All individual prepaid and postpaid subscribers aged 18 and over."
+          }
+        ],
+        "icon": "Users",
+        "title": "Who can participate?"
+      },
+      {
+        "blocks": [
+          {
+            "kind": "p",
+            "text": "Winners are contacted by phone and listed on the official website."
+          }
+        ],
+        "icon": "Megaphone",
+        "title": "How are winners announced?"
+      },
+      {
+        "blocks": [
+          {
+            "kind": "p",
+            "text": "Chances are not transferable and cannot be exchanged for money."
+          }
+        ],
+        "icon": "Info",
+        "title": "Important notes"
+      }
+    ],
+    "terms_url": null
+  },
+  "GET content.notification": {
+    "body": "Get 15 minutes of free time on your first Wingz ride when you pay with your Azercell balance.",
+    "cta": null,
+    "id": "wingz",
+    "read": true,
+    "sent_at": "2025-10-27T09:00:00Z",
+    "title": "Activate Wingz scooter with your Azercell balance!"
+  },
+  "GET content.notifications": {
+    "next": null,
+    "results": [
+      {
+        "body": "Chance collection starts on 19 October 2026.",
+        "cta": {
+          "deep_link": "/lottery-rules",
+          "label": "Learn more about the lottery"
+        },
+        "id": "lottery",
+        "read": false,
+        "sent_at": "2026-10-01T09:00:00Z",
+        "title": "30 il səninlə"
+      },
+      {
+        "body": "Get 15 minutes of free time on your first Wingz ride when you pay with your Azercell balance.",
+        "cta": null,
+        "id": "wingz",
+        "read": false,
+        "sent_at": "2025-10-27T09:00:00Z",
+        "title": "Activate Wingz scooter with your Azercell balance!"
+      },
+      {
+        "body": "Manage your number, tariff and payments in one place.",
+        "cta": null,
+        "id": "welcome",
+        "read": true,
+        "sent_at": "2025-09-15T09:00:00Z",
+        "title": "Welcome to the new Azercell app"
+      }
+    ],
+    "unread": 2
+  },
+  "GET content.perk_offers": {
+    "results": [
+      {
+        "deep_link": null,
+        "id": "wingz",
+        "image": "http://localhost/media/content/perk-wingz.png",
+        "name": "Wingz",
+        "sub": "15 minutes of free scooter time"
+      },
+      {
+        "deep_link": null,
+        "id": "wolt-plus",
+        "image": "http://localhost/media/content/perk-wolt-plus.png",
+        "name": "Wolt+",
+        "sub": "Free delivery with your Azercell number"
+      }
+    ]
+  },
+  "GET content.stories": {
+    "results": [
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-gift-wheel.png",
+        "key": "gift-wheel",
+        "label": "Gift Wheel",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-roaming.png",
+        "key": "roaming",
+        "label": "Roaming",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-especially.png",
+        "key": "especially",
+        "label": "Especially for you",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-applications.png",
+        "key": "applications",
+        "label": "Applications",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-tariffs.png",
+        "key": "tariffs",
+        "label": "Tariffs",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-kredit.png",
+        "key": "kredit",
+        "label": "Kredit",
+        "viewed": false
+      },
+      {
+        "has_story": true,
+        "image": "http://localhost/media/content/chip-lottery.png",
+        "key": "lottery",
+        "label": "30 il səninlə",
+        "viewed": false
+      }
+    ]
+  },
+  "GET content.story": {
+    "key": "especially",
+    "next_key": "applications",
+    "pages": [
+      {
+        "body": "Offers picked for the way you use your number.",
+        "cta": null,
+        "duration_ms": 5000,
+        "image": "http://localhost/media/content/story-especially-1.png",
+        "title": "Especially for you"
+      },
+      {
+        "body": "Unlimited speed for only 0.99 ₼.",
+        "cta": {
+          "deep_link": "/internet-packs",
+          "label": "Buy internet"
+        },
+        "duration_ms": 5000,
+        "image": "http://localhost/media/content/story-especially-2.png",
+        "title": "Unlimited 1 hour"
+      }
+    ],
+    "prev_key": "roaming",
+    "thumb": "http://localhost/media/content/chip-especially.png",
+    "title": "Especially for you"
+  },
+  "GET kredit.overview": {
+    "debt": {
+      "amount": "0.00",
+      "items": [],
+      "note": "no items"
+    },
+    "products": [
+      {
+        "chip": "1-3 ₼",
+        "chip_icon": "coins",
+        "deep_link": "/kredit/simkredit",
+        "id": "simkredit",
+        "name": "SimKredit",
+        "subtitle": "Get now! Pay back at the next topup"
+      },
+      {
+        "chip": "2 ₼",
+        "chip_icon": "coins",
+        "deep_link": "/kredit/simtaksit",
+        "id": "simtaksit",
+        "name": "SimTaksit",
+        "subtitle": "Get now! Pay back within 32 days by 0.08 ₼"
+      },
+      {
+        "chip": "300 MB",
+        "chip_icon": "broadcast",
+        "deep_link": "/kredit/internetkredit",
+        "id": "internetkredit",
+        "name": "InternetKredit",
+        "price": "2 ₼",
+        "subtitle": "Get now! Pay back at the next topup"
+      },
+      {
+        "chip": "1 ₼",
+        "chip_icon": "coins",
+        "deep_link": "/kredit/ekstrakredit",
+        "id": "ekstrakredit",
+        "name": "EkstraKredit",
+        "subtitle": "Get now! Pay back at the next topup"
+      }
+    ]
+  },
+  "GET kredit.product": {
+    "amount": "2.00",
+    "cta": "Get SimTaksit 2.00 ₼",
+    "fee": "0.60",
+    "id": "simtaksit",
+    "name": "SimTaksit",
+    "unit": "₼"
+  },
+  "GET kredit.tamamla": {
+    "banner": {
+      "alt": "Instant loan with akart! Complete your payments up to 50 ₼ with akart loan",
+      "image": "http://localhost/media/content/tamamla-hero.png"
+    },
+    "cta": {
+      "label": "Get now!",
+      "url": "https://links.akart.az/app/"
+    },
+    "steps": [
+      "Apply for akart with ease: download the akart app and register",
+      "Give permission to borrow up to 50.00 ₼ when your balance is not enough",
+      "Activate Tamamla & Cover unexpected expenses!"
+    ]
+  },
+  "GET packs.internet": {
+    "categories": [
+      {
+        "id": "unlimited",
+        "label": "Unlimited"
+      },
+      {
+        "id": "high-volume",
+        "label": "High-volume"
+      },
+      {
+        "id": "weekly",
+        "label": "Weekly"
+      },
+      {
+        "id": "daily",
+        "label": "Daily"
+      },
+      {
+        "id": "social",
+        "label": "Social"
+      }
+    ],
+    "msisdn": "994516643342",
+    "packs": {
+      "daily": [
+        {
+          "id": "daily-500mb",
+          "label": "Daily 500 MB",
+          "name": "500 MB",
+          "price": "0.50",
+          "renews": false,
+          "sub": "1 day"
+        },
+        {
+          "id": "daily-1gb",
+          "label": "Daily 1 GB",
+          "name": "1 GB",
+          "price": "1.00",
+          "renews": false,
+          "sub": "1 day"
+        }
+      ],
+      "high-volume": [
+        {
+          "id": "hv-20gb",
+          "label": "High-volume 20 GB",
+          "name": "20 GB",
+          "price": "15.00",
+          "renews": true,
+          "sub": "30 days"
+        },
+        {
+          "id": "hv-50gb",
+          "label": "High-volume 50 GB",
+          "name": "50 GB",
+          "price": "25.00",
+          "renews": true,
+          "sub": "30 days"
+        },
+        {
+          "id": "hv-100gb",
+          "label": "High-volume 100 GB",
+          "name": "100 GB",
+          "price": "35.00",
+          "renews": true,
+          "sub": "30 days"
+        }
+      ],
+      "unlimited": [
+        {
+          "id": "unlimited-1h",
+          "label": "Unlimited 1 hour",
+          "name": "1 hour",
+          "price": "0.99",
+          "renews": false,
+          "sub": "Unlimited speed"
+        },
+        {
+          "id": "unlimited-3h",
+          "label": "Unlimited 3 hours",
+          "name": "3 hours",
+          "price": "1.99",
+          "renews": false,
+          "sub": "Unlimited speed"
+        },
+        {
+          "id": "unlimited-1d",
+          "label": "Unlimited 1 day",
+          "name": "1 day",
+          "price": "2.99",
+          "renews": false,
+          "sub": "Unlimited speed"
+        }
+      ],
+      "weekly": [
+        {
+          "id": "weekly-2gb",
+          "label": "Weekly 2 GB",
+          "name": "2 GB",
+          "price": "3.00",
+          "renews": false,
+          "sub": "7 days"
+        },
+        {
+          "id": "weekly-5gb",
+          "label": "Weekly 5 GB",
+          "name": "5 GB",
+          "price": "5.00",
+          "renews": false,
+          "sub": "7 days"
+        }
+      ]
+    },
+    "promo": {
+      "gradient": [
+        "#8C80FE",
+        "#4670E2"
+      ],
+      "sub": "For only 0.99 ₼",
+      "title": "Unlimited entertainment is waiting for you!"
+    },
+    "social": [
+      {
+        "app": "teams",
+        "auto_renew": true,
+        "cta": "Subscribe",
+        "id": "tehsil",
+        "periods": [
+          "Daily",
+          "Monthly"
+        ],
+        "range": "0.7-9.9",
+        "special": false,
+        "subtitle": "Join online classes with ease via Microsoft Teams.",
+        "title": "Tehsil",
+        "volume": "10-100 GB"
+      },
+      {
+        "app": "instagram",
+        "auto_renew": false,
+        "cta": "Activate",
+        "id": "instagram-facebook",
+        "periods": [
+          "Daily",
+          "Monthly"
+        ],
+        "range": "1-3",
+        "special": true,
+        "subtitle": "Scroll, post and watch stories without counting megabytes.",
+        "title": "Instagram & Facebook",
+        "volume": "1-5 GB"
+      },
+      {
+        "app": "tiktok",
+        "auto_renew": false,
+        "cta": "Activate",
+        "id": "tiktok",
+        "periods": [
+          "Daily",
+          "Monthly"
+        ],
+        "range": "1-4",
+        "special": false,
+        "subtitle": "Watch and share videos on TikTok all day long.",
+        "title": "TikTok",
+        "volume": "2-10 GB"
+      },
+      {
+        "app": "youtube",
+        "auto_renew": false,
+        "cta": "Activate",
+        "id": "youtube",
+        "periods": [
+          "Daily",
+          "Monthly"
+        ],
+        "range": "1-4",
+        "special": false,
+        "subtitle": "Stream your favourite channels in high quality.",
+        "title": "YouTube",
+        "volume": "2-10 GB"
+      }
+    ]
+  },
+  "GET packs.internet_top": {
+    "results": [
+      {
+        "id": "unlimited-1h",
+        "label": "Unlimited 1 hour",
+        "name": "1 hour",
+        "price": "0.99",
+        "renews": false,
+        "sub": "Unlimited speed"
+      },
+      {
+        "id": "hv-20gb",
+        "label": "High-volume 20 GB",
+        "name": "20 GB",
+        "price": "15.00",
+        "renews": true,
+        "sub": "30 days"
+      },
+      {
+        "id": "weekly-5gb",
+        "label": "Weekly 5 GB",
+        "name": "5 GB",
+        "price": "5.00",
+        "renews": false,
+        "sub": "7 days"
+      }
+    ]
+  },
+  "GET packs.roaming": {
+    "confirm": {
+      "body": "Roaming internet pack is activated immediately after purchasing. Are you sure you want to proceed?",
+      "confirm": "Yes, activate the pack",
+      "decline": "No, thanks",
+      "title": "You are not yet in the roaming area"
+    },
+    "results": [
+      {
+        "id": "r-500mb",
+        "name": "500 MB",
+        "price": "10.00",
+        "sub": "3 days"
+      },
+      {
+        "id": "r-2gb",
+        "name": "2 GB",
+        "price": "25.00",
+        "sub": "10 days"
+      },
+      {
+        "id": "r-5gb",
+        "name": "5 GB",
+        "price": "45.00",
+        "sub": "30 days"
+      }
+    ]
+  },
+  "GET packs.social": {
+    "app": "teams",
+    "badge": "AUTO-RENEWAL",
+    "cta": "Subscribe",
+    "default_plan": "10gb",
+    "id": "tehsil",
+    "note": "The traffic of the pack is used only in the specified application. After the traffic ends, standard internet pricing of your tariff applies.",
+    "plans": [
+      {
+        "id": "10gb",
+        "price": "0.70",
+        "title": "10 GB",
+        "validity": "1 d."
+      },
+      {
+        "id": "100gb",
+        "price": "9.90",
+        "title": "100 GB",
+        "validity": "30 d."
+      }
+    ],
+    "rows": [
+      {
+        "label": "Application traffic",
+        "value": "10 GB"
+      },
+      {
+        "label": "Validity period",
+        "value": "1 d."
+      },
+      {
+        "label": "Renews",
+        "value": "Automatically"
+      }
+    ],
+    "title": "Tehsil"
+  },
+  "GET referral.me": {
+    "code": "wa16Kg",
+    "earned": "0.00",
+    "headline": "Share Azercell app and get 3.00 ₼ bonus!",
+    "share_message": "Join me on the Azercell app and use my referral code wa16Kg",
+    "share_url": "https://azercell.com/app?ref=wa16Kg",
+    "steps": [
+      {
+        "body": "Share your invitation link or referral code. The link can be sent an unlimited number of times.",
+        "title": "Invite a friend who doesn’t have an account on the Azercell app"
+      },
+      {
+        "body": "Your friend must register for the first time using the link you shared and benefit from the specified paid services. Use of the paid service must be done within 24 hours of registration.",
+        "title": "Your friend registers and easily uses the service."
+      },
+      {
+        "body": "Once all eligibility requirements are confirmed, you will receive a bonus of 3.00 ₼. Your friend will also be granted 5GB of free internet.",
+        "title": "Earn together with your friend"
+      }
+    ],
+    "terms_url": null
+  },
+  "GET sim.call_forwarding": {
+    "all": false,
+    "busy": false,
+    "unanswered": false,
+    "unreachable": false
+  },
+  "GET sim.esim": {
+    "actions": [
+      {
+        "key": "transfer",
+        "label": "Transfer to eSIM"
+      },
+      {
+        "deep_link": "/esim/recover",
+        "key": "recover",
+        "label": "Recover eSIM"
+      }
+    ],
+    "asan_note": "The use of the obtained eSIM “Asan İmza” service is possible only after the “Asan İmza” certificates are renewed.",
+    "benefits": [
+      {
+        "body": "Your eSIM stays secure, no physical card to lose or damage",
+        "key": "safe",
+        "title": "Safe & Reliable"
+      },
+      {
+        "body": "Keep several numbers on one device and switch between them",
+        "key": "flexible",
+        "title": "Flexible"
+      },
+      {
+        "body": "No plastic card and no packaging",
+        "key": "eco",
+        "title": "Eco-friendly"
+      }
+    ]
+  },
+  "GET sim.line": {
+    "call_forwarding_status": "Off",
+    "mobile_internet": true,
+    "second_line": true,
+    "status": "open",
+    "status_sub": "Line activation/suspension at subscriber’s request",
+    "status_title": "Line status: Open",
+    "texts": {
+      "internet_settings_link": "Request automatic internet settings",
+      "second_line_sub": "With call holding you can hold the first caller on the line and answer the second call"
+    }
+  },
+  "GET sim.line_status": {
+    "consequences": [
+      "Your agreement will be automatically terminated",
+      "Your line will be completely deactivated",
+      "Remaining balance will be lost",
+      "The number may be reassigned to another person"
+    ],
+    "cta": "Close line",
+    "fee": "20.00",
+    "general": "You can activate or suspend your line upon request. The line can be closed for a maximum of 90 days",
+    "suspend_until": "2027-01-23",
+    "title": "Line status: Open"
+  },
+  "GET sim.overview": {
+    "badge": "4G (LTE) enabled",
+    "details": [
+      {
+        "label": "One-way blocking",
+        "value": "2026-10-25"
+      },
+      {
+        "label": "Deactivation date",
+        "value": "2027-01-23"
+      }
+    ],
+    "lte_enabled": true,
+    "msisdn": "994516643342",
+    "rows": [
+      {
+        "deep_link": "/sim/line",
+        "key": "line",
+        "label": "Line settings"
+      },
+      {
+        "deep_link": "/sim/roaming",
+        "key": "roaming",
+        "label": "Roaming settings"
+      },
+      {
+        "deep_link": "/esim",
+        "key": "esim",
+        "label": "eSIM"
+      },
+      {
+        "deep_link": "/sim/sms",
+        "key": "sms",
+        "label": "SMS settings"
+      },
+      {
+        "deep_link": "/sim/puk",
+        "key": "puk",
+        "label": "PUK codes"
+      },
+      {
+        "deep_link": "/sim/services",
+        "key": "services",
+        "label": "Services"
+      }
+    ]
+  },
+  "GET sim.puk": {
+    "codes": [
+      {
+        "label": "PUK 1",
+        "value": "5839 0447"
+      },
+      {
+        "label": "PUK 2",
+        "value": "8815 4421"
+      }
+    ],
+    "paragraphs": [
+      [
+        {
+          "text": "After 3 incorrect entries of PIN 1 and PIN 2, the codes "
+        },
+        {
+          "bold": true,
+          "text": "will be blocked"
+        },
+        {
+          "text": ". Use the matching PUK code to unblock them."
+        }
+      ],
+      [
+        {
+          "text": "After 10 incorrect entries of a PUK code, the SIM card "
+        },
+        {
+          "bold": true,
+          "text": "is blocked permanently"
+        },
+        {
+          "text": " and has to be replaced."
+        }
+      ]
+    ]
+  },
+  "GET sim.roaming": {
+    "changed_at": null,
+    "enabled": false,
+    "texts": {
+      "packs_title": "Roaming packs",
+      "search_placeholder": "Explore countries and tariffs",
+      "search_title": "Search for country pricing"
+    }
+  },
+  "GET sim.service_detail": {
+    "action": {
+      "kind": "subscribe",
+      "label": "Subscribe for 0.90 ₼"
+    },
+    "activated": false,
+    "badge": "AUTO-RENEWAL",
+    "id": "missed-call",
+    "name": "Buraxılmış zəng",
+    "period": "30 days",
+    "price": "0.90",
+    "sections": [
+      {
+        "text": "You receive an SMS about every call you missed while your phone was switched off or out of coverage."
+      },
+      {
+        "rows": [
+          {
+            "label": "Price",
+            "value": "0.90 ₼"
+          },
+          {
+            "label": "Validity period",
+            "value": "30 days"
+          },
+          {
+            "label": "Renews",
+            "value": "Automatically"
+          }
+        ]
+      },
+      {
+        "option": {
+          "id": "xeber-ver",
+          "label": "Xəbər ver",
+          "sub": "Let the caller know when you are back in the network"
+        }
+      }
+    ],
+    "sub": "Find out who called while you were unreachable"
+  },
+  "GET sim.service_list": {
+    "results": [
+      {
+        "activated": false,
+        "badge": "AUTO-RENEWAL",
+        "id": "missed-call",
+        "name": "Buraxılmış zəng",
+        "period": "30 days",
+        "price": "0.90",
+        "sub": "Find out who called while you were unreachable"
+      },
+      {
+        "activated": false,
+        "badge": "AUTO-RENEWAL",
+        "id": "whos-calling",
+        "name": "Who is calling",
+        "period": "30 days",
+        "price": "1.00",
+        "sub": "See the name of unknown callers"
+      },
+      {
+        "activated": false,
+        "badge": "AUTO-RENEWAL",
+        "id": "ringback-tone",
+        "name": "Ringback tone",
+        "period": "30 days",
+        "price": "1.50",
+        "sub": "Callers hear music instead of the standard tone"
+      }
+    ]
+  },
+  "GET sim.sms": {
+    "language": "az",
+    "languages": [
+      {
+        "id": "az",
+        "name": "Azerbaijani"
+      },
+      {
+        "id": "en",
+        "name": "English"
+      },
+      {
+        "id": "ru",
+        "name": "Russian"
+      }
+    ],
+    "toggles": {
+      "ads": true,
+      "campaigns": true,
+      "partners": true
+    }
+  },
+  "GET tariffs.change": {
+    "results": [
+      {
+        "cards": [
+          {
+            "family_id": "digimax",
+            "features": [
+              {
+                "kind": "data",
+                "value": "5-25 GB"
+              },
+              {
+                "kind": "minutes",
+                "value": "100-500 min."
+              }
+            ],
+            "id": "digimax",
+            "is_new": false,
+            "period": "28 days",
+            "price": "12-30",
+            "socials": [
+              "whatsapp",
+              "telegram",
+              "instagram"
+            ],
+            "tagline": "Internet, calls and social networks in one tariff",
+            "title": "DigiMax"
+          },
+          {
+            "family_id": null,
+            "features": [
+              {
+                "kind": "data",
+                "value": "3 GB"
+              },
+              {
+                "kind": "minutes",
+                "value": "50 min."
+              }
+            ],
+            "id": "digimax-3gb",
+            "is_new": true,
+            "period": "28 days",
+            "price": "9",
+            "socials": [
+              "whatsapp"
+            ],
+            "tagline": "The essentials at the lowest price",
+            "title": "DigiMax 3GB"
+          }
+        ],
+        "id": "digimax",
+        "title": "DigiMax"
+      },
+      {
+        "cards": [
+          {
+            "family_id": "premium-plus",
+            "features": [
+              {
+                "kind": "data",
+                "value": "60-100 GB"
+              },
+              {
+                "kind": "minutes",
+                "value": "Unlimited"
+              }
+            ],
+            "id": "premium-plus",
+            "is_new": false,
+            "period": "30 days",
+            "price": "60-90",
+            "socials": [
+              "whatsapp",
+              "telegram",
+              "instagram",
+              "youtube"
+            ],
+            "tagline": "Unlimited calls and a personal curator",
+            "title": "Premium+"
+          },
+          {
+            "family_id": null,
+            "features": [
+              {
+                "kind": "data",
+                "value": "40 GB"
+              },
+              {
+                "kind": "minutes",
+                "value": "1000 min."
+              }
+            ],
+            "id": "premium",
+            "is_new": false,
+            "period": "30 days",
+            "price": "45",
+            "socials": [
+              "whatsapp",
+              "telegram"
+            ],
+            "tagline": "Premium service for everyday use",
+            "title": "Premium"
+          }
+        ],
+        "id": "premium",
+        "title": "Premium"
+      }
+    ]
+  },
+  "GET tariffs.families": {
+    "results": [
+      {
+        "badges": [
+          "PREPAID"
+        ],
+        "cta": "Subscribe for 18.00 ₼",
+        "id": "digimax",
+        "is_premium": false,
+        "name": "DigiMax",
+        "note": "When the subscription fee of the tariff is paid, the line of the number will remain bilaterally active for 28 days.",
+        "plans": [
+          {
+            "features": [
+              {
+                "kind": "internet",
+                "label": "Internet",
+                "value": "5 GB"
+              },
+              {
+                "kind": "calls",
+                "label": "Local calls",
+                "value": "100 min."
+              },
+              {
+                "kind": "sms",
+                "label": "SMS",
+                "value": "50 SMS"
+              },
+              {
+                "kind": "validity",
+                "label": "Validity period",
+                "value": "28 d."
+              }
+            ],
+            "hot": false,
+            "id": "digimax-5",
+            "price": "12.00",
+            "title": "DigiMax 5GB"
+          },
+          {
+            "features": [
+              {
+                "kind": "internet",
+                "label": "Internet",
+                "value": "10 GB"
+              },
+              {
+                "kind": "calls",
+                "label": "Local calls",
+                "value": "200 min."
+              },
+              {
+                "kind": "sms",
+                "label": "SMS",
+                "value": "100 SMS"
+              },
+              {
+                "kind": "social",
+                "label": "Social networks",
+                "socials": [
+                  "whatsapp",
+                  "telegram"
+                ],
+                "value": "Unlimited"
+              },
+              {
+                "kind": "validity",
+                "label": "Validity period",
+                "value": "28 d."
+              }
+            ],
+            "hot": true,
+            "id": "digimax-10",
+            "price": "18.00",
+            "title": "DigiMax 10GB"
+          },
+          {
+            "features": [
+              {
+                "kind": "internet",
+                "label": "Internet",
+                "value": "25 GB"
+              },
+              {
+                "kind": "calls",
+                "label": "Local calls",
+                "value": "500 min."
+              },
+              {
+                "kind": "sms",
+                "label": "SMS",
+                "value": "200 SMS"
+              },
+              {
+                "kind": "social",
+                "label": "Social networks",
+                "socials": [
+                  "whatsapp",
+                  "telegram",
+                  "instagram"
+                ],
+                "value": "Unlimited"
+              },
+              {
+                "kind": "validity",
+                "label": "Validity period",
+                "value": "28 d."
+              }
+            ],
+            "hot": true,
+            "id": "digimax-25",
+            "price": "30.00",
+            "title": "DigiMax 25GB"
+          }
+        ],
+        "selected_plan": "digimax-10",
+        "subtitle": null,
+        "total_price": [
+          {
+            "heading": "When you use all package, prices will be next:",
+            "rows": [
+              {
+                "label": "Internet - 1MB",
+                "price": "0.05"
+              },
+              {
+                "label": "Local calls - 1 min.",
+                "price": "0.06"
+              },
+              {
+                "label": "SMS - 1 pcs.",
+                "price": "0.05"
+              },
+              {
+                "label": "International SMS - 1 pcs.",
+                "price": "0.20"
+              }
+            ],
+            "tone": "secondary"
+          },
+          {
+            "heading": "If monthly fee is not paid:",
+            "rows": [
+              {
+                "label": "Internet - 1MB",
+                "price": "0.10"
+              },
+              {
+                "label": "Local calls - 1 min.",
+                "price": "0.10"
+              },
+              {
+                "label": "SMS - 1 pcs.",
+                "price": "0.06"
+              },
+              {
+                "label": "International SMS - 1 pcs.",
+                "price": "0.25"
+              }
+            ],
+            "tone": "red"
+          }
+        ]
+      },
+      {
+        "badges": [
+          "POSTPAID"
+        ],
+        "cta": "Subscribe for 60.00 ₼",
+        "id": "premium-plus",
+        "is_premium": true,
+        "name": "Premium+",
+        "note": "When the subscription fee of the tariff is paid, the line of the number will remain bilaterally active for 28 days.",
+        "plans": [
+          {
+            "features": [
+              {
+                "kind": "internet",
+                "label": "Internet",
+                "value": "60 GB"
+              },
+              {
+                "kind": "calls",
+                "label": "Local calls",
+                "value": "Unlimited"
+              },
+              {
+                "kind": "sms",
+                "label": "SMS",
+                "value": "500 SMS"
+              },
+              {
+                "kind": "social",
+                "label": "Social networks",
+                "socials": [
+                  "whatsapp",
+                  "telegram",
+                  "instagram",
+                  "youtube"
+                ],
+                "value": "Unlimited"
+              },
+              {
+                "kind": "roaming",
+                "label": "Roaming internet",
+                "value": "1 GB"
+              },
+              {
+                "kind": "validity",
+                "label": "Validity period",
+                "value": "28 d."
+              }
+            ],
+            "hot": true,
+            "id": "premium-60",
+            "price": "60.00",
+            "title": "Premium+ 60GB"
+          },
+          {
+            "features": [
+              {
+                "kind": "internet",
+                "label": "Internet",
+                "value": "100 GB"
+              },
+              {
+                "kind": "calls",
+                "label": "Local calls",
+                "value": "Unlimited"
+              },
+              {
+                "kind": "sms",
+                "label": "SMS",
+                "value": "Unlimited"
+              },
+              {
+                "kind": "social",
+                "label": "Social networks",
+                "socials": [
+                  "whatsapp",
+                  "telegram",
+                  "instagram",
+                  "youtube"
+                ],
+                "value": "Unlimited"
+              },
+              {
+                "kind": "roaming",
+                "label": "Roaming internet",
+                "value": "3 GB"
+              },
+              {
+                "kind": "validity",
+                "label": "Validity period",
+                "value": "28 d."
+              }
+            ],
+            "hot": false,
+            "id": "premium-100",
+            "price": "90.00",
+            "title": "Premium+ 100GB"
+          }
+        ],
+        "selected_plan": "premium-60",
+        "subtitle": "For those who expect more",
+        "total_price": [
+          {
+            "heading": "When you use all package, prices will be next:",
+            "rows": [
+              {
+                "label": "Internet - 1MB",
+                "price": "0.05"
+              },
+              {
+                "label": "Local calls - 1 min.",
+                "price": "0.06"
+              },
+              {
+                "label": "SMS - 1 pcs.",
+                "price": "0.05"
+              },
+              {
+                "label": "International SMS - 1 pcs.",
+                "price": "0.20"
+              }
+            ],
+            "tone": "secondary"
+          },
+          {
+            "heading": "If monthly fee is not paid:",
+            "rows": [
+              {
+                "label": "Internet - 1MB",
+                "price": "0.10"
+              },
+              {
+                "label": "Local calls - 1 min.",
+                "price": "0.10"
+              },
+              {
+                "label": "SMS - 1 pcs.",
+                "price": "0.06"
+              },
+              {
+                "label": "International SMS - 1 pcs.",
+                "price": "0.25"
+              }
+            ],
+            "tone": "red"
+          }
+        ]
+      }
+    ]
+  },
+  "GET tariffs.family": {
+    "badges": [
+      "PREPAID"
+    ],
+    "cta": "Subscribe for 18.00 ₼",
+    "id": "digimax",
+    "is_premium": false,
+    "name": "DigiMax",
+    "note": "When the subscription fee of the tariff is paid, the line of the number will remain bilaterally active for 28 days.",
+    "plans": [
+      {
+        "features": [
+          {
+            "kind": "internet",
+            "label": "Internet",
+            "value": "5 GB"
+          },
+          {
+            "kind": "calls",
+            "label": "Local calls",
+            "value": "100 min."
+          },
+          {
+            "kind": "sms",
+            "label": "SMS",
+            "value": "50 SMS"
+          },
+          {
+            "kind": "validity",
+            "label": "Validity period",
+            "value": "28 d."
+          }
+        ],
+        "hot": false,
+        "id": "digimax-5",
+        "price": "12.00",
+        "title": "DigiMax 5GB"
+      },
+      {
+        "features": [
+          {
+            "kind": "internet",
+            "label": "Internet",
+            "value": "10 GB"
+          },
+          {
+            "kind": "calls",
+            "label": "Local calls",
+            "value": "200 min."
+          },
+          {
+            "kind": "sms",
+            "label": "SMS",
+            "value": "100 SMS"
+          },
+          {
+            "kind": "social",
+            "label": "Social networks",
+            "socials": [
+              "whatsapp",
+              "telegram"
+            ],
+            "value": "Unlimited"
+          },
+          {
+            "kind": "validity",
+            "label": "Validity period",
+            "value": "28 d."
+          }
+        ],
+        "hot": true,
+        "id": "digimax-10",
+        "price": "18.00",
+        "title": "DigiMax 10GB"
+      },
+      {
+        "features": [
+          {
+            "kind": "internet",
+            "label": "Internet",
+            "value": "25 GB"
+          },
+          {
+            "kind": "calls",
+            "label": "Local calls",
+            "value": "500 min."
+          },
+          {
+            "kind": "sms",
+            "label": "SMS",
+            "value": "200 SMS"
+          },
+          {
+            "kind": "social",
+            "label": "Social networks",
+            "socials": [
+              "whatsapp",
+              "telegram",
+              "instagram"
+            ],
+            "value": "Unlimited"
+          },
+          {
+            "kind": "validity",
+            "label": "Validity period",
+            "value": "28 d."
+          }
+        ],
+        "hot": true,
+        "id": "digimax-25",
+        "price": "30.00",
+        "title": "DigiMax 25GB"
+      }
+    ],
+    "selected_plan": "digimax-10",
+    "subtitle": null,
+    "total_price": [
+      {
+        "heading": "When you use all package, prices will be next:",
+        "rows": [
+          {
+            "label": "Internet - 1MB",
+            "price": "0.05"
+          },
+          {
+            "label": "Local calls - 1 min.",
+            "price": "0.06"
+          },
+          {
+            "label": "SMS - 1 pcs.",
+            "price": "0.05"
+          },
+          {
+            "label": "International SMS - 1 pcs.",
+            "price": "0.20"
+          }
+        ],
+        "tone": "secondary"
+      },
+      {
+        "heading": "If monthly fee is not paid:",
+        "rows": [
+          {
+            "label": "Internet - 1MB",
+            "price": "0.10"
+          },
+          {
+            "label": "Local calls - 1 min.",
+            "price": "0.10"
+          },
+          {
+            "label": "SMS - 1 pcs.",
+            "price": "0.06"
+          },
+          {
+            "label": "International SMS - 1 pcs.",
+            "price": "0.25"
+          }
+        ],
+        "tone": "red"
+      }
+    ]
+  },
+  "GET tariffs.hot": {
+    "results": [
+      {
+        "family_id": "digimax",
+        "features": [
+          {
+            "kind": "data",
+            "value": "10 GB"
+          },
+          {
+            "kind": "minutes",
+            "value": "200 min."
+          },
+          {
+            "kind": "sms",
+            "value": "100 SMS"
+          }
+        ],
+        "id": "digimax-10",
+        "price": "18.00",
+        "socials": [
+          "whatsapp",
+          "telegram"
+        ],
+        "title": "DigiMax 10GB"
+      },
+      {
+        "family_id": "premium-plus",
+        "features": [
+          {
+            "kind": "data",
+            "value": "60 GB"
+          },
+          {
+            "kind": "minutes",
+            "value": "Unlimited"
+          },
+          {
+            "kind": "sms",
+            "value": "500 SMS"
+          },
+          {
+            "kind": "roaming",
+            "value": "1 GB"
+          }
+        ],
+        "id": "premium-60",
+        "price": "60.00",
+        "socials": [
+          "whatsapp",
+          "telegram",
+          "instagram",
+          "youtube"
+        ],
+        "title": "Premium+ 60GB"
+      },
+      {
+        "family_id": "digimax",
+        "features": [
+          {
+            "kind": "data",
+            "value": "25 GB"
+          },
+          {
+            "kind": "minutes",
+            "value": "500 min."
+          },
+          {
+            "kind": "sms",
+            "value": "200 SMS"
+          }
+        ],
+        "id": "digimax-25",
+        "price": "30.00",
+        "socials": [
+          "whatsapp",
+          "telegram",
+          "instagram"
+        ],
+        "title": "DigiMax 25GB"
+      }
+    ]
+  },
+  "GET tariffs.my": {
+    "banner": {
+      "alt": "All you need and more!",
+      "deep_link": "/internet-packs",
+      "image": "http://localhost/media/content/banner-want-more.png"
+    },
+    "charging_note": "Charging interval: 1 minute for calls",
+    "family": "istesen",
+    "lines": [
+      {
+        "label": "Current tariff",
+        "value": "19.10 ₼/month"
+      },
+      {
+        "label": "Next renewal",
+        "value": "19.10 ₼/month"
+      }
+    ],
+    "payment_details": [
+      {
+        "label": "Validity period",
+        "value": "30 d."
+      },
+      {
+        "label": "Activation date",
+        "value": "2026-09-24T00:00:00+04:00"
+      },
+      {
+        "label": "Last payment date",
+        "value": "2026-09-24T00:00:00+04:00"
+      },
+      {
+        "label": "Next payment date",
+        "value": "2026-10-25T08:00:00+04:00"
+      },
+      {
+        "label": "Payment amount",
+        "value": "19.10"
+      }
+    ],
+    "pills": [
+      "CURRENT TARIFF",
+      "PREPAID"
+    ],
+    "renew": {
+      "body": "By renewing tariff, the remaining balance will be annulled but the existing old internet packs will still stay active.",
+      "title": "Renew tariff"
+    },
+    "title": "IsteSen",
+    "total_price": [
+      {
+        "heading": "When you use all package, prices will be next:",
+        "rows": [
+          {
+            "label": "Internet - 1MB",
+            "price": "0.05"
+          },
+          {
+            "label": "Local calls - 1 min.",
+            "price": "0.06"
+          },
+          {
+            "label": "SMS - 1 pcs.",
+            "price": "0.05"
+          },
+          {
+            "label": "International SMS - 1 pcs.",
+            "price": "0.20"
+          }
+        ],
+        "tone": "secondary"
+      },
+      {
+        "heading": "If monthly fee is not paid:",
+        "rows": [
+          {
+            "label": "Internet - 1MB",
+            "price": "0.10"
+          },
+          {
+            "label": "Local calls - 1 min.",
+            "price": "0.10"
+          },
+          {
+            "label": "SMS - 1 pcs.",
+            "price": "0.06"
+          },
+          {
+            "label": "International SMS - 1 pcs.",
+            "price": "0.25"
+          }
+        ],
+        "tone": "red"
+      }
+    ],
+    "usage": [
+      {
+        "kind": "internet",
+        "label": "Internet",
+        "ratio": 0.45,
+        "remaining": "7.20",
+        "remaining_unit": "GB",
+        "total": "16",
+        "total_unit": "GB"
+      },
+      {
+        "kind": "messaging",
+        "label": "Messaging",
+        "ratio": 0.98,
+        "remaining": "1003",
+        "remaining_unit": "MB",
+        "total": "1",
+        "total_unit": "GB"
+      },
+      {
+        "kind": "calls",
+        "label": "Local calls",
+        "ratio": 1.0,
+        "remaining": "30",
+        "remaining_unit": "MIN.",
+        "total": "30",
+        "total_unit": "MIN."
+      }
+    ]
+  },
+  "GET tariffs.premium": {
+    "benefits": [
+      {
+        "key": "curator",
+        "text": "Personal curator for all your needs"
+      },
+      {
+        "key": "priority",
+        "text": "Priority service in customer care and stores"
+      },
+      {
+        "key": "theme",
+        "text": "Exclusive Premium theme in the app"
+      },
+      {
+        "key": "roaming",
+        "text": "Special roaming offers"
+      },
+      {
+        "key": "lounge",
+        "text": "Access to airport lounges"
+      },
+      {
+        "key": "partners",
+        "text": "Discounts from Premium partners"
+      },
+      {
+        "key": "number",
+        "text": "Gold number selection"
+      },
+      {
+        "key": "events",
+        "text": "Invitations to private events"
+      }
+    ],
+    "logo": "http://localhost/media/content/premium-logo.png",
+    "note": "To access the Premium theme you must log in with Premium number as main account"
+  },
+  "GET tariffs.redesign": {
+    "estimate": "19.10",
+    "pricing": {
+      "base": "19.10",
+      "per_gb": "0.50",
+      "per_minute": "0.02"
+    },
+    "sliders": [
+      {
+        "key": "internet",
+        "label": "Internet GB",
+        "max": 16,
+        "min": 0,
+        "step": 1,
+        "value": 16
+      },
+      {
+        "key": "calls",
+        "label": "Local calls min.",
+        "max": 350,
+        "min": 30,
+        "step": 10,
+        "value": 30
+      },
+      {
+        "key": "instagramFb",
+        "label": "Instagram & FB GB",
+        "max": 5,
+        "min": 0,
+        "step": 1,
+        "value": 0
+      },
+      {
+        "key": "youtube",
+        "label": "YouTube GB",
+        "max": 10,
+        "min": 0,
+        "step": 1,
+        "value": 0
+      },
+      {
+        "key": "tiktok",
+        "label": "TikTok GB",
+        "max": 10,
+        "min": 0,
+        "step": 1,
+        "value": 0
+      }
+    ]
+  },
+  "GET tariffs.usage": {
+    "aggregation": [
+      {
+        "body": "The total shows the sum of the internet in your tariff and in all of your active internet packs.",
+        "title": "For internet"
+      },
+      {
+        "body": "The total shows the sum of the local minutes in your tariff and in all of your active packs.",
+        "title": "For calls"
+      }
+    ],
+    "period_left": {
+      "days": 15,
+      "hours": 16
+    },
+    "remaining": {
+      "data_gb": "7.20",
+      "data_total_gb": "16",
+      "minutes": 30,
+      "minutes_total": 30
+    },
+    "renewal_label": "Renews 25 October, 08:00",
+    "rows": [
+      {
+        "kind": "internet",
+        "label": "Internet",
+        "ratio": 0.45,
+        "remaining": "7.20",
+        "remaining_unit": "GB",
+        "total": "16",
+        "total_unit": "GB"
+      },
+      {
+        "kind": "messaging",
+        "label": "Messaging",
+        "ratio": 0.98,
+        "remaining": "1003",
+        "remaining_unit": "MB",
+        "total": "1",
+        "total_unit": "GB"
+      },
+      {
+        "kind": "calls",
+        "label": "Local calls",
+        "ratio": 1.0,
+        "remaining": "30",
+        "remaining_unit": "MIN.",
+        "total": "30",
+        "total_unit": "MIN."
+      }
+    ],
+    "tariff": "IsteSen"
+  },
+  "GET users.me": {
+    "app_version": null,
+    "display_msisdn": "051 664 33 42",
+    "display_name": "Qüdrət Abidzadə",
+    "id": 6,
+    "is_premium": false,
+    "language": "en",
+    "line_type": "prepaid",
+    "msisdn": "994516643342"
+  },
+  "PATCH sim.call_forwarding_update": {
+    "all": true,
+    "busy": false,
+    "unanswered": false,
+    "unreachable": false
+  },
+  "PATCH sim.line_update": {
+    "call_forwarding_status": "Off",
+    "mobile_internet": false,
+    "second_line": true,
+    "status": "open",
+    "status_sub": "Line activation/suspension at subscriber’s request",
+    "status_title": "Line status: Open",
+    "texts": {
+      "internet_settings_link": "Request automatic internet settings",
+      "second_line_sub": "With call holding you can hold the first caller on the line and answer the second call"
+    }
+  },
+  "PATCH sim.roaming_update": {
+    "changed_at": "2026-10-09T11:40:02Z",
+    "enabled": true,
+    "texts": {
+      "packs_title": "Roaming packs",
+      "search_placeholder": "Explore countries and tariffs",
+      "search_title": "Search for country pricing"
+    }
+  },
+  "PATCH sim.sms_update": {
+    "language": "en",
+    "languages": [
+      {
+        "id": "az",
+        "name": "Azerbaijani"
+      },
+      {
+        "id": "en",
+        "name": "English"
+      },
+      {
+        "id": "ru",
+        "name": "Russian"
+      }
+    ],
+    "toggles": {
+      "ads": true,
+      "campaigns": true,
+      "partners": false
+    }
+  },
+  "POST assistant.conversation_create": {
+    "created_at": "2026-10-09T11:40:02Z",
+    "external_id": "#3513324",
+    "id": 3513324,
+    "status": "open"
+  },
+  "POST assistant.message_send": {
+    "action": {
+      "action": "navigate",
+      "label": "Open remaining balance",
+      "to": "/remaining-balance"
+    },
+    "message": {
+      "content": "You have 7.20 GB left until 25 October.",
+      "created_at": "2026-10-09T11:40:02Z",
+      "id": 6,
+      "role": "assistant",
+      "route": "usage"
+    },
+    "user_message_id": 5
+  },
+  "POST assistant.rate": {
+    "message": "Thanks! Your rating helps us a lot"
+  },
+  "POST billing.steam_top_up": {
+    "balance": "71.21",
+    "steam_top_up": {
+      "account": "gamer_01",
+      "amount": "10.00",
+      "id": 1
+    },
+    "transaction": {
+      "amount": "-10.00",
+      "id": 8,
+      "title": "Steam balance gamer_01"
+    }
+  },
+  "POST billing.top_up_akart": {
+    "balance": "61.21",
+    "saved_akart": {
+      "id": 1,
+      "msisdn": "994516643342"
+    },
+    "top_up": {
+      "amount": "20.00",
+      "created_at": "2026-10-09T11:40:02Z",
+      "id": 6,
+      "method": "akart",
+      "status": "completed"
+    },
+    "transaction": {
+      "amount": "20.00",
+      "id": 6,
+      "title": "Number balance"
+    }
+  },
+  "POST billing.top_up_card": {
+    "balance": "41.21",
+    "top_up": {
+      "amount": "25.00",
+      "created_at": "2026-10-09T11:40:02Z",
+      "id": 5,
+      "method": "card",
+      "status": "completed"
+    },
+    "transaction": {
+      "amount": "25.00",
+      "id": 5,
+      "title": "Number balance"
+    }
+  },
+  "POST billing.top_up_google_pay": {
+    "balance": "81.21",
+    "top_up": {
+      "amount": "20.00",
+      "created_at": "2026-10-09T11:40:02Z",
+      "id": 7,
+      "method": "google_pay",
+      "status": "completed"
+    },
+    "transaction": {
+      "amount": "20.00",
+      "id": 7,
+      "title": "Number balance"
+    }
+  },
+  "POST content.app_rating": {
+    "message": "Thanks! Your rating helps us a lot"
+  },
+  "POST content.notification_read": {
+    "body": "Get 15 minutes of free time on your first Wingz ride when you pay with your Azercell balance.",
+    "cta": null,
+    "id": "wingz",
+    "read": true,
+    "sent_at": "2025-10-27T09:00:00Z",
+    "title": "Activate Wingz scooter with your Azercell balance!"
+  },
+  "POST content.story_viewed": {
+    "key": "especially",
+    "viewed": true
+  },
+  "POST packs.internet_purchase": {
+    "activation": {
+      "activated_at": "2026-10-09T11:40:02Z",
+      "auto_renew": false,
+      "expires_at": "2026-10-09T12:40:02Z",
+      "id": 1,
+      "label": "Unlimited 1 hour",
+      "pack_id": "unlimited-1h",
+      "status": "active"
+    },
+    "balance": "70.22",
+    "transaction": {
+      "amount": "-0.99",
+      "id": 9,
+      "title": "Unlimited 1 hour pack"
+    }
+  },
+  "POST packs.roaming_purchase": {
+    "activation": {
+      "activated_at": "2026-10-09T11:40:02Z",
+      "auto_renew": false,
+      "expires_at": "2026-10-12T11:40:02Z",
+      "id": 3,
+      "label": "Roaming 500 MB",
+      "pack_id": "r-500mb",
+      "status": "active"
+    },
+    "balance": "50.32",
+    "transaction": {
+      "amount": "-10.00",
+      "id": 11,
+      "title": "Roaming 500 MB pack"
+    }
+  },
+  "POST packs.social_activate": {
+    "activation": {
+      "activated_at": "2026-10-09T11:40:02Z",
+      "auto_renew": true,
+      "expires_at": "2026-11-08T11:40:02Z",
+      "id": 2,
+      "label": "Tehsil 100 GB",
+      "pack_id": "tehsil",
+      "status": "active"
+    },
+    "balance": "60.32",
+    "transaction": {
+      "amount": "-9.90",
+      "id": 10,
+      "title": "Tehsil 100 GB"
+    }
+  },
+  "POST sim.service_subscribe": {
+    "balance": "49.42",
+    "subscription": {
+      "id": 1,
+      "next_payment_at": "2026-11-08T11:40:02Z",
+      "service": "missed-call",
+      "status": "active"
+    },
+    "transaction": {
+      "amount": "-0.90",
+      "title": "Buraxılmış zəng service"
+    }
+  }
+}
