@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "api.common",
     "api.users",
+    "api.billing",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,13 @@ CELERY_BROKER_URL = env.text("CELERY_BROKER_URL", REDIS_URL)
 CELERY_TASK_ALWAYS_EAGER = not CELERY_BROKER_URL  # no broker: run tasks inline
 CELERY_TIMEZONE = "Asia/Baku"
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-CELERY_BEAT_SCHEDULE = {}
+CELERY_BEAT_SCHEDULE = {
+    "purge-idempotency-keys": {
+        "task": "api.billing.tasks.purge_idempotency_keys",
+        "schedule": timedelta(hours=1),
+    },
+}
+IDEMPOTENCY_KEY_DAYS = env.number("IDEMPOTENCY_KEY_DAYS", 7)
 
 # --- language and time -------------------------------------------------------
 
@@ -180,7 +187,11 @@ SPECTACULAR_SETTINGS = {
     "SCHEMA_PATH_PREFIX": r"/api/",
     "TAGS": [
         {"name": "users", "description": "Sign in and the subscriber's profile"},
+        {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
         {"name": "health", "description": "Liveness and readiness probes"},
     ],
     "SWAGGER_UI_SETTINGS": {"persistAuthorization": True, "docExpansion": "none"},
 }
+
+# Google Pay: payment_token == "simulated" completes immediately when enabled.
+GOOGLE_PAY_SIMULATED = env.flag("GOOGLE_PAY_SIMULATED", DEBUG)
