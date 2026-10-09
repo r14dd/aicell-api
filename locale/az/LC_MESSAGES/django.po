@@ -1,0 +1,841 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: aicell-api\n"
+"Language: az\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: api/assistant/services.py
+msgid "Too many messages, try again in a minute"
+msgstr "Çox mesaj göndərdiniz, bir dəqiqədən sonra yenidən cəhd edin"
+
+#: api/assistant/views.py
+msgid "AI Chat Bot"
+msgstr "Süni intellekt çat-botu"
+
+#: api/assistant/views.py
+msgid "Ask a question"
+msgstr "Sual verin"
+
+#: api/assistant/views.py
+msgid "How can we support you?"
+msgstr "Sizə necə kömək edə bilərik?"
+
+#: api/assistant/views.py
+msgid "New conversation"
+msgstr "Yeni söhbət"
+
+#: api/assistant/views.py
+msgid "Rate your conversation"
+msgstr "Söhbəti qiymətləndirin"
+
+#: api/assistant/views.py
+msgid "Share your ideas for new features"
+msgstr "Yeni funksiyalar üçün fikirlərinizi bölüşün"
+
+#: api/assistant/views.py
+msgid "Support messages are not part of this prototype yet"
+msgstr "Dəstək mesajları hələ bu prototipdə yoxdur"
+
+#: api/assistant/views.py api/content/services.py
+msgid "Thanks! Your rating helps us a lot"
+msgstr "Təşəkkürlər! Qiymətiniz bizə çox kömək edir"
+
+#: api/assistant/views.py
+msgid "We're here to help, just ask away!"
+msgstr "Kömək etməyə hazırıq, sadəcə soruşun!"
+
+#: api/assistant/views.py
+msgid "Your feedback helps us improve!"
+msgstr "Rəyiniz bizə daha yaxşı olmağa kömək edir!"
+
+#: api/billing/idempotency.py
+msgid "Idempotency-Key header is required"
+msgstr "Idempotency-Key başlığı tələb olunur"
+
+#: api/billing/idempotency.py
+msgid "Idempotency-Key must be a UUID"
+msgstr "Idempotency-Key UUID formatında olmalıdır"
+
+#: api/billing/idempotency.py
+msgid "Idempotency-Key was already used for another request"
+msgstr "Bu Idempotency-Key artıq başqa sorğu üçün istifadə olunub"
+
+#: api/billing/services.py
+msgid "Not enough balance for this top-up"
+msgstr "Bu ödəniş üçün balans kifayət etmir"
+
+#: api/billing/services.py
+msgid "Number balance"
+msgstr "Nömrə balansı"
+
+#: api/billing/services.py
+msgid "Steam balance %(account)s"
+msgstr "Steam balansı %(account)s"
+
+#: api/billing/views.py
+msgid "Adding a card is not part of this prototype yet"
+msgstr "Kart əlavə etmək hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "Aztelekom payments are not part of this prototype yet"
+msgstr "Aztelekom ödənişləri hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "Card settings are not part of this prototype yet"
+msgstr "Kart ayarları hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "Enter the first 6 digits of the card"
+msgstr "Kartın ilk 6 rəqəmini daxil edin"
+
+#: api/billing/views.py
+msgid "Get Kredit"
+msgstr "Kredit al"
+
+#: api/billing/views.py
+msgid "Google Pay token verification is not part of this prototype yet"
+msgstr "Google Pay tokeninin yoxlanması hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py api/kredit/views.py
+msgid ""
+"Instant loan with akart! Complete your payments up to 50 ₼ with akart loan"
+msgstr ""
+"akart ilə ani kredit! 50 ₼-dək ödənişlərinizi akart krediti ilə tamamlayın"
+
+#: api/billing/views.py
+msgid "Paying for another number is not part of this prototype yet"
+msgstr "Başqa nömrə üçün ödəniş hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "Payment history is not part of this prototype yet"
+msgstr "Ödəniş tarixçəsi hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "Removing a Steam account is not part of this prototype yet"
+msgstr "Steam hesabını silmək hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "Saved akart numbers are not part of this prototype yet"
+msgstr "Yadda saxlanmış akart nömrələri hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "Top up from bank card"
+msgstr "Bank kartı ilə artır"
+
+#: api/billing/views.py
+msgid "Utility payments are not part of this prototype yet"
+msgstr "Kommunal ödənişlər hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "Voucher"
+msgstr "Vauçer"
+
+#: api/billing/views.py
+msgid "Voucher redemption is not part of this prototype yet"
+msgstr "Vauçerin istifadəsi hələ bu prototipdə yoxdur"
+
+#: api/billing/views.py
+msgid "We don't charge any fees for Google Pay top-ups"
+msgstr "Google Pay ilə balans artımı üçün komissiya tutulmur"
+
+#: api/common/exceptions.py
+msgid "Already active"
+msgstr "Artıq aktivdir"
+
+#: api/common/exceptions.py
+msgid "Authentication required"
+msgstr "Avtorizasiya tələb olunur"
+
+#: api/common/exceptions.py
+msgid "Invalid input"
+msgstr "Yanlış məlumat"
+
+#: api/common/exceptions.py
+msgid "Not enough balance"
+msgstr "Balans kifayət etmir"
+
+#: api/common/exceptions.py
+msgid "Not found."
+msgstr "Tapılmadı."
+
+#: api/common/exceptions.py
+msgid "This is not part of this prototype yet"
+msgstr "Bu hələ prototipdə yoxdur"
+
+#: api/common/exceptions.py
+msgid "Token expired"
+msgstr "Tokenin vaxtı bitib"
+
+#: api/common/exceptions.py
+msgid "Too many requests"
+msgstr "Həddən çox sorğu"
+
+#: api/common/exceptions.py
+msgid "Too many requests, try again in %(seconds)s seconds"
+msgstr "Həddən çox sorğu, %(seconds)s saniyədən sonra yenidən cəhd edin"
+
+#: api/common/http.py
+msgid "Enter a number as 994XXXXXXXXX"
+msgstr "Nömrəni 994XXXXXXXXX formatında daxil edin"
+
+#: api/common/http.py
+msgid "Enter an amount between %(min)s and %(max)s ₼"
+msgstr "%(min)s ilə %(max)s ₼ arasında məbləğ daxil edin"
+
+#: api/common/http.py
+msgid "Invalid cursor"
+msgstr "Yanlış kursor"
+
+#: api/content/services.py
+msgid "Thanks for the feedback, we will do better"
+msgstr "Rəyiniz üçün təşəkkürlər, daha yaxşı olacağıq"
+
+#: api/content/views.py
+msgid "30 il səninlə"
+msgstr "30 il səninlə"
+
+#: api/content/views.py
+msgid "About Azercell is not part of this prototype yet"
+msgstr "“Azercell haqqında” bölməsi hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "App subscriptions are not part of this prototype yet"
+msgstr "Tətbiq abunəlikləri hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Aztelekom orders are not part of this prototype yet"
+msgstr "Aztelekom sifarişləri hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Chance collection starts on 19 October 2026"
+msgstr "Şansların toplanması 19 oktyabr 2026-cı ildə başlayır"
+
+#: api/content/views.py
+msgid "Game search is not part of this prototype yet"
+msgstr "Oyun axtarışı hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Games are not part of this prototype yet"
+msgstr "Oyunlar hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Gift Wheel is not part of this prototype yet"
+msgstr "Hədiyyə çarxı hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Help & Support is not part of this prototype yet"
+msgstr "Yardım və dəstək hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Learn more about the lottery"
+msgstr "Lotereya haqqında ətraflı"
+
+#: api/content/views.py
+msgid "Lottery chances are not part of this prototype yet"
+msgstr "Lotereya şansları hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Lottery terms are not part of this prototype yet"
+msgstr "Lotereya şərtləri hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Notification options are not part of this prototype yet"
+msgstr "Bildiriş seçimləri hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Problem reports are not part of this prototype yet"
+msgstr "Problem bildirişləri hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Stickers are not part of this prototype yet"
+msgstr "Stikerlər hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Stores map is not part of this prototype yet"
+msgstr "Mağazalar xəritəsi hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "The tournament is not part of this prototype yet"
+msgstr "Turnir hələ bu prototipdə yoxdur"
+
+#: api/content/views.py
+msgid "Tournament rules are not part of this prototype yet"
+msgstr "Turnir qaydaları hələ bu prototipdə yoxdur"
+
+#: api/kredit/views.py
+msgid "%(count)s items"
+msgstr "%(count)s borc"
+
+#: api/kredit/views.py
+msgid "%(name)s %(amount)s ₼ will be added to your balance (prototype)"
+msgstr "%(name)s %(amount)s ₼ balansınıza əlavə olunacaq (prototip)"
+
+#: api/kredit/views.py
+msgid "%(name)s %(mb)s MB will be added to your number (prototype)"
+msgstr "%(name)s %(mb)s MB nömrənizə əlavə olunacaq (prototip)"
+
+#: api/kredit/views.py
+msgid "Activate Tamamla & Cover unexpected expenses!"
+msgstr "Tamamla-nı aktivləşdirin və gözlənilməz xərcləri qarşılayın!"
+
+#: api/kredit/views.py
+msgid "Apply for akart with ease: download the akart app and register"
+msgstr ""
+"akart-a rahat müraciət edin: akart tətbiqini yükləyin və qeydiyyatdan keçin"
+
+#: api/kredit/views.py
+msgid "Get %(name)s %(amount)s ₼"
+msgstr "%(name)s %(amount)s ₼ al"
+
+#: api/kredit/views.py
+msgid "Get now!"
+msgstr "İndi al!"
+
+#: api/kredit/views.py
+msgid ""
+"Give permission to borrow up to 50.00 ₼ when your balance is not enough"
+msgstr "Balansınız çatmayanda 50.00 ₼-dək borc götürməyə icazə verin"
+
+#: api/kredit/views.py
+msgid "no items"
+msgstr "borc yoxdur"
+
+#: api/packs/services.py
+msgid "%(label)s pack"
+msgstr "%(label)s paketi"
+
+#: api/packs/services.py
+msgid "Not enough balance for this pack"
+msgstr "Bu paket üçün balans kifayət etmir"
+
+#: api/packs/services.py
+msgid "Roaming %(name)s"
+msgstr "Rouminq %(name)s"
+
+#: api/packs/services.py
+msgid "This pack is already active"
+msgstr "Bu paket artıq aktivdir"
+
+#: api/packs/services.py
+msgid "Unknown pack"
+msgstr "Naməlum paket"
+
+#: api/packs/services.py
+msgid "Unknown plan"
+msgstr "Naməlum plan"
+
+#: api/packs/texts.py
+msgid "For only 0.99 ₼"
+msgstr "Cəmi 0.99 ₼-a"
+
+#: api/packs/texts.py
+msgid "No, thanks"
+msgstr "Xeyr, təşəkkürlər"
+
+#: api/packs/texts.py
+msgid ""
+"Roaming internet pack is activated immediately after purchasing. Are you "
+"sure you want to proceed?"
+msgstr ""
+"Rouminq internet paketi alışdan dərhal sonra aktivləşir. Davam etmək "
+"istədiyinizə əminsiniz?"
+
+#: api/packs/texts.py
+msgid ""
+"The traffic of the pack is used only in the specified application. After the"
+" traffic ends, standard internet pricing of your tariff applies."
+msgstr ""
+"Paketin trafiki yalnız göstərilən tətbiqdə istifadə olunur. Trafik bitdikdən"
+" sonra tarifinizin standart internet qiymətləri tətbiq edilir."
+
+#: api/packs/texts.py
+msgid "Unlimited entertainment is waiting for you!"
+msgstr "Limitsiz əyləncə sizi gözləyir!"
+
+#: api/packs/texts.py
+msgid "Yes, activate the pack"
+msgstr "Bəli, paketi aktivləşdir"
+
+#: api/packs/texts.py
+msgid "You are not yet in the roaming area"
+msgstr "Siz hələ rouminq zonasında deyilsiniz"
+
+#: api/packs/views.py api/sim/views.py
+msgid "AUTO-RENEWAL"
+msgstr "AVTO-YENİLƏNMƏ"
+
+#: api/packs/views.py
+msgid "Active packs are not part of this prototype yet"
+msgstr "Aktiv paketlər hələ bu prototipdə yoxdur"
+
+#: api/packs/views.py
+msgid "Application traffic"
+msgstr "Tətbiq trafiki"
+
+#: api/packs/views.py
+msgid "Automatically"
+msgstr "Avtomatik"
+
+#: api/packs/views.py
+msgid "Manually"
+msgstr "Əl ilə"
+
+#: api/packs/views.py
+msgid "Renews"
+msgstr "Yenilənmə"
+
+#: api/packs/views.py api/tariffs/views.py
+msgid "Validity period"
+msgstr "Etibarlılıq müddəti"
+
+#: api/referral/views.py
+msgid "Join me on the Azercell app and use my referral code %(code)s"
+msgstr "Azercell tətbiqinə qoşul və referal kodumdan istifadə et: %(code)s"
+
+#: api/referral/views.py
+msgid "Referral events are not part of this prototype yet"
+msgstr "Referal hadisələri hələ bu prototipdə yoxdur"
+
+#: api/referral/views.py
+msgid "Share Azercell app and get 3.00 ₼ bonus!"
+msgstr "Azercell tətbiqini paylaşın və 3.00 ₼ bonus qazanın!"
+
+#: api/referral/views.py
+msgid "Terms of Use are not part of this prototype yet"
+msgstr "İstifadə şərtləri hələ bu prototipdə yoxdur"
+
+#: api/sim/services.py
+msgid "%(name)s service"
+msgstr "%(name)s xidməti"
+
+#: api/sim/services.py
+msgid "Not enough balance for this service"
+msgstr "Bu xidmət üçün balans kifayət etmir"
+
+#: api/sim/services.py
+msgid "This service is already active"
+msgstr "Bu xidmət artıq aktivdir"
+
+#: api/sim/services.py
+msgid "Turn off forwarding of all calls first"
+msgstr "Əvvəlcə bütün zənglərin yönləndirilməsini söndürün"
+
+#: api/sim/services.py
+msgid "Unknown option"
+msgstr "Naməlum seçim"
+
+#: api/sim/texts.py
+msgid " and has to be replaced."
+msgstr " və dəyişdirilməlidir."
+
+#: api/sim/texts.py
+msgid ". Use the matching PUK code to unblock them."
+msgstr ". Onları açmaq üçün uyğun PUK kodundan istifadə edin."
+
+#: api/sim/texts.py
+msgid "After 10 incorrect entries of a PUK code, the SIM card "
+msgstr "PUK kodu 10 dəfə səhv daxil edildikdən sonra SIM kart "
+
+#: api/sim/texts.py
+msgid "After 3 incorrect entries of PIN 1 and PIN 2, the codes "
+msgstr "PIN 1 və PIN 2 kodları 3 dəfə səhv daxil edildikdən sonra kodlar "
+
+#: api/sim/texts.py
+msgid "Azerbaijani"
+msgstr "Azərbaycan dili"
+
+#: api/sim/texts.py
+msgid "Closed"
+msgstr "Bağlı"
+
+#: api/sim/texts.py
+msgid "Eco-friendly"
+msgstr "Ekoloji təmiz"
+
+#: api/sim/texts.py
+msgid "English"
+msgstr "İngilis dili"
+
+#: api/sim/texts.py
+msgid "Explore countries and tariffs"
+msgstr "Ölkələri və tarifləri araşdırın"
+
+#: api/sim/texts.py
+msgid "Flexible"
+msgstr "Çevik"
+
+#: api/sim/texts.py
+msgid "Keep several numbers on one device and switch between them"
+msgstr "Bir cihazda bir neçə nömrə saxlayın və aralarında keçid edin"
+
+#: api/sim/texts.py
+msgid "Line activation/suspension at subscriber’s request"
+msgstr "Abunəçinin istəyi ilə xəttin aktivləşdirilməsi/dayandırılması"
+
+#: api/sim/texts.py
+msgid "Line settings"
+msgstr "Xətt ayarları"
+
+#: api/sim/texts.py
+msgid "No plastic card and no packaging"
+msgstr "Plastik kart və qablaşdırma yoxdur"
+
+#: api/sim/texts.py
+msgid "Open"
+msgstr "Açıq"
+
+#: api/sim/texts.py
+msgid "PUK codes"
+msgstr "PUK kodları"
+
+#: api/sim/texts.py
+msgid "Recover eSIM"
+msgstr "eSIM-i bərpa et"
+
+#: api/sim/texts.py
+msgid "Remaining balance will be lost"
+msgstr "Qalan balans itiriləcək"
+
+#: api/sim/texts.py
+msgid "Request automatic internet settings"
+msgstr "Avtomatik internet ayarlarını istə"
+
+#: api/sim/texts.py
+msgid "Roaming packs"
+msgstr "Rouminq paketləri"
+
+#: api/sim/texts.py
+msgid "Roaming settings"
+msgstr "Rouminq ayarları"
+
+#: api/sim/texts.py
+msgid "Russian"
+msgstr "Rus dili"
+
+#: api/sim/texts.py
+msgid "SMS settings"
+msgstr "SMS ayarları"
+
+#: api/sim/texts.py
+msgid "Safe & Reliable"
+msgstr "Təhlükəsiz və etibarlı"
+
+#: api/sim/texts.py
+msgid "Search for country pricing"
+msgstr "Ölkələr üzrə qiymətləri axtarın"
+
+#: api/sim/texts.py
+msgid "Services"
+msgstr "Xidmətlər"
+
+#: api/sim/texts.py
+msgid "Suspended"
+msgstr "Dayandırılıb"
+
+#: api/sim/texts.py
+msgid "The number may be reassigned to another person"
+msgstr "Nömrə başqa şəxsə verilə bilər"
+
+#: api/sim/texts.py
+msgid ""
+"The use of the obtained eSIM “Asan İmza” service is possible only after the "
+"“Asan İmza” certificates are renewed."
+msgstr ""
+"Alınmış eSIM-də “Asan İmza” xidmətindən istifadə yalnız “Asan İmza” "
+"sertifikatları yeniləndikdən sonra mümkündür."
+
+#: api/sim/texts.py
+msgid "Transfer to eSIM"
+msgstr "eSIM-ə keç"
+
+#: api/sim/texts.py
+msgid ""
+"With call holding you can hold the first caller on the line and answer the "
+"second call"
+msgstr ""
+"Zəng gözlətmə ilə birinci zəng edəni xətdə saxlayıb ikinci zəngə cavab verə "
+"bilərsiniz"
+
+#: api/sim/texts.py
+msgid ""
+"You can activate or suspend your line upon request. The line can be closed "
+"for a maximum of 90 days"
+msgstr ""
+"Xəttinizi istəyinizlə aktivləşdirə və ya dayandıra bilərsiniz. Xətt ən çoxu "
+"90 günlük bağlana bilər"
+
+#: api/sim/texts.py
+msgid "Your agreement will be automatically terminated"
+msgstr "Müqaviləniz avtomatik ləğv olunacaq"
+
+#: api/sim/texts.py
+msgid "Your eSIM stays secure, no physical card to lose or damage"
+msgstr ""
+"eSIM-iniz təhlükəsiz qalır: itiriləcək və ya zədələnəcək fiziki kart yoxdur"
+
+#: api/sim/texts.py
+msgid "Your line will be completely deactivated"
+msgstr "Xəttiniz tamamilə deaktiv ediləcək"
+
+#: api/sim/texts.py
+msgid "eSIM"
+msgstr "eSIM"
+
+#: api/sim/texts.py
+msgid "is blocked permanently"
+msgstr "həmişəlik bloklanır"
+
+#: api/sim/texts.py
+msgid "will be blocked"
+msgstr "bloklanacaq"
+
+#: api/sim/views.py
+msgid "4G (LTE) disabled"
+msgstr "4G (LTE) söndürülüb"
+
+#: api/sim/views.py
+msgid "4G (LTE) enabled"
+msgstr "4G (LTE) aktivdir"
+
+#: api/sim/views.py
+msgid "ACTIVATED"
+msgstr "AKTİVDİR"
+
+#: api/sim/views.py
+msgid "Close line"
+msgstr "Xətti bağla"
+
+#: api/sim/views.py
+msgid "Closing the line is not part of this prototype yet"
+msgstr "Xəttin bağlanması hələ bu prototipdə yoxdur"
+
+#: api/sim/views.py
+msgid "Country pricing is not part of this prototype yet"
+msgstr "Ölkələr üzrə qiymətlər hələ bu prototipdə yoxdur"
+
+#: api/sim/views.py
+msgid "Deactivate"
+msgstr "Deaktiv et"
+
+#: api/sim/views.py
+msgid "Deactivation date"
+msgstr "Deaktivasiya tarixi"
+
+#: api/sim/views.py
+msgid "Deactivation is not part of this prototype yet"
+msgstr "Deaktivasiya hələ bu prototipdə yoxdur"
+
+#: api/sim/views.py
+msgid "Internet settings will be sent by SMS (prototype)"
+msgstr "İnternet ayarları SMS ilə göndəriləcək (prototip)"
+
+#: api/sim/views.py
+msgid "Line status: %(status)s"
+msgstr "Xəttin statusu: %(status)s"
+
+#: api/sim/views.py
+msgid "Off"
+msgstr "Söndürülüb"
+
+#: api/sim/views.py
+msgid "On"
+msgstr "Aktivdir"
+
+#: api/sim/views.py
+msgid "One-way blocking"
+msgstr "Birtərəfli bloklama"
+
+#: api/sim/views.py api/tariffs/views.py
+msgid "Subscribe for %(price)s ₼"
+msgstr "%(price)s ₼-a abunə ol"
+
+#: api/sim/views.py
+msgid "eSIM recovery is not part of this prototype yet"
+msgstr "eSIM-in bərpası hələ bu prototipdə yoxdur"
+
+#: api/sim/views.py
+msgid "eSIM transfer is not part of this prototype yet"
+msgstr "eSIM-ə keçid hələ bu prototipdə yoxdur"
+
+#: api/tariffs/services.py
+msgid "Unknown plan '%(plan)s'"
+msgstr "Naməlum plan: '%(plan)s'"
+
+#: api/tariffs/texts.py
+msgid "All you need and more!"
+msgstr "Sizə lazım olan hər şey və daha çoxu!"
+
+#: api/tariffs/texts.py
+msgid ""
+"By renewing tariff, the remaining balance will be annulled but the existing "
+"old internet packs will still stay active."
+msgstr ""
+"Tarifi yenilədikdə qalıq sıfırlanacaq, lakin mövcud köhnə internet paketləri"
+" aktiv qalacaq."
+
+#: api/tariffs/texts.py
+msgid "Charging interval: 1 minute for calls"
+msgstr "Tarifləndirmə intervalı: zənglər üçün 1 dəqiqə"
+
+#: api/tariffs/texts.py
+msgid "For calls"
+msgstr "Zənglər üçün"
+
+#: api/tariffs/texts.py
+msgid "For internet"
+msgstr "İnternet üçün"
+
+#: api/tariffs/texts.py
+msgid "Renew tariff"
+msgstr "Tarifi yenilə"
+
+#: api/tariffs/texts.py
+msgid ""
+"The total shows the sum of the internet in your tariff and in all of your "
+"active internet packs."
+msgstr ""
+"Cəm tarifinizdəki və bütün aktiv internet paketlərinizdəki internetin "
+"məcmusunu göstərir."
+
+#: api/tariffs/texts.py
+msgid ""
+"The total shows the sum of the local minutes in your tariff and in all of "
+"your active packs."
+msgstr ""
+"Cəm tarifinizdəki və bütün aktiv paketlərinizdəki ölkədaxili dəqiqələrin "
+"məcmusunu göstərir."
+
+#: api/tariffs/texts.py
+msgid ""
+"To access the Premium theme you must log in with Premium number as main "
+"account"
+msgstr ""
+"Premium mövzusundan istifadə üçün əsas hesab kimi Premium nömrə ilə daxil "
+"olmalısınız"
+
+#: api/tariffs/texts.py
+msgid ""
+"When the subscription fee of the tariff is paid, the line of the number will"
+" remain bilaterally active for 28 days."
+msgstr ""
+"Tarifin abunə haqqı ödənildikdə nömrənin xətti 28 gün ərzində ikitərəfli "
+"aktiv qalacaq."
+
+#: api/tariffs/views.py
+msgid "%(amount)s ₼/month"
+msgstr "%(amount)s ₼/ay"
+
+#: api/tariffs/views.py
+msgid "%(days)s d."
+msgstr "%(days)s gün"
+
+#: api/tariffs/views.py
+msgid "Activation date"
+msgstr "Aktivləşdirmə tarixi"
+
+#: api/tariffs/views.py
+msgid "CURRENT TARIFF"
+msgstr "CARİ TARİF"
+
+#: api/tariffs/views.py
+msgid "Changing tariff is not part of this prototype yet"
+msgstr "Tarifin dəyişdirilməsi hələ bu prototipdə yoxdur"
+
+#: api/tariffs/views.py
+msgid "Current tariff"
+msgstr "Cari tarif"
+
+#: api/tariffs/views.py
+msgid "GB"
+msgstr "GB"
+
+#: api/tariffs/views.py
+msgid "Internet"
+msgstr "İnternet"
+
+#: api/tariffs/views.py
+msgid "Last payment date"
+msgstr "Son ödəniş tarixi"
+
+#: api/tariffs/views.py
+msgid "Local calls"
+msgstr "Ölkədaxili zənglər"
+
+#: api/tariffs/views.py
+msgid "MB"
+msgstr "MB"
+
+#: api/tariffs/views.py
+msgid "MIN."
+msgstr "DƏQ."
+
+#: api/tariffs/views.py
+msgid "Messaging"
+msgstr "Mesajlaşma"
+
+#: api/tariffs/views.py
+msgid "Next payment date"
+msgstr "Növbəti ödəniş tarixi"
+
+#: api/tariffs/views.py
+msgid "Next renewal"
+msgstr "Növbəti yenilənmə"
+
+#: api/tariffs/views.py
+msgid "POSTPAID"
+msgstr "FAKTURALI"
+
+#: api/tariffs/views.py
+msgid "PREPAID"
+msgstr "FAKTURASIZ"
+
+#: api/tariffs/views.py
+msgid "Payment amount"
+msgstr "Ödəniş məbləği"
+
+#: api/tariffs/views.py
+msgid "Premium activation is not part of this prototype yet"
+msgstr "Premium-un aktivləşdirilməsi hələ bu prototipdə yoxdur"
+
+#: api/tariffs/views.py
+msgid "Renews %(day)s, %(time)s"
+msgstr "%(day)s, %(time)s-da yenilənir"
+
+#: api/tariffs/views.py
+msgid "Saving a redesigned tariff is not part of this prototype yet"
+msgstr "Yenidən qurulmuş tarifin saxlanması hələ bu prototipdə yoxdur"
+
+#: api/tariffs/views.py
+msgid "Tariff renewal is not part of this prototype yet"
+msgstr "Tarifin yenilənməsi hələ bu prototipdə yoxdur"
+
+#: api/tariffs/views.py
+msgid "Tariff subscription is not part of this prototype yet"
+msgstr "Tarifə qoşulma hələ bu prototipdə yoxdur"
+
+#: api/users/views.py
+msgid "App settings are not part of this prototype yet"
+msgstr "Tətbiq ayarları hələ bu prototipdə yoxdur"
+
+#: api/users/views.py
+msgid "Profile settings are not part of this prototype yet"
+msgstr "Profil ayarları hələ bu prototipdə yoxdur"
+
+#: api/users/views.py
+msgid "Push notifications are not part of this prototype yet"
+msgstr "Push bildirişlər hələ bu prototipdə yoxdur"
+
+#: api/users/views.py
+msgid "Sign in is not part of this prototype yet"
+msgstr "Giriş hələ bu prototipdə yoxdur"
+
+#: api/users/views.py
+msgid "Sign out is not part of this prototype yet"
+msgstr "Çıxış hələ bu prototipdə yoxdur"
+
+#: api/users/views.py
+msgid "Version %(version)s"
+msgstr "Versiya %(version)s"

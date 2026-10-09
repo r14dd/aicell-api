@@ -1,0 +1,843 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: aicell-api\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: api/assistant/services.py
+msgid "Too many messages, try again in a minute"
+msgstr "Слишком много сообщений, попробуйте через минуту"
+
+#: api/assistant/views.py
+msgid "AI Chat Bot"
+msgstr "ИИ чат-бот"
+
+#: api/assistant/views.py
+msgid "Ask a question"
+msgstr "Задать вопрос"
+
+#: api/assistant/views.py
+msgid "How can we support you?"
+msgstr "Чем мы можем помочь?"
+
+#: api/assistant/views.py
+msgid "New conversation"
+msgstr "Новый диалог"
+
+#: api/assistant/views.py
+msgid "Rate your conversation"
+msgstr "Оцените диалог"
+
+#: api/assistant/views.py
+msgid "Share your ideas for new features"
+msgstr "Поделитесь идеями новых функций"
+
+#: api/assistant/views.py
+msgid "Support messages are not part of this prototype yet"
+msgstr "Сообщений в поддержку пока нет в этом прототипе"
+
+#: api/assistant/views.py api/content/services.py
+msgid "Thanks! Your rating helps us a lot"
+msgstr "Спасибо! Ваша оценка нам очень помогает"
+
+#: api/assistant/views.py
+msgid "We're here to help, just ask away!"
+msgstr "Мы готовы помочь, просто спросите!"
+
+#: api/assistant/views.py
+msgid "Your feedback helps us improve!"
+msgstr "Ваш отзыв помогает нам становиться лучше!"
+
+#: api/billing/idempotency.py
+msgid "Idempotency-Key header is required"
+msgstr "Требуется заголовок Idempotency-Key"
+
+#: api/billing/idempotency.py
+msgid "Idempotency-Key must be a UUID"
+msgstr "Idempotency-Key должен быть в формате UUID"
+
+#: api/billing/idempotency.py
+msgid "Idempotency-Key was already used for another request"
+msgstr "Этот Idempotency-Key уже использован для другого запроса"
+
+#: api/billing/services.py
+msgid "Not enough balance for this top-up"
+msgstr "Недостаточно средств для этого пополнения"
+
+#: api/billing/services.py
+msgid "Number balance"
+msgstr "Баланс номера"
+
+#: api/billing/services.py
+msgid "Steam balance %(account)s"
+msgstr "Баланс Steam %(account)s"
+
+#: api/billing/views.py
+msgid "Adding a card is not part of this prototype yet"
+msgstr "Добавления карты пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "Aztelekom payments are not part of this prototype yet"
+msgstr "Платежей Aztelekom пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "Card settings are not part of this prototype yet"
+msgstr "Настроек карты пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "Enter the first 6 digits of the card"
+msgstr "Введите первые 6 цифр карты"
+
+#: api/billing/views.py
+msgid "Get Kredit"
+msgstr "Получить Kredit"
+
+#: api/billing/views.py
+msgid "Google Pay token verification is not part of this prototype yet"
+msgstr "Проверки токена Google Pay пока нет в этом прототипе"
+
+#: api/billing/views.py api/kredit/views.py
+msgid ""
+"Instant loan with akart! Complete your payments up to 50 ₼ with akart loan"
+msgstr "Мгновенный кредит с akart! Оплачивайте до 50 ₼ в кредит от akart"
+
+#: api/billing/views.py
+msgid "Paying for another number is not part of this prototype yet"
+msgstr "Оплаты другого номера пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "Payment history is not part of this prototype yet"
+msgstr "Истории платежей пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "Removing a Steam account is not part of this prototype yet"
+msgstr "Удаления аккаунта Steam пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "Saved akart numbers are not part of this prototype yet"
+msgstr "Сохранённых номеров akart пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "Top up from bank card"
+msgstr "Пополнить с банковской карты"
+
+#: api/billing/views.py
+msgid "Utility payments are not part of this prototype yet"
+msgstr "Коммунальных платежей пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "Voucher"
+msgstr "Ваучер"
+
+#: api/billing/views.py
+msgid "Voucher redemption is not part of this prototype yet"
+msgstr "Активации ваучера пока нет в этом прототипе"
+
+#: api/billing/views.py
+msgid "We don't charge any fees for Google Pay top-ups"
+msgstr "Мы не берём комиссию за пополнение через Google Pay"
+
+#: api/common/exceptions.py
+msgid "Already active"
+msgstr "Уже подключено"
+
+#: api/common/exceptions.py
+msgid "Authentication required"
+msgstr "Требуется авторизация"
+
+#: api/common/exceptions.py
+msgid "Invalid input"
+msgstr "Неверные данные"
+
+#: api/common/exceptions.py
+msgid "Not enough balance"
+msgstr "Недостаточно средств"
+
+#: api/common/exceptions.py
+msgid "Not found."
+msgstr "Не найдено."
+
+#: api/common/exceptions.py
+msgid "This is not part of this prototype yet"
+msgstr "Этого пока нет в прототипе"
+
+#: api/common/exceptions.py
+msgid "Token expired"
+msgstr "Срок действия токена истёк"
+
+#: api/common/exceptions.py
+msgid "Too many requests"
+msgstr "Слишком много запросов"
+
+#: api/common/exceptions.py
+msgid "Too many requests, try again in %(seconds)s seconds"
+msgstr "Слишком много запросов, повторите через %(seconds)s сек."
+
+#: api/common/http.py
+msgid "Enter a number as 994XXXXXXXXX"
+msgstr "Введите номер в формате 994XXXXXXXXX"
+
+#: api/common/http.py
+msgid "Enter an amount between %(min)s and %(max)s ₼"
+msgstr "Введите сумму от %(min)s до %(max)s ₼"
+
+#: api/common/http.py
+msgid "Invalid cursor"
+msgstr "Неверный курсор"
+
+#: api/content/services.py
+msgid "Thanks for the feedback, we will do better"
+msgstr "Спасибо за отзыв, мы станем лучше"
+
+#: api/content/views.py
+msgid "30 il səninlə"
+msgstr "30 il səninlə"
+
+#: api/content/views.py
+msgid "About Azercell is not part of this prototype yet"
+msgstr "Раздела «Об Azercell» пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "App subscriptions are not part of this prototype yet"
+msgstr "Подписок на приложения пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Aztelekom orders are not part of this prototype yet"
+msgstr "Заказов Aztelekom пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Chance collection starts on 19 October 2026"
+msgstr "Сбор шансов начинается 19 октября 2026 года"
+
+#: api/content/views.py
+msgid "Game search is not part of this prototype yet"
+msgstr "Поиска игр пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Games are not part of this prototype yet"
+msgstr "Игр пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Gift Wheel is not part of this prototype yet"
+msgstr "Колеса подарков пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Help & Support is not part of this prototype yet"
+msgstr "Раздела «Помощь и поддержка» пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Learn more about the lottery"
+msgstr "Подробнее о лотерее"
+
+#: api/content/views.py
+msgid "Lottery chances are not part of this prototype yet"
+msgstr "Шансов лотереи пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Lottery terms are not part of this prototype yet"
+msgstr "Условий лотереи пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Notification options are not part of this prototype yet"
+msgstr "Параметров уведомлений пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Problem reports are not part of this prototype yet"
+msgstr "Сообщений о проблеме пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Stickers are not part of this prototype yet"
+msgstr "Стикеров пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Stores map is not part of this prototype yet"
+msgstr "Карты магазинов пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "The tournament is not part of this prototype yet"
+msgstr "Турнира пока нет в этом прототипе"
+
+#: api/content/views.py
+msgid "Tournament rules are not part of this prototype yet"
+msgstr "Правил турнира пока нет в этом прототипе"
+
+#: api/kredit/views.py
+msgid "%(count)s items"
+msgstr "Долгов: %(count)s"
+
+#: api/kredit/views.py
+msgid "%(name)s %(amount)s ₼ will be added to your balance (prototype)"
+msgstr "%(name)s %(amount)s ₼ будет зачислен на баланс (прототип)"
+
+#: api/kredit/views.py
+msgid "%(name)s %(mb)s MB will be added to your number (prototype)"
+msgstr "%(name)s %(mb)s МБ будет добавлен на номер (прототип)"
+
+#: api/kredit/views.py
+msgid "Activate Tamamla & Cover unexpected expenses!"
+msgstr "Подключите Tamamla и покрывайте непредвиденные расходы!"
+
+#: api/kredit/views.py
+msgid "Apply for akart with ease: download the akart app and register"
+msgstr ""
+"Оформите akart без труда: скачайте приложение akart и зарегистрируйтесь"
+
+#: api/kredit/views.py
+msgid "Get %(name)s %(amount)s ₼"
+msgstr "Получить %(name)s %(amount)s ₼"
+
+#: api/kredit/views.py
+msgid "Get now!"
+msgstr "Получить сейчас!"
+
+#: api/kredit/views.py
+msgid ""
+"Give permission to borrow up to 50.00 ₼ when your balance is not enough"
+msgstr "Разрешите брать в долг до 50.00 ₼, когда баланса не хватает"
+
+#: api/kredit/views.py
+msgid "no items"
+msgstr "долгов нет"
+
+#: api/packs/services.py
+msgid "%(label)s pack"
+msgstr "Пакет %(label)s"
+
+#: api/packs/services.py
+msgid "Not enough balance for this pack"
+msgstr "Недостаточно средств для этого пакета"
+
+#: api/packs/services.py
+msgid "Roaming %(name)s"
+msgstr "Роуминг %(name)s"
+
+#: api/packs/services.py
+msgid "This pack is already active"
+msgstr "Этот пакет уже подключён"
+
+#: api/packs/services.py
+msgid "Unknown pack"
+msgstr "Неизвестный пакет"
+
+#: api/packs/services.py
+msgid "Unknown plan"
+msgstr "Неизвестный план"
+
+#: api/packs/texts.py
+msgid "For only 0.99 ₼"
+msgstr "Всего за 0.99 ₼"
+
+#: api/packs/texts.py
+msgid "No, thanks"
+msgstr "Нет, спасибо"
+
+#: api/packs/texts.py
+msgid ""
+"Roaming internet pack is activated immediately after purchasing. Are you "
+"sure you want to proceed?"
+msgstr ""
+"Интернет-пакет в роуминге активируется сразу после покупки. Вы уверены, что "
+"хотите продолжить?"
+
+#: api/packs/texts.py
+msgid ""
+"The traffic of the pack is used only in the specified application. After the"
+" traffic ends, standard internet pricing of your tariff applies."
+msgstr ""
+"Трафик пакета расходуется только в указанном приложении. После его окончания"
+" действует стандартная цена интернета по вашему тарифу."
+
+#: api/packs/texts.py
+msgid "Unlimited entertainment is waiting for you!"
+msgstr "Вас ждут развлечения без ограничений!"
+
+#: api/packs/texts.py
+msgid "Yes, activate the pack"
+msgstr "Да, подключить пакет"
+
+#: api/packs/texts.py
+msgid "You are not yet in the roaming area"
+msgstr "Вы ещё не в зоне роуминга"
+
+#: api/packs/views.py api/sim/views.py
+msgid "AUTO-RENEWAL"
+msgstr "АВТОПРОДЛЕНИЕ"
+
+#: api/packs/views.py
+msgid "Active packs are not part of this prototype yet"
+msgstr "Активных пакетов пока нет в этом прототипе"
+
+#: api/packs/views.py
+msgid "Application traffic"
+msgstr "Трафик приложения"
+
+#: api/packs/views.py
+msgid "Automatically"
+msgstr "Автоматически"
+
+#: api/packs/views.py
+msgid "Manually"
+msgstr "Вручную"
+
+#: api/packs/views.py
+msgid "Renews"
+msgstr "Продление"
+
+#: api/packs/views.py api/tariffs/views.py
+msgid "Validity period"
+msgstr "Срок действия"
+
+#: api/referral/views.py
+msgid "Join me on the Azercell app and use my referral code %(code)s"
+msgstr ""
+"Присоединяйся к приложению Azercell и используй мой реферальный код %(code)s"
+
+#: api/referral/views.py
+msgid "Referral events are not part of this prototype yet"
+msgstr "Реферальных событий пока нет в этом прототипе"
+
+#: api/referral/views.py
+msgid "Share Azercell app and get 3.00 ₼ bonus!"
+msgstr "Поделитесь приложением Azercell и получите бонус 3.00 ₼!"
+
+#: api/referral/views.py
+msgid "Terms of Use are not part of this prototype yet"
+msgstr "Условий использования пока нет в этом прототипе"
+
+#: api/sim/services.py
+msgid "%(name)s service"
+msgstr "Услуга %(name)s"
+
+#: api/sim/services.py
+msgid "Not enough balance for this service"
+msgstr "Недостаточно средств для этой услуги"
+
+#: api/sim/services.py
+msgid "This service is already active"
+msgstr "Эта услуга уже подключена"
+
+#: api/sim/services.py
+msgid "Turn off forwarding of all calls first"
+msgstr "Сначала отключите переадресацию всех звонков"
+
+#: api/sim/services.py
+msgid "Unknown option"
+msgstr "Неизвестная опция"
+
+#: api/sim/texts.py
+msgid " and has to be replaced."
+msgstr " и её придётся заменить."
+
+#: api/sim/texts.py
+msgid ". Use the matching PUK code to unblock them."
+msgstr ". Чтобы разблокировать их, используйте соответствующий PUK-код."
+
+#: api/sim/texts.py
+msgid "After 10 incorrect entries of a PUK code, the SIM card "
+msgstr "После 10 неверных вводов PUK-кода SIM-карта "
+
+#: api/sim/texts.py
+msgid "After 3 incorrect entries of PIN 1 and PIN 2, the codes "
+msgstr "После 3 неверных вводов PIN 1 и PIN 2 коды "
+
+#: api/sim/texts.py
+msgid "Azerbaijani"
+msgstr "Азербайджанский"
+
+#: api/sim/texts.py
+msgid "Closed"
+msgstr "Закрыта"
+
+#: api/sim/texts.py
+msgid "Eco-friendly"
+msgstr "Экологично"
+
+#: api/sim/texts.py
+msgid "English"
+msgstr "Английский"
+
+#: api/sim/texts.py
+msgid "Explore countries and tariffs"
+msgstr "Изучите страны и тарифы"
+
+#: api/sim/texts.py
+msgid "Flexible"
+msgstr "Гибко"
+
+#: api/sim/texts.py
+msgid "Keep several numbers on one device and switch between them"
+msgstr ""
+"Держите несколько номеров на одном устройстве и переключайтесь между ними"
+
+#: api/sim/texts.py
+msgid "Line activation/suspension at subscriber’s request"
+msgstr "Активация/приостановка линии по запросу абонента"
+
+#: api/sim/texts.py
+msgid "Line settings"
+msgstr "Настройки линии"
+
+#: api/sim/texts.py
+msgid "No plastic card and no packaging"
+msgstr "Без пластиковой карты и упаковки"
+
+#: api/sim/texts.py
+msgid "Open"
+msgstr "Открыта"
+
+#: api/sim/texts.py
+msgid "PUK codes"
+msgstr "PUK-коды"
+
+#: api/sim/texts.py
+msgid "Recover eSIM"
+msgstr "Восстановить eSIM"
+
+#: api/sim/texts.py
+msgid "Remaining balance will be lost"
+msgstr "Остаток баланса будет потерян"
+
+#: api/sim/texts.py
+msgid "Request automatic internet settings"
+msgstr "Запросить автоматические настройки интернета"
+
+#: api/sim/texts.py
+msgid "Roaming packs"
+msgstr "Роуминг-пакеты"
+
+#: api/sim/texts.py
+msgid "Roaming settings"
+msgstr "Настройки роуминга"
+
+#: api/sim/texts.py
+msgid "Russian"
+msgstr "Русский"
+
+#: api/sim/texts.py
+msgid "SMS settings"
+msgstr "Настройки SMS"
+
+#: api/sim/texts.py
+msgid "Safe & Reliable"
+msgstr "Безопасно и надёжно"
+
+#: api/sim/texts.py
+msgid "Search for country pricing"
+msgstr "Поиск цен по странам"
+
+#: api/sim/texts.py
+msgid "Services"
+msgstr "Услуги"
+
+#: api/sim/texts.py
+msgid "Suspended"
+msgstr "Приостановлена"
+
+#: api/sim/texts.py
+msgid "The number may be reassigned to another person"
+msgstr "Номер может быть передан другому человеку"
+
+#: api/sim/texts.py
+msgid ""
+"The use of the obtained eSIM “Asan İmza” service is possible only after the "
+"“Asan İmza” certificates are renewed."
+msgstr ""
+"Пользоваться услугой «Asan İmza» на полученной eSIM можно только после "
+"обновления сертификатов «Asan İmza»."
+
+#: api/sim/texts.py
+msgid "Transfer to eSIM"
+msgstr "Перейти на eSIM"
+
+#: api/sim/texts.py
+msgid ""
+"With call holding you can hold the first caller on the line and answer the "
+"second call"
+msgstr ""
+"Удержание вызова позволяет оставить первого собеседника на линии и ответить "
+"на второй звонок"
+
+#: api/sim/texts.py
+msgid ""
+"You can activate or suspend your line upon request. The line can be closed "
+"for a maximum of 90 days"
+msgstr ""
+"Вы можете активировать или приостановить линию по запросу. Линию можно "
+"закрыть максимум на 90 дней"
+
+#: api/sim/texts.py
+msgid "Your agreement will be automatically terminated"
+msgstr "Ваш договор будет автоматически расторгнут"
+
+#: api/sim/texts.py
+msgid "Your eSIM stays secure, no physical card to lose or damage"
+msgstr ""
+"Ваша eSIM в безопасности: нет физической карты, которую можно потерять или "
+"повредить"
+
+#: api/sim/texts.py
+msgid "Your line will be completely deactivated"
+msgstr "Ваша линия будет полностью отключена"
+
+#: api/sim/texts.py
+msgid "eSIM"
+msgstr "eSIM"
+
+#: api/sim/texts.py
+msgid "is blocked permanently"
+msgstr "блокируется навсегда"
+
+#: api/sim/texts.py
+msgid "will be blocked"
+msgstr "будут заблокированы"
+
+#: api/sim/views.py
+msgid "4G (LTE) disabled"
+msgstr "4G (LTE) выключен"
+
+#: api/sim/views.py
+msgid "4G (LTE) enabled"
+msgstr "4G (LTE) включён"
+
+#: api/sim/views.py
+msgid "ACTIVATED"
+msgstr "ПОДКЛЮЧЕНО"
+
+#: api/sim/views.py
+msgid "Close line"
+msgstr "Закрыть линию"
+
+#: api/sim/views.py
+msgid "Closing the line is not part of this prototype yet"
+msgstr "Закрытия линии пока нет в этом прототипе"
+
+#: api/sim/views.py
+msgid "Country pricing is not part of this prototype yet"
+msgstr "Цен по странам пока нет в этом прототипе"
+
+#: api/sim/views.py
+msgid "Deactivate"
+msgstr "Отключить"
+
+#: api/sim/views.py
+msgid "Deactivation date"
+msgstr "Дата отключения"
+
+#: api/sim/views.py
+msgid "Deactivation is not part of this prototype yet"
+msgstr "Отключения пока нет в этом прототипе"
+
+#: api/sim/views.py
+msgid "Internet settings will be sent by SMS (prototype)"
+msgstr "Настройки интернета будут отправлены по SMS (прототип)"
+
+#: api/sim/views.py
+msgid "Line status: %(status)s"
+msgstr "Статус линии: %(status)s"
+
+#: api/sim/views.py
+msgid "Off"
+msgstr "Выкл."
+
+#: api/sim/views.py
+msgid "On"
+msgstr "Вкл."
+
+#: api/sim/views.py
+msgid "One-way blocking"
+msgstr "Односторонняя блокировка"
+
+#: api/sim/views.py api/tariffs/views.py
+msgid "Subscribe for %(price)s ₼"
+msgstr "Подписаться за %(price)s ₼"
+
+#: api/sim/views.py
+msgid "eSIM recovery is not part of this prototype yet"
+msgstr "Восстановления eSIM пока нет в этом прототипе"
+
+#: api/sim/views.py
+msgid "eSIM transfer is not part of this prototype yet"
+msgstr "Перехода на eSIM пока нет в этом прототипе"
+
+#: api/tariffs/services.py
+msgid "Unknown plan '%(plan)s'"
+msgstr "Неизвестный план '%(plan)s'"
+
+#: api/tariffs/texts.py
+msgid "All you need and more!"
+msgstr "Всё, что нужно, и даже больше!"
+
+#: api/tariffs/texts.py
+msgid ""
+"By renewing tariff, the remaining balance will be annulled but the existing "
+"old internet packs will still stay active."
+msgstr ""
+"При продлении тарифа остаток будет аннулирован, но имеющиеся интернет-пакеты"
+" останутся активными."
+
+#: api/tariffs/texts.py
+msgid "Charging interval: 1 minute for calls"
+msgstr "Интервал тарификации: 1 минута для звонков"
+
+#: api/tariffs/texts.py
+msgid "For calls"
+msgstr "Для звонков"
+
+#: api/tariffs/texts.py
+msgid "For internet"
+msgstr "Для интернета"
+
+#: api/tariffs/texts.py
+msgid "Renew tariff"
+msgstr "Продлить тариф"
+
+#: api/tariffs/texts.py
+msgid ""
+"The total shows the sum of the internet in your tariff and in all of your "
+"active internet packs."
+msgstr ""
+"Итог показывает сумму интернета в вашем тарифе и во всех активных интернет-"
+"пакетах."
+
+#: api/tariffs/texts.py
+msgid ""
+"The total shows the sum of the local minutes in your tariff and in all of "
+"your active packs."
+msgstr ""
+"Итог показывает сумму минут по стране в вашем тарифе и во всех активных "
+"пакетах."
+
+#: api/tariffs/texts.py
+msgid ""
+"To access the Premium theme you must log in with Premium number as main "
+"account"
+msgstr ""
+"Чтобы открыть тему Premium, войдите с номером Premium в качестве основного "
+"аккаунта"
+
+#: api/tariffs/texts.py
+msgid ""
+"When the subscription fee of the tariff is paid, the line of the number will"
+" remain bilaterally active for 28 days."
+msgstr ""
+"После оплаты абонентской платы линия номера остаётся двусторонне активной 28"
+" дней."
+
+#: api/tariffs/views.py
+msgid "%(amount)s ₼/month"
+msgstr "%(amount)s ₼/мес."
+
+#: api/tariffs/views.py
+msgid "%(days)s d."
+msgstr "%(days)s дн."
+
+#: api/tariffs/views.py
+msgid "Activation date"
+msgstr "Дата подключения"
+
+#: api/tariffs/views.py
+msgid "CURRENT TARIFF"
+msgstr "ТЕКУЩИЙ ТАРИФ"
+
+#: api/tariffs/views.py
+msgid "Changing tariff is not part of this prototype yet"
+msgstr "Смены тарифа пока нет в этом прототипе"
+
+#: api/tariffs/views.py
+msgid "Current tariff"
+msgstr "Текущий тариф"
+
+#: api/tariffs/views.py
+msgid "GB"
+msgstr "ГБ"
+
+#: api/tariffs/views.py
+msgid "Internet"
+msgstr "Интернет"
+
+#: api/tariffs/views.py
+msgid "Last payment date"
+msgstr "Дата последнего платежа"
+
+#: api/tariffs/views.py
+msgid "Local calls"
+msgstr "Звонки по стране"
+
+#: api/tariffs/views.py
+msgid "MB"
+msgstr "МБ"
+
+#: api/tariffs/views.py
+msgid "MIN."
+msgstr "МИН."
+
+#: api/tariffs/views.py
+msgid "Messaging"
+msgstr "Мессенджеры"
+
+#: api/tariffs/views.py
+msgid "Next payment date"
+msgstr "Дата следующего платежа"
+
+#: api/tariffs/views.py
+msgid "Next renewal"
+msgstr "Следующее продление"
+
+#: api/tariffs/views.py
+msgid "POSTPAID"
+msgstr "ПОСТОПЛАТА"
+
+#: api/tariffs/views.py
+msgid "PREPAID"
+msgstr "ПРЕДОПЛАТА"
+
+#: api/tariffs/views.py
+msgid "Payment amount"
+msgstr "Сумма платежа"
+
+#: api/tariffs/views.py
+msgid "Premium activation is not part of this prototype yet"
+msgstr "Подключения Premium пока нет в этом прототипе"
+
+#: api/tariffs/views.py
+msgid "Renews %(day)s, %(time)s"
+msgstr "Продление %(day)s, %(time)s"
+
+#: api/tariffs/views.py
+msgid "Saving a redesigned tariff is not part of this prototype yet"
+msgstr "Сохранения изменённого тарифа пока нет в этом прототипе"
+
+#: api/tariffs/views.py
+msgid "Tariff renewal is not part of this prototype yet"
+msgstr "Продления тарифа пока нет в этом прототипе"
+
+#: api/tariffs/views.py
+msgid "Tariff subscription is not part of this prototype yet"
+msgstr "Подключения тарифа пока нет в этом прототипе"
+
+#: api/users/views.py
+msgid "App settings are not part of this prototype yet"
+msgstr "Настроек приложения пока нет в этом прототипе"
+
+#: api/users/views.py
+msgid "Profile settings are not part of this prototype yet"
+msgstr "Настроек профиля пока нет в этом прототипе"
+
+#: api/users/views.py
+msgid "Push notifications are not part of this prototype yet"
+msgstr "Push-уведомлений пока нет в этом прототипе"
+
+#: api/users/views.py
+msgid "Sign in is not part of this prototype yet"
+msgstr "Входа пока нет в этом прототипе"
+
+#: api/users/views.py
+msgid "Sign out is not part of this prototype yet"
+msgstr "Выхода пока нет в этом прототипе"
+
+#: api/users/views.py
+msgid "Version %(version)s"
+msgstr "Версия %(version)s"
