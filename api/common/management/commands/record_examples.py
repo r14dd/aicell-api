@@ -84,6 +84,7 @@ class Command(BaseCommand):
         THROTTLE_RATES={},
         ASSISTANT_STREAM_DELAY=0,
         GOOGLE_PAY_SIMULATED=True,
+        LAYA_BRAIN="api.laya.offline",
         SECURE_SSL_REDIRECT=False,
     )
     def handle(self, *args, **options):

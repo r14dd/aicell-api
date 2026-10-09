@@ -306,6 +306,10 @@ msgstr "Разрешите брать в долг до 50.00 ₼, когда б�
 msgid "no items"
 msgstr "долгов нет"
 
+#: api/laya/brain.py
+msgid "Laya is not available right now"
+msgstr "Лая сейчас недоступна"
+
 #: api/packs/services.py
 msgid "%(label)s pack"
 msgstr "Пакет %(label)s"

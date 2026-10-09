@@ -307,6 +307,10 @@ msgstr "Balansınız çatmayanda 50.00 ₼-dək borc götürməyə icazə verin"
 msgid "no items"
 msgstr "borc yoxdur"
 
+#: api/laya/brain.py
+msgid "Laya is not available right now"
+msgstr "Laya hazırda əlçatan deyil"
+
 #: api/packs/services.py
 msgid "%(label)s pack"
 msgstr "%(label)s paketi"

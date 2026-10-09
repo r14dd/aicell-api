@@ -18,6 +18,7 @@ dependencies = [
     "django-modeltranslation>=0.19",
     "polib>=1.2",
     "django-unfold>=0.50",
+    "anthropic>=1.12.1",
 ]
 
 [dependency-groups]
