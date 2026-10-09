@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "api.billing",
     "api.tariffs",
     "api.packs",
+    "api.kredit",
 ]
 
 MIDDLEWARE = [
@@ -198,6 +199,7 @@ SPECTACULAR_SETTINGS = {
         {"name": "users", "description": "Sign in and the subscriber's profile"},
         {"name": "tariffs", "description": "Tariff catalogue and the subscriber's tariff"},
         {"name": "packs", "description": "Internet, social and roaming packs"},
+        {"name": "kredit", "description": "Credit products and the open debt"},
         {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
         {"name": "health", "description": "Liveness and readiness probes"},
     ],
