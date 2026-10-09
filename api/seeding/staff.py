@@ -41,6 +41,7 @@ SUPPORT_MODELS = [
     "usage.AppUsage",
     "usage.PersonalOffer",
     "usage.SubscriberInsight",
+    "insights.Insight",
 ]
 
 FINANCE_MODELS = [

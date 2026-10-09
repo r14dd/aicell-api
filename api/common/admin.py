@@ -21,6 +21,9 @@ STATUS_COLOURS = {
     "shown": "warning",
     "accepted": "success",
     "declined": "danger",
+    "seen": "warning",
+    "dismissed": "danger",
+    "resolved": "info",
 }
 
 
