@@ -120,6 +120,17 @@ def test_deploy_check_passes_without_warnings():
     assert "no issues" in result.stdout
 
 
+def test_the_local_compose_setup_trades_only_tls_checks():
+    """Plain HTTP on localhost: the three TLS warnings, listed in the README, and no others."""
+    result = django(
+        "manage.py", "check", "--deploy",
+        DJANGO_SECRET_KEY=SECRET, DJANGO_ALLOWED_HOSTS="localhost",
+        SECURE_SSL_REDIRECT="false", SECURE_COOKIES="false",
+    )  # fmt: skip
+    warnings = sorted({part.split(")")[0] for part in result.stderr.split("(security.")[1:]})
+    assert warnings == ["W008", "W012", "W016"]
+
+
 def test_responses_carry_the_hardening_headers(client):
     response = client.get("/api/users/me/")
     assert response["X-Content-Type-Options"] == "nosniff"
