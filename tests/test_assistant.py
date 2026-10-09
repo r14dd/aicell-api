@@ -306,7 +306,9 @@ def test_voice_message_to_a_foreign_conversation_is_a_404(client):
 
 
 def test_agent_routes_with_gemini_and_writes_from_facts(subscriber, monkeypatch):
-    from api.assistant import agent, gemini
+    from api.assistant import agent, gemini, memory
+
+    monkeypatch.setattr(memory, "recall", lambda s, q, limit=3: [])
 
     calls = []
 
@@ -324,7 +326,9 @@ def test_agent_routes_with_gemini_and_writes_from_facts(subscriber, monkeypatch)
 
 
 def test_agent_answers_from_knowledge_chunks(subscriber, monkeypatch):
-    from api.assistant import agent, gemini, knowledge
+    from api.assistant import agent, gemini, knowledge, memory
+
+    monkeypatch.setattr(memory, "recall", lambda s, q, limit=3: [])
 
     seen = {}
 
@@ -349,3 +353,42 @@ def test_agent_falls_back_to_keyword_rules_when_gemini_fails(subscriber, monkeyp
 
     monkeypatch.setattr(gemini, "generate", down)
     assert agent.respond(subscriber, "balance").route == "balance"
+
+
+def test_agent_gives_the_writer_what_it_remembers_and_stores_new_facts(subscriber, monkeypatch):
+    from api.assistant import agent, gemini, memory
+
+    seen, stored = {}, []
+
+    def fake(system, prompt, *, schema=None):
+        seen["prompt"] = prompt
+        route = '{"route": "roaming", "remember": "Travels to Turkey every summer"}'
+        return (route if schema else "Turkiyə üçün paket var."), 1, 1
+
+    monkeypatch.setattr(gemini, "generate", fake)
+    monkeypatch.setattr(agent.knowledge, "retrieve", lambda q, kinds: [])
+    monkeypatch.setattr(memory, "recall", lambda s, q, limit=3: ["Likes short answers"])
+    monkeypatch.setattr(memory, "remember", lambda s, fact: stored.append(fact))
+    agent.respond(subscriber, "I am going to Turkey again")
+    assert "Likes short answers" in seen["prompt"]
+    assert stored == ["Travels to Turkey every summer"]
+
+
+def test_agent_answers_when_memory_is_down(subscriber, monkeypatch):
+    from api.assistant import agent, gemini, memory
+
+    def down(*args, **kwargs):
+        raise RuntimeError("milvus down")
+
+    monkeypatch.setattr(
+        gemini,
+        "generate",
+        lambda system, prompt, *, schema=None: (
+            ('{"route": "balance", "remember": "Prefers Azerbaijani"}' if schema else "5 manat."),
+            1,
+            1,
+        ),
+    )
+    monkeypatch.setattr(memory, "recall", down)
+    monkeypatch.setattr(memory, "remember", down)
+    assert agent.respond(subscriber, "balans").text == "5 manat."

@@ -7,7 +7,7 @@ Same signature as the keyword responder, which it falls back to when Gemini fail
 import json
 import logging
 
-from . import gemini, knowledge, responder
+from . import gemini, knowledge, memory, responder
 from .responder import Reply
 
 log = logging.getLogger(__name__)
@@ -48,10 +48,16 @@ KNOWLEDGE = {
 ROUTE_SYSTEM = (
     "Route a mobile-operator customer message (Azerbaijani or English) to one route:\n"
     + "\n".join(f"{name}: {about}" for name, about in ROUTES.items())
+    + "\nAlso set `remember` to one short durable fact the customer states about themselves "
+    "(habits, plans, preferences, e.g. travels to Turkey every summer), in the third person. "
+    "Leave it empty for balances, prices, questions and one-off requests."
 )
 ROUTE_SCHEMA = {
     "type": "OBJECT",
-    "properties": {"route": {"type": "STRING", "enum": list(ROUTES)}},
+    "properties": {
+        "route": {"type": "STRING", "enum": list(ROUTES)},
+        "remember": {"type": "STRING"},
+    },
     "required": ["route"],
 }
 REPLY_SYSTEM = (
@@ -80,15 +86,38 @@ def _answer(subscriber, text, route):
     return Reply("", "chat"), "No data needed."
 
 
+def _recall(subscriber, text):
+    """What the subscriber told us before; memory never breaks an answer."""
+    try:
+        return memory.recall(subscriber, text)
+    except Exception:
+        log.exception("Memory recall failed")
+        return []
+
+
+def _remember(subscriber, fact):
+    try:
+        memory.remember(subscriber, fact)
+    except Exception:
+        log.exception("Memory write failed")
+
+
 def respond(subscriber, text):
     try:
         raw, in_a, out_a = gemini.generate(ROUTE_SYSTEM, text, schema=ROUTE_SCHEMA)
-        route = json.loads(raw)["route"]
+        routed = json.loads(raw)
+        route = routed["route"]
         draft, facts = _answer(subscriber, text, route)
+        past = _recall(subscriber, text) if route != "chat" else []
+        if past:
+            facts += "\n\nWhat the customer told us earlier:\n" + "\n".join(past)
         reply, in_b, out_b = _write(text, facts)
     except Exception:
         log.exception("Assistant failed, using keyword rules")
         return responder.respond(subscriber, text)
+    fact = (routed.get("remember") or "").strip()
+    if fact:
+        _remember(subscriber, fact)
     return Reply(
         reply.strip(), route, draft.action, tokens_in=in_a + in_b, tokens_out=out_a + out_b
     )
