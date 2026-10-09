@@ -1,0 +1,42 @@
+[project]
+name = "aicell-api"
+version = "0.1.0"
+description = "Self-service backend for the aicell mobile operator app"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2,<5.3",
+    "djangorestframework>=3.16",
+    "drf-spectacular>=0.28",
+    "django-cors-headers>=4.7",
+    "dj-database-url>=2.3",
+    "psycopg[binary]>=3.2",
+    "redis>=5",
+    "celery>=5.4",
+    "gunicorn>=23",
+    "whitenoise>=6.8",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-django>=4.11",
+    "ruff>=0.8",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["api/*/migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "C4"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+markers = [
+    "postgres: needs PostgreSQL (set DATABASE_URL); proves locking under real concurrency",
+    "redis: needs Redis (set REDIS_URL)",
+]
