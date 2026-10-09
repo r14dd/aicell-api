@@ -166,6 +166,10 @@ msgid "Server error"
 msgstr "Server xətası"
 
 #: api/common/exceptions.py
+msgid "This insight is already closed"
+msgstr "Bu tövsiyə artıq bağlanıb"
+
+#: api/common/exceptions.py
 msgid "This is not part of this prototype yet"
 msgstr "Bu hələ prototipdə yoxdur"
 
@@ -272,6 +276,10 @@ msgstr "Turnir hələ bu prototipdə yoxdur"
 #: api/content/views.py
 msgid "Tournament rules are not part of this prototype yet"
 msgstr "Turnir qaydaları hələ bu prototipdə yoxdur"
+
+#: api/insights/services.py
+msgid "Top up %(amount)s ₼"
+msgstr "Balansı %(amount)s ₼ artır"
 
 #: api/kredit/views.py
 msgid "%(count)s items"

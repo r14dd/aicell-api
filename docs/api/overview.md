@@ -57,6 +57,7 @@ Schema: `GET /api/schema/`, Swagger UI: `GET /api/swagger/`.
 | 404 | `not_found` | |
 | 409 | `already_active` | pack / service already active |
 | 409 | `offer_closed` | personal offer already accepted, declined or expired |
+| 409 | `insight_closed` | insight already accepted or dismissed |
 | 429 | `rate_limited` | OTP sends, assistant messages |
 | 501 | `not_implemented` | every `:todo` endpoint returns this with `detail` = the mobile notice text, so the client can keep showing the same toast |
 

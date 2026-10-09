@@ -13,13 +13,21 @@ from django.utils import timezone
 from api.assistant.models import Conversation, Message
 from api.billing.models import SavedCard, SteamAccount, TopUp, Transaction, Wallet
 from api.content.models import Notification
+from api.insights.models import Insight
 from api.referral.models import ReferralProfile
 from api.sim.models import SimProfile
 from api.tariffs.models import SubscriberTariff
 from api.usage.models import DailyUsage, OfferRule, PersonalOffer
 from api.users.models import Subscriber
 
-from .stories import DEMO_OFFER_ID, Calendar, demo_offer, demo_usage
+from .stories import (
+    DEMO_INSIGHT_ID,
+    DEMO_OFFER_ID,
+    Calendar,
+    demo_insight,
+    demo_offer,
+    demo_usage,
+)
 from .translations import localized
 
 BAKU = ZoneInfo("Asia/Baku")
@@ -182,6 +190,8 @@ def _usage_and_offer(subscriber, offer_id) -> None:
     if offer_id and OfferRule.objects.exists():
         demo_offer(subscriber, offer_id)
         _advance_sequence(PersonalOffer)
+    if offer_id == DEMO_OFFER_ID and demo_insight(subscriber, DEMO_INSIGHT_ID):
+        _advance_sequence(Insight)
 
 
 @transaction.atomic

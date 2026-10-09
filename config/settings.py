@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "api.referral",
     "api.assistant",
     "api.usage",
+    "api.insights",
     "api.laya",
 ]
 
@@ -255,6 +256,7 @@ SPECTACULAR_SETTINGS = {
         {"name": "referral", "description": "Invite & earn"},
         {"name": "assistant", "description": "Support inbox and the chat assistant"},
         {"name": "usage", "description": "30-day usage profile, recommendations, personal offers"},
+        {"name": "insights", "description": "What the usage says to do, and the tariff advisor"},
         {
             "name": "laya",
             "description": "Laya, the voice assistant: plan a task, narrate an insight",

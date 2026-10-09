@@ -48,6 +48,12 @@ class OfferClosed(ApiError):
     default_detail = _("This offer is no longer available")
 
 
+class InsightClosed(ApiError):
+    status_code = 409
+    code = "insight_closed"
+    default_detail = _("This insight is already closed")
+
+
 class RateLimited(ApiError):
     status_code = 429
     code = "rate_limited"

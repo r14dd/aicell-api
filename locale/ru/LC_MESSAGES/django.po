@@ -165,6 +165,10 @@ msgid "Server error"
 msgstr "Ошибка сервера"
 
 #: api/common/exceptions.py
+msgid "This insight is already closed"
+msgstr "Эта подсказка уже закрыта"
+
+#: api/common/exceptions.py
 msgid "This is not part of this prototype yet"
 msgstr "Этого пока нет в прототипе"
 
@@ -271,6 +275,10 @@ msgstr "Турнира пока нет в этом прототипе"
 #: api/content/views.py
 msgid "Tournament rules are not part of this prototype yet"
 msgstr "Правил турнира пока нет в этом прототипе"
+
+#: api/insights/services.py
+msgid "Top up %(amount)s ₼"
+msgstr "Пополнить на %(amount)s ₼"
 
 #: api/kredit/views.py
 msgid "%(count)s items"

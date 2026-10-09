@@ -33,6 +33,7 @@ PARAMS = {
     "content": {"<key>": "especially", "<id>": "wingz", "<slug>": "ninja-saga-2"},
     "assistant": {"<id>": "3513323"},
     "usage": {"<id>": "9001"},
+    "insights": {"<id>": "9101"},
 }
 # Bodies of the implemented writes; everything else is sent `{}`.
 BODIES = {

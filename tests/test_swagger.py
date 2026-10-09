@@ -51,10 +51,10 @@ def test_schema_is_valid_and_free_of_warnings(db):
 
 
 def test_every_endpoint_of_the_docs_is_in_the_schema(spec):
-    assert len(operations(spec)) == 122  # the 120 documented paths x methods + 2 health probes
+    assert len(operations(spec)) == 127  # the 125 documented paths x methods + 2 health probes
     assert {tag for _, _, operation in operations(spec) for tag in operation["tags"]} == {
         "users", "billing", "tariffs", "packs", "kredit", "sim", "content", "referral",
-        "assistant", "usage", "laya", "health",
+        "assistant", "usage", "insights", "laya", "health",
     }  # fmt: skip
 
 

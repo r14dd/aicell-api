@@ -20,7 +20,7 @@ ERROR_NOTES = {
     402: "`insufficient_balance` — the wallet cannot cover the charge",
     403: "`forbidden`",
     404: "`not_found`",
-    409: "`already_active` — the pack or service is already on",
+    409: "`already_active` — the pack or service is already on; `offer_closed` / `insight_closed` — it was already decided",
     429: "`rate_limited` — see the `Retry-After` header",
     501: "`not_implemented` — `detail` is the app's notice text",
     502: "`laya_unavailable` — the model failed or gave an answer that was rejected",

@@ -399,6 +399,16 @@ def _best_per_kind(candidates):
     return list(best.values())
 
 
+def candidates_for(profile: Profile, current: Decimal) -> list[Recommendation]:
+    """Every priced option for a subscriber with a tariff, cheaper or not."""
+    evidence = evidence_for(profile)
+    return [
+        candidate
+        for build in (_tariff_plans, _internet_packs, _social_packs, _roaming_packs, _redesign)
+        for candidate in build(profile, current, evidence)
+    ]
+
+
 def recommend(subscriber, end=None) -> Result:
     """Ranked recommendations for the last 30 days, or an explicit "nothing beats this"."""
     profile = services.profile(subscriber, WINDOW_DAYS, end)
@@ -407,12 +417,7 @@ def recommend(subscriber, end=None) -> Result:
     if profile.tariff is None:
         return Result(profile, current, (), insights)
 
-    evidence = evidence_for(profile)
-    candidates = _best_per_kind(
-        candidate
-        for build in (_tariff_plans, _internet_packs, _social_packs, _roaming_packs, _redesign)
-        for candidate in build(profile, current, evidence)
-    )
+    candidates = _best_per_kind(candidates_for(profile, current))
     cheaper = sorted(
         (c for c in candidates if c.saving > 0), key=lambda c: (-c.saving, c.projected)
     )

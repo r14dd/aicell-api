@@ -32,6 +32,7 @@ MB_PER_GB = 1024
 
 TEST_NUMBERS = ("994501000001", "994501000002", "994501000003", "994501000004")
 DEMO_OFFER_ID = 9001
+DEMO_INSIGHT_ID = 9101
 DEMO_OFFER = ("social_pack", "instagram-facebook:5gb")
 
 # Share of home data per app, in percent. Each adds up to 100.
@@ -347,6 +348,24 @@ def demo_offer(subscriber, offer_id: int) -> PersonalOffer:
         reason=rule.reason if rule else "",
         created_at=now,
         expires_at=now + timedelta(days=14),
+    )
+
+
+def demo_insight(subscriber, insight_id: int):
+    """The most urgent insight the demo usage really gives, stored under a fixed id."""
+    from api.insights import services as insights
+    from api.insights.models import Insight
+
+    found = insights.detect(subscriber)
+    if not found:
+        return None
+    first = found[0]
+    return Insight.objects.create(
+        id=insight_id,
+        subscriber=subscriber,
+        kind=first.kind,
+        evidence=first.evidence,
+        offers=first.offers,
     )
 
 

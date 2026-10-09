@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from api.seeding import DEMO_CONVERSATION_ID, DEMO_OFFER_ID
+from api.seeding import DEMO_CONVERSATION_ID, DEMO_INSIGHT_ID, DEMO_OFFER_ID
 
 DOCS = Path(__file__).resolve().parent.parent / "docs" / "api"
 ROW = re.compile(r"^\| (GET|POST|PATCH|DELETE) \| `([^`]*)`[^|]*\| `([^`]+)` \|")
@@ -24,6 +24,7 @@ PARAMS = {
     "content": {"<key>": "especially", "<id>": "wingz", "<slug>": "ninja-saga-2"},
     "assistant": {"<id>": str(DEMO_CONVERSATION_ID)},
     "usage": {"<id>": str(DEMO_OFFER_ID)},
+    "insights": {"<id>": str(DEMO_INSIGHT_ID)},
 }
 
 
@@ -55,7 +56,7 @@ ROWS = rows()
 
 
 def test_docs_tables_were_parsed():
-    assert len(ROWS) == 121  # every endpoint row in docs/api/*.md
+    assert len(ROWS) == 126  # every endpoint row in docs/api/*.md
     assert {status for _, _, status in ROWS} == {"ready", ":todo", ":dummy"}
 
 
