@@ -210,11 +210,17 @@ if not DEBUG:
 
 # --- API ----------------------------------------------------------------------
 
-# The app has no login screen yet (users/otp/* is :todo). While DEMO_AUTH is on,
-# requests without an Authorization header act as the seeded demo subscriber.
+# While DEMO_AUTH is on, requests without an Authorization header act as the
+# seeded demo subscriber.
 # Off unless switched on deliberately: it lets anyone use that account.
 DEMO_AUTH = env.flag("DEMO_AUTH", False)
 DEMO_MSISDN = env.text("DEMO_MSISDN", "994516643342")
+
+# Sign-in (users/otp/*). No SMS provider yet: every code is OTP_TEST_CODE.
+OTP_TEST_CODE = env.text("OTP_TEST_CODE", "000000")
+OTP_TTL = 300  # seconds a sign-in request lives
+OTP_RESEND_AFTER = 60  # seconds before the same number may ask again
+OTP_ATTEMPTS = 5  # wrong codes allowed per request
 # One-click admin sign-in as each seeded staff account, no password (api/common/demo_login.py).
 DEMO_ADMIN_LOGIN = env.flag("DEMO_ADMIN_LOGIN", False)
 
@@ -240,8 +246,8 @@ THROTTLE_RATES = {
 }
 
 SIMPLE_JWT = {
-    # token/refresh/ is :todo, so the prototype access token is long-lived.
     "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 

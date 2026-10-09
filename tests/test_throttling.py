@@ -16,22 +16,22 @@ def limits(settings, **rates):
 def test_sign_in_is_limited_per_address(anon, settings):
     limits(settings, otp_ip="3/min")
     statuses = [anon.post_json("/api/users/otp/send/").status_code for _ in range(5)]
-    assert statuses == [501, 501, 501, 429, 429]
+    assert statuses == [400, 400, 400, 429, 429]
     # the limit follows the address, and is shared by both sign-in endpoints
     assert anon.post_json("/api/users/otp/verify/").status_code == 429
-    assert anon.post_json("/api/users/otp/send/", REMOTE_ADDR="10.0.0.9").status_code == 501
+    assert anon.post_json("/api/users/otp/send/", REMOTE_ADDR="10.0.0.9").status_code == 400
 
 
 def test_sign_in_is_limited_per_number_across_addresses(anon, settings):
     limits(settings, otp_phone="2/min")
-    target = {"msisdn": "994516643342"}
+    target = {"msisdn": "994500000001"}  # no such subscriber: every answer is a 404
     statuses = [
         anon.post_json("/api/users/otp/send/", target, REMOTE_ADDR=f"10.0.0.{index}").status_code
         for index in range(4)
     ]
-    assert statuses == [501, 501, 429, 429]
+    assert statuses == [404, 404, 429, 429]
     other = anon.post_json("/api/users/otp/send/", {"msisdn": "994500000002"})
-    assert other.status_code == 501
+    assert other.status_code == 404
 
 
 def test_the_429_uses_the_shared_error_shape_and_says_when_to_retry(anon, settings):
@@ -130,7 +130,7 @@ def test_limits_are_counted_in_redis(anon, settings):
     limits(settings, otp_ip="2/min")
     try:
         statuses = [anon.post_json("/api/users/otp/send/").status_code for _ in range(3)]
-        assert statuses == [501, 501, 429]
+        assert statuses == [400, 400, 429]
 
         import redis
 

@@ -19,6 +19,8 @@ x-app: &app
     DATABASE_URL: ${DATABASE_URL:-sqlite:////app/data/db.sqlite3}
     REDIS_URL: redis://redis:6379/0
     DEMO_AUTH: ${DEMO_AUTH:-false}
+    # The sign-in code every number accepts until an SMS provider is wired in.
+    OTP_TEST_CODE: ${OTP_TEST_CODE:-000000}
     DEMO_ADMIN_LOGIN: ${DEMO_ADMIN_LOGIN:-false}
     GOOGLE_PAY_SIMULATED: ${GOOGLE_PAY_SIMULATED:-true}
     SEED_STAFF_PASSWORD: ${SEED_STAFF_PASSWORD:-aicell-demo}

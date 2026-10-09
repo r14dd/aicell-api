@@ -169,7 +169,7 @@ def test_every_endpoint_requires_credentials(anon, catalogue, method, path, stat
 
 @pytest.mark.parametrize("path", sorted(PUBLIC))
 def test_sign_in_endpoints_are_public(anon, path):
-    assert anon.post_json(path).status_code == 501
+    assert anon.post_json(path).status_code == 400  # reaches validation, not 401
 
 
 def test_an_inactive_subscriber_is_rejected(anon, subscriber):

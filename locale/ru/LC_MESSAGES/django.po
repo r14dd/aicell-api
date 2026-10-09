@@ -998,6 +998,26 @@ msgstr ""
 "За последние 30 дней вы заплатили %(current)s ₼; с «%(title)s» это было бы "
 "%(projected)s ₼"
 
+#: api/users/services.py
+msgid "No subscriber with this number"
+msgstr "Абонент с этим номером не найден"
+
+#: api/users/services.py
+msgid "The code has expired, request a new one"
+msgstr "Срок действия кода истёк, запросите новый"
+
+#: api/users/services.py
+msgid "The refresh token is invalid or has expired"
+msgstr "Токен обновления недействителен или истёк"
+
+#: api/users/services.py
+msgid "Try again in %(wait)d seconds"
+msgstr "Повторите попытку через %(wait)d сек."
+
+#: api/users/services.py
+msgid "Wrong code"
+msgstr "Неверный код"
+
 #: api/users/views.py
 msgid "App settings are not part of this prototype yet"
 msgstr "Настроек приложения пока нет в этом прототипе"
@@ -1009,10 +1029,6 @@ msgstr "Настроек профиля пока нет в этом протот
 #: api/users/views.py
 msgid "Push notifications are not part of this prototype yet"
 msgstr "Push-уведомлений пока нет в этом прототипе"
-
-#: api/users/views.py
-msgid "Sign in is not part of this prototype yet"
-msgstr "Входа пока нет в этом прототипе"
 
 #: api/users/views.py
 msgid "Sign out is not part of this prototype yet"

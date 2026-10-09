@@ -71,19 +71,56 @@ Sağlamlıq endpoint-ləri (`/api/health/`, `/api/health/ready/`) dil başlığ�
 
 ## 4. Giriş (auth)
 
-Tətbiqdə login ekranı hələ yoxdur və `users/otp/*` endpoint-ləri qurulmayıb (`501`). İki yol var:
+Abunəçi yalnız telefon nömrəsi ilə daxil olur. SMS hələ göndərilmir: təsdiq kodu hər nömrə üçün **`000000`**-dır. Hər abunəçi öz tokenini alır və bütün endpoint-lər yalnız həmin abunəçinin məlumatını qaytarır.
 
-1. **Demo token.** Backend tərəfdə `python manage.py demo_token` (Docker-də `docker compose exec -T web python manage.py demo_token`) demo abunəçi üçün 30 günlük token çap edir. Onu `Authorization: Bearer <token>` kimi göndərin.
-2. **`DEMO_AUTH` rejimi.** Serverdə `DEMO_AUTH=true` olanda `Authorization` başlığı **olmayan** hər sorğu demo abunəçi kimi işləyir. Bu rejim susmaya görə bağlıdır; açıq olub-olmadığını backend komandasından soruşun. Açıq olsa belə, başlıq göndərilibsə, o yoxlanır.
+### Axın
 
-Token ilə bağlı cavablar:
+1. **Nömrə ekranı.** İstifadəçi nömrəni yazır, tətbiq `POST /api/users/otp/send/` göndərir.
+2. **Kod ekranı.** `request_id` ilə `POST /api/users/otp/verify/` göndərilir. Kodu soruşmaq istəmirsinizsə, bu ekranı keçib dərhal `"code": "000000"` göndərə bilərsiniz; onda giriş tam şifrəsiz olur. SMS qoşulanda bu ekran lazım olacaq, ona görə onu hazır saxlamaq məsləhətdir.
+3. **Tokenləri saxlayın.** `access` və `refresh` cavabdan gəlir; onları təhlükəsiz yaddaşda (iOS Keychain, Android Keystore / EncryptedSharedPreferences) saxlayın. `subscriber` `GET me/` ilə eyni formadadır, ayrıca sorğuya ehtiyac yoxdur.
+4. **Hər sorğuda** `Authorization: Bearer <access>` göndərin.
+5. **`401 token_expired` gələndə** `POST /api/users/token/refresh/` ilə yeni `access` alın və sorğunu təkrarlayın. Refresh də `400 invalid_token` qaytarsa, tokenləri silin və nömrə ekranına qaytarın.
+6. **Çıxış.** `logout/` hələ `501` qaytarır; tətbiqdə tokenləri silmək kifayətdir.
+
+```http
+POST /api/users/otp/send/
+{ "msisdn": "994501000001" }
+
+200 { "request_id": "9f2c…", "ttl": 300, "resend_after": 60 }
+404 { "code": "not_found", "detail": "No subscriber with this number" }
+429 { "code": "rate_limited", "detail": "Try again in 42 seconds" }
+```
+
+```http
+POST /api/users/otp/verify/
+{ "request_id": "9f2c…", "code": "000000" }
+
+200 { "access": "<jwt>", "refresh": "<jwt>", "subscriber": { "id": 2, "msisdn": "994501000001", "display_name": "Test Abunəçi 1", … } }
+400 { "code": "invalid_code", "detail": "Wrong code", "attempts_left": 4 }
+```
+
+```http
+POST /api/users/token/refresh/
+{ "refresh": "<jwt>" }
+
+200 { "access": "<jwt>" }
+400 { "code": "invalid_token", "detail": "The refresh token is invalid or has expired" }
+```
 
 | Hal | HTTP | `code` | Tətbiq nə etməlidir |
 |---|---|---|---|
-| Başlıq yoxdur, token səhvdir və ya abunəçi deaktivdir | 401 | `not_authenticated` | Girişə yönləndir |
-| Tokenin vaxtı bitib | 401 | `token_expired` | Tokeni yenilə (hələlik: yeni demo token) |
+| Nömrə formatı səhvdir | 400 | `validation_error` | Sahənin altında `errors.msisdn` mətnini göstər |
+| Belə abunəçi yoxdur | 404 | `not_found` | "Nömrə tapılmadı" |
+| Eyni nömrəyə 60 saniyədən tez təkrar `send` | 429 | `rate_limited` | `resend_after` geri sayımını göstər |
+| Kod səhvdir | 400 | `invalid_code` | `attempts_left` göstər; `0` olanda yenidən `send` |
+| `request_id`-nin vaxtı bitib (5 dəqiqə) və ya istifadə olunub | 400 | `invalid_code` (`attempts_left: 0`) | Nömrə ekranına qayıt |
+| Başlıq yoxdur, token səhvdir və ya abunəçi deaktivdir | 401 | `not_authenticated` | Nömrə ekranına qayıt |
+| `access`-in vaxtı bitib | 401 | `token_expired` | `token/refresh/`, sonra sorğunu təkrarla |
+| `refresh`-in vaxtı bitib və ya səhvdir | 400 | `invalid_token` | Tokenləri sil, nömrə ekranına qayıt |
 
-`token/refresh/` hələ `501` qaytarır, ona görə token 30 gün etibarlıdır.
+`access` 30 gün, `refresh` 90 gün etibarlıdır. Giriş endpoint-lərinə `Authorization` göndərilmir.
+
+Backend tərəfdə token əl ilə də alına bilər: `docker compose exec -T web python manage.py demo_token 994501000001`. `DEMO_AUTH=true` rejimində başlıqsız sorğular demo abunəçi (`994516643342`) kimi işləyir; deploy olunmuş serverdə bu rejim bağlıdır, ona görə tətbiq həmişə yuxarıdakı axınla girməlidir.
 
 ### Hazır hesablar
 
@@ -97,7 +134,7 @@ Beş abunəçi var; hər birinin son 30 günə aid istifadə tarixçəsi, alış
 | `994501000003` | Tez-tez xaricə gedir, kiçik rouminq paketləri alır | DigiMax 10GB | `10.00` |
 | `994501000004` | Tarazlı istifadə: cari tarifi ona uyğundur | DigiMax 10GB | `9.10` |
 
-Hər nömrə üçün token: `python manage.py demo_token 994501000001`. `DEMO_AUTH` rejimi yalnız demo abunəçiyə (`994516643342`) aiddir; qalanları üçün token lazımdır.
+Bu beş nömrənin hər biri yuxarıdakı axınla (`000000` kodu ilə) daxil ola bilər.
 
 ## 5. Məlumat formatları
 
@@ -283,7 +320,7 @@ Baza yolu: `/api/users/`
 | `app_version` | sətir \| null | `X-App-Version` başlığının əksi: `"Version 5.1.0 (13557)"`. Başlıq yoxdursa `null` |
 | `is_premium` | bool | Premium abunəçidirmi |
 
-`:todo` olanlar: `POST otp/send/`, `POST otp/verify/`, `POST token/refresh/`, `POST logout/`, `PATCH me/`, `GET`/`PATCH me/app-settings/`, `POST devices/`.
+Giriş endpoint-ləri [bölmə 4](#4-giriş-auth)-dədir. `:todo` olanlar: `POST logout/`, `PATCH me/`, `GET`/`PATCH me/app-settings/`, `POST devices/`.
 
 ---
 
@@ -2463,7 +2500,7 @@ Abunəçinin tarifi yoxdursa `404`.
 - **Insight-lar da sintetik istifadə üzərində işləyir.** Qaydalar realdır, məlumat seed-dir. Saatlıq trafik olmadığı üçün "Teams" və "1 saatda 1 GB" siqnalları qurulmayıb.
 - **Tarifin real sərfiyyatı izlənmir.** Tarif alınanda və yenilənəndə qalıqlar tam həcmə qayıdır, amma istifadə etdikcə azalmır (şəbəkə axını yoxdur).
 - **`501` bildiriş mətnləri** əksər hallarda ümumi qəlibdədir ("… hələ bu prototipdə yoxdur").
-- **Giriş yoxdur**: OTP, token yeniləmə və çıxış `501` qaytarır.
+- **SMS göndərilmir**: giriş kodu hər nömrə üçün `000000`-dır. Çıxış (`logout/`) `501` qaytarır.
 - **Aktiv paketlərin siyahısı yoxdur** (`packs/active/` `501`-dir).
 - **Assistent süni intellektə qoşulmayıb** və ingiliscə cavab verir.
 - **Google Pay** yalnız `"simulated"` tokeni qəbul edir.
@@ -2475,9 +2512,9 @@ Abunəçinin tarifi yoxdursa `404`.
 
 | Metod | Yol | Vəziyyət | Pul | Təsvir |
 |---|---|---|---|---|
-| POST | `/api/users/otp/send/` | `:todo` |  | Send an OTP to a number |
-| POST | `/api/users/otp/verify/` | `:todo` |  | Verify an OTP and get tokens |
-| POST | `/api/users/token/refresh/` | `:todo` |  | Refresh the access token |
+| POST | `/api/users/otp/send/` | `ready` |  | Send an OTP to a number |
+| POST | `/api/users/otp/verify/` | `ready` |  | Verify an OTP and get tokens |
+| POST | `/api/users/token/refresh/` | `ready` |  | Refresh the access token |
 | POST | `/api/users/logout/` | `:todo` |  | Sign out |
 | GET | `/api/users/me/` | `ready` |  | My profile |
 | PATCH | `/api/users/me/` | `:todo` |  | Update my profile |
