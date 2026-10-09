@@ -23,6 +23,7 @@ if not SECRET_KEY:
 ALLOWED_HOSTS = env.items("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1" if DEBUG else "")
 
 INSTALLED_APPS = [
+    "modeltranslation",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.staticfiles",
@@ -33,6 +34,7 @@ INSTALLED_APPS = [
     "api.common",
     "api.users",
     "api.billing",
+    "api.tariffs",
 ]
 
 MIDDLEWARE = [
@@ -90,6 +92,8 @@ IDEMPOTENCY_KEY_DAYS = env.number("IDEMPOTENCY_KEY_DAYS", 7)
 LANGUAGE_CODE = "en"
 LANGUAGES = [("az", _("Azerbaijani")), ("ru", _("Russian")), ("en", _("English"))]
 LOCALE_PATHS = [BASE_DIR / "locale"]
+MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
+MODELTRANSLATION_FALLBACK_LANGUAGES = ("en",)
 TIME_ZONE = "Asia/Baku"
 USE_I18N = True
 USE_TZ = True
@@ -187,6 +191,7 @@ SPECTACULAR_SETTINGS = {
     "SCHEMA_PATH_PREFIX": r"/api/",
     "TAGS": [
         {"name": "users", "description": "Sign in and the subscriber's profile"},
+        {"name": "tariffs", "description": "Tariff catalogue and the subscriber's tariff"},
         {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
         {"name": "health", "description": "Liveness and readiness probes"},
     ],
