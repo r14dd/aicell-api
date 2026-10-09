@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "api.kredit",
     "api.sim",
     "api.content",
+    "api.referral",
 ]
 
 MIDDLEWARE = [
@@ -206,6 +207,7 @@ SPECTACULAR_SETTINGS = {
             "name": "content",
             "description": "Home feed, stories, notifications, lottery, games and offers",
         },
+        {"name": "referral", "description": "Invite & earn"},
         {"name": "sim", "description": "Line, roaming, SMS, PUK, eSIM and paid services"},
         {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
         {"name": "health", "description": "Liveness and readiness probes"},
