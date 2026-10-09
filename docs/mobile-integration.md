@@ -19,10 +19,10 @@ aicell backend-inə mobil tətbiqi qoşmaq üçün lazım olan hər şey: ünvan
 9. [Dil](#9-dil)
 10. [Endpoint vəziyyətləri](#10-endpoint-vəziyyətləri)
 11. [Məlumat modeli](#11-məlumat-modeli)
-12. Domenlər: [users](#12-users) · [billing](#13-billing) · [tariffs](#14-tariffs) · [packs](#15-packs) · [kredit](#16-kredit) · [sim](#17-sim) · [content](#18-content) · [referral](#19-referral) · [assistant](#20-assistant) · [usage](#21-usage) · [insights](#22-insights)
-13. [Tipik axınlar](#23-tipik-axınlar)
-14. [Məlum məhdudiyyətlər](#24-məlum-məhdudiyyətlər)
-15. [Bütün endpoint-lərin siyahısı](#25-bütün-endpoint-lərin-siyahısı)
+12. Domenlər: [users](#12-users) · [billing](#13-billing) · [tariffs](#14-tariffs) · [packs](#15-packs) · [kredit](#16-kredit) · [sim](#17-sim) · [content](#18-content) · [referral](#19-referral) · [assistant](#20-assistant) · [usage](#21-usage) · [insights](#22-insights) · [laya](#23-laya)
+13. [Tipik axınlar](#24-tipik-axınlar)
+14. [Məlum məhdudiyyətlər](#25-məlum-məhdudiyyətlər)
+15. [Bütün endpoint-lərin siyahısı](#26-bütün-endpoint-lərin-siyahısı)
 
 ---
 
@@ -221,9 +221,9 @@ Diqqət: əməliyyat adı (`transactions[].title`) və aktivləşdirmə adı (`a
 |---|---|
 | `ready` | Tam işləyir |
 | `:todo` | Yol hazırdır, amma `501 not_implemented` qaytarır. `detail`-də göstəriləcək bildiriş mətni var. Tətbiq bu yollara indidən qoşula bilər |
-| `:dummy` | Assistent: başdan-sona işləyir, amma cavabı süni intellekt yox, açar sözlər verir |
+| `:dummy` | Assistent: başdan-sona işləyir; cavabı `GEMINI_API_KEY` olanda Gemini, olmayanda açar sözlər verir |
 
-126 endpoint-dən 81-i işləyir (75 `ready`, 6 `:dummy`), 45-i `:todo`-dur. `laya/` endpoint-ləri [docs/api/laya.md](api/laya.md)-də təsvir olunub. Tam siyahı [bölmə 25](#25-bütün-endpoint-lərin-siyahısı)-də.
+127 endpoint-dən 82-si işləyir (75 `ready`, 7 `:dummy`), 45-i `:todo`-dur. `laya/` endpoint-ləri [bölmə 23](#23-laya)-də. Tam siyahı [bölmə 26](#26-bütün-endpoint-lərin-siyahısı)-də.
 
 ## 11. Məlumat modeli
 
@@ -1863,7 +1863,7 @@ Baza yolu: `/api/referral/`
 
 ## 20. assistant
 
-Baza yolu: `/api/assistant/`. Vəziyyət `:dummy`: hər şey işləyir, amma cavabı açar sözlər verir və həmişə ingiliscədir.
+Baza yolu: `/api/assistant/`. Vəziyyət `:dummy`: hər şey başdan-sona işləyir. Serverdə `GEMINI_API_KEY` varsa assistent Gemini ilə cavab verir: Gemini mesajın mövzusunu seçir, cavab abunəçinin məlumatından və ya bilik bazasından qurulur və Gemini tərəfindən yazılır. Açar yoxdursa cavabı açar söz qaydaları verir. Sorğu və cavab formatı hər iki halda eynidir.
 
 ### `GET inbox/` — dəstək ekranı
 
@@ -1943,7 +1943,7 @@ Sorğu:
 
 `content` məcburidir, ən çoxu 2000 simvol.
 
-**Rejim 1 — axın (SSE), susmaya görə.** Cavab `200`, `Content-Type: text/event-stream`:
+**Rejim 1 — axın (SSE), susmaya görə.** Axın rejimində `POST` `200` qaytarır (`201` yox), `Content-Type: text/event-stream`:
 
 ```
 event: message
@@ -1992,6 +1992,42 @@ data: {}
 ```
 
 Xətalar: `400` (boş mesaj), `404` (söhbət yoxdur və ya başqasınındır), `429` (dəqiqədə 20 mesaj).
+
+### `POST conversations/<id>/voice/` — səs mesajı
+
+Cihazda nitq tanıma və səsləndirmə olmayan müştərilər üçündür: server səsi mətnə çevirir, mətn mesajı ilə eyni cavabı hazırlayır və cavabı səslə qaytarır. Cihazda nitq varsa, adi `messages/` istifadə edin.
+
+Sorğu `multipart/form-data`, bir sahə: `audio` (fayl). Format: wav, mp3, m4a, ogg və ya webm, ən çoxu 5 MB.
+
+Cavab `201`:
+
+```jsonc
+{
+  "action": { "action": "navigate", "label": "Top up balance", "to": "/top-up" },
+  "audio": "<base64 WAV, 24 kHz mono>",
+  "audio_mime": "audio/wav",
+  "message": {
+    "content": "Balansınız 16.21 ₼-dir.",
+    "created_at": "2026-10-09T12:24:05Z",
+    "id": 813,
+    "role": "assistant",
+    "route": "balance"
+  },
+  "transcript": "Balansım nə qədərdir?",
+  "user_message_id": 812
+}
+```
+
+| Sahə | Mənası |
+|---|---|
+| `transcript` | Səsdən tanınan mətn (istifadəçinin mesajı kimi saxlanır) |
+| `user_message_id` | İstifadəçi mesajının `id`-si |
+| `message` | Assistentin cavabı, `messages/` tarixçəsindəki ilə eyni forma |
+| `action` | Təklif olunan keçid, `messages/` ilə eyni. Olmaya bilər |
+| `audio` | Cavabın səsi: base64 WAV, 24 kHz, mono. Səsləndirmə alınmayıbsa `null`; mətn yenə də gəlir |
+| `audio_mime` | `audio/wav` |
+
+Xətalar: `400` (yazı başa düşülmədi).
 
 ### `POST conversations/<id>/rate/`
 
@@ -2425,7 +2461,91 @@ Abunəçinin tarifi yoxdursa `404`.
 
 ---
 
-## 23. Tipik axınlar
+## 23. laya
+
+Baza yolu: `/api/laya/`. Vəziyyət `ready`. Laya tətbiqdəki səs assistentidir: tətbiq istifadəçinin dediyini göndərir və qayıdan tapşırığı özü icra edir. Bu endpoint-lərdən heç biri pul köçürmür.
+
+Server tərəfdə Laya-nın beyni Gemini-dir (cavab təxminən 1 saniyə); açar yoxdursa açar söz qaydaları işləyir. Cavabdakı hər rəqəm sorğuda artıq olmalıdır, yoxsa cavab atılır: `plan/` bu halda `task: "none"` qaytarır, `narrate/` isə `502 laya_unavailable`.
+
+| Endpoint | Nə edir |
+|---|---|
+| `POST plan/` | İstifadəçinin dediyi → cavab, tapşırıq, parametrlər |
+| `POST narrate/` | Server insight-ı → bir səsli mesaj |
+
+**Keçid.** Tətbiq hazırda Node `laya-backend`-in `/laya/plan` endpoint-ini çağırır. Django-da eyni yol `POST /api/laya/plan/`-dır (Gemini beyni, təxminən 1 saniyə), sorğu və cavab müqaviləsi eynidir; keçmək üçün yalnız baza ünvanı dəyişir.
+
+### `POST plan/` — nə edəcəyini seç
+
+Sorğu:
+
+```jsonc
+{
+  "context": {
+    "balance": 16.21,
+    "dataGb": 7.2,
+    "pending": {
+      "insight_id": 41,
+      "task": { "name": "activatePack", "params": { "plan": "5gb", "slug": "youtube" } }
+    },
+    "screen": "assistant",
+    "tariff": "IsteSen"
+  },
+  "text": "hə, qoş"
+}
+```
+
+Cavab `200`:
+
+```jsonc
+{
+  "amount": null,
+  "language": "az",
+  "params": { "insight_id": 41, "plan": "5gb", "slug": "youtube" },
+  "reply": "Edirəm.",
+  "task": "activatePack"
+}
+```
+
+| Sahə | Mənası |
+|---|---|
+| `text` | İstifadəçinin dediyi |
+| `context` | Ekrandakı rəqəmlər və vəziyyət. `insights` və `advisor` da ola bilər |
+| `context.pending` | Laya-nın təklif etdiyi, cavab gözləyən tapşırıq (`insight_id`, `task`) |
+| `reply` | Səsləndiriləcək cavab |
+| `task` | İcra ediləcək tapşırıq (aşağıda) |
+| `params` | Tapşırığın parametrləri; `pending`-dən gələndə `insight_id` əlavə olunur |
+| `amount` | Məbləğ (məsələn `topUp` üçün), yoxdursa `null` |
+| `language` | Cavabın dili |
+
+`task` dəyərləri: `checkBalance`, `checkRemaining`, `topUp`, `openInternetPacks`, `openRoaming`, `openTariff`, `openNotifications`, `openSupport`, `activatePack`, `buyPack`, `applyRedesign`, `changeTariff`, `explainInsight`, `dismissInsight`, `adviseTariff`, `none`.
+
+`pending` varsa: "hə" onun tapşırığını olduğu kimi qaytarır, "yox" `dismissInsight`, "niyə" `explainInsight` qaytarır.
+
+### `POST narrate/` — insight-ı səslə de
+
+Sorğu:
+
+```jsonc
+{
+  "insight": { "evidence": {…}, "id": 41, "kind": "video_heavy", "offers": […], "recommended": 0 },
+  "language": "az",
+  "name": "Qüdrət"
+}
+```
+
+Cavab `200`:
+
+```jsonc
+{ "language": "az", "speech": "12 GB-lıq paketinizi 2 gündə bitirdiniz … Qoşum?" }
+```
+
+`speech` ən çoxu 45 sözdür və sualla bitir. `insight` obyekti [bölmə 22](#22-insights)-dəki insight-dır.
+
+Xətalar: `502 laya_unavailable` (cavabda sorğuda olmayan rəqəm var).
+
+---
+
+## 24. Tipik axınlar
 
 **Ana səhifənin yüklənməsi** (hamısı paralel göndərilə bilər):
 
@@ -2453,7 +2573,7 @@ Abunəçinin tarifi yoxdursa `404`.
 
 **Tövsiyə və təklif:** `GET usage/recommendations/` → `fits` `false` isə ilk tövsiyəni `evidence` ilə göstər, `action.to`-ya apar; `offer` varsa kart kimi göstər → `POST usage/offers/<id>/accept/` + `Idempotency-Key` və ya `…/decline/`.
 
-## 24. Məlum məhdudiyyətlər
+## 25. Məlum məhdudiyyətlər
 
 - **İstifadə məlumatı sintetikdir.** Şəbəkədən real axın yoxdur; 30 günlük tarixçələr seed ilə yazılır. Tövsiyələr həmin məlumat üzərində real hesablamadır.
 - **Keçid yolları təxminidir.** `action.to` dəyərləri (`/offers/<id>`, `/my-tariff/redesign`, `/internet-packs/<slug>`) backend-in fərziyyəsidir; tətbiqdəki real yollarla uzlaşdırılmalıdır.
@@ -2465,11 +2585,11 @@ Abunəçinin tarifi yoxdursa `404`.
 - **`501` bildiriş mətnləri** əksər hallarda ümumi qəlibdədir ("… hələ bu prototipdə yoxdur").
 - **Giriş yoxdur**: OTP, token yeniləmə və çıxış `501` qaytarır.
 - **Aktiv paketlərin siyahısı yoxdur** (`packs/active/` `501`-dir).
-- **Assistent süni intellektə qoşulmayıb** və ingiliscə cavab verir.
+- **Assistent açar söz rejimində** (serverdə `GEMINI_API_KEY` yoxdursa) sadə qaydalarla və ingiliscə cavab verir; Gemini ilə cavab keyfiyyəti və dili fərqlidir.
 - **Google Pay** yalnız `"simulated"` tokeni qəbul edir.
 - **`X-Platform`** oxunmur.
 
-## 25. Bütün endpoint-lərin siyahısı
+## 26. Bütün endpoint-lərin siyahısı
 
 `pul` sütununda işarə olanlar `Idempotency-Key` tələb edir.
 
@@ -2588,6 +2708,7 @@ Abunəçinin tarifi yoxdursa `404`.
 | POST | `/api/assistant/conversations/` | `:dummy` |  | Start a conversation |
 | GET | `/api/assistant/conversations/<id>/messages/` | `:dummy` |  | Conversation history |
 | POST | `/api/assistant/conversations/<id>/messages/` | `:dummy` |  | Send a message |
+| POST | `/api/assistant/conversations/<id>/voice/` | `:dummy` |  | Send a voice message |
 | POST | `/api/assistant/conversations/<id>/rate/` | `:dummy` |  | Rate a conversation |
 | POST | `/api/assistant/feedback/` | `:todo` |  | Share an idea for a new feature |
 | GET | `/api/usage/summary/` | `ready` |  | 30-day usage profile |
