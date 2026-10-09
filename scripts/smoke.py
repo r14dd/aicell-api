@@ -41,6 +41,13 @@ BODIES = {
     "/api/billing/top-up/akart/": {"akart_msisdn": "994516643342", "amount": "1.00"},
     "/api/billing/top-up/google-pay/": {"amount": "1.00", "payment_token": "simulated"},
     "/api/billing/steam/top-up/": {"account": "gamer_01", "amount": "1.00"},
+    # Valid requests that leave the demo subscriber on its tariff: plans it cannot
+    # afford (402) and the slider values it already has.
+    "/api/tariffs/subscribe/": {"plan_id": "premium-100"},
+    "/api/tariffs/change/": {"tariff_id": "premium"},
+    "/api/tariffs/my/redesign/": {
+        "values": {"internet": 16, "calls": 30, "instagramFb": 0, "youtube": 0, "tiktok": 0}
+    },
     "/api/packs/internet/purchase/": {"pack_id": "daily-500mb"},
     "/api/packs/social/tehsil/activate/": {"plan_id": "10gb"},
     "/api/packs/roaming/purchase/": {"pack_id": "r-500mb"},
@@ -53,6 +60,17 @@ BODIES = {
     "/api/assistant/conversations/": {"source": "smoke"},
     "/api/assistant/conversations/3513323/messages/": {"content": "balans"},
     "/api/assistant/conversations/3513323/rate/": {"stars": 5},
+    "/api/laya/plan/": {"text": "balansım nə qədərdir", "context": {"balance": 16.21}},
+    "/api/laya/narrate/": {
+        "language": "az",
+        "insight": {
+            "id": 7001,
+            "kind": "forecast_gap",
+            "evidence": {"remaining_gb": 2, "days_left": 10},
+            "offers": [{"label": "Weekly 5 GB", "price": "5.00"}],
+            "recommended": 0,
+        },
+    },
 }
 PUBLIC = ("/api/users/otp/", "/api/users/token/refresh/")
 ROLES = {

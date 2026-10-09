@@ -19,8 +19,15 @@ x-app: &app
     DATABASE_URL: ${DATABASE_URL:-sqlite:////app/data/db.sqlite3}
     REDIS_URL: redis://redis:6379/0
     DEMO_AUTH: ${DEMO_AUTH:-false}
+    DEMO_ADMIN_LOGIN: ${DEMO_ADMIN_LOGIN:-false}
     GOOGLE_PAY_SIMULATED: ${GOOGLE_PAY_SIMULATED:-true}
     SEED_STAFF_PASSWORD: ${SEED_STAFF_PASSWORD:-aicell-demo}
+    SECURE_HSTS_SECONDS: ${SECURE_HSTS_SECONDS:-31536000}
+    INSIGHTS_QUIET_HOURS: ${INSIGHTS_QUIET_HOURS:-true}
+    # Laya answers with keyword rules until a key is given; then the model is used.
+    ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    LAYA_PLAN_MODEL: ${LAYA_PLAN_MODEL:-claude-sonnet-5-5}
+    LAYA_NARRATE_MODEL: ${LAYA_NARRATE_MODEL:-claude-haiku-5-5}
     THROTTLE_OTP_IP: ${THROTTLE_OTP_IP:-5/min}
     THROTTLE_OTP_PHONE: ${THROTTLE_OTP_PHONE:-5/min}
     THROTTLE_MONEY: ${THROTTLE_MONEY:-30/min}

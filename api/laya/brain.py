@@ -31,7 +31,8 @@ def _ask(call, payload, valid):
         except Exception:
             log.exception("Laya brain failed")
             raise LayaUnavailable() from None
-        if valid(answer):
+        # A model may hand back anything; only a mapping can be an answer.
+        if isinstance(answer, dict) and valid(answer):
             return answer
         log.warning("Laya answer rejected: %r", answer)
     return None
@@ -57,7 +58,7 @@ def plan(text, context):
     return {
         "reply": answer["reply"],
         "task": answer["task"],
-        "params": answer["params"],
+        "params": answer.get("params"),
         "amount": amount if isinstance(amount, int | float) else None,
         "language": answer["language"],
     }

@@ -1,0 +1,19 @@
+{% extends "admin/login.html" %}
+
+{% load unfold %}
+
+{% block login_after %}
+    {{ block.super }}
+    {% if demo_logins %}
+        <div class="border-t border-base-200 flex flex-col gap-3 mt-8 pt-6 dark:border-base-800" data-test="demo-logins">
+            <p class="text-sm">Demo: enter without a password as</p>
+            {% for account in demo_logins %}
+                <form method="post" action="{% url 'admin-demo-login' account.login %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {% component "unfold/components/button.html" with submit=1 variant="secondary" class="w-full" %}{{ account.name }} <span class="opacity-50">({{ account.login }})</span>{% endcomponent %}
+                </form>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
