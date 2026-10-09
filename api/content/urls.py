@@ -1,0 +1,36 @@
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path("home/", views.home_view),
+    path("stories/", views.stories_view),
+    path("stories/<slug:key>/", views.story_view),
+    path("stories/<slug:key>/viewed/", views.story_viewed_view),
+    path("banners/", views.banners_view),
+    path("notifications/", views.notifications_view),
+    path("notifications/options/", views.notification_options_view),
+    path("notifications/<slug:id>/", views.notification_view),
+    path("notifications/<slug:id>/read/", views.notification_read_view),
+    path("lottery/rules/", views.lottery_rules_view),
+    path("lottery/chances/", views.lottery_chances_view),
+    path("lottery/terms/", views.lottery_terms_view),
+    path("games/", views.games_view),
+    path("games/tournament/join/", views.tournament_join_view),
+    path("games/tournament/rules/", views.tournament_rules_view),
+    path("games/<slug:slug>/launch/", views.game_launch_view),
+    path("offers/apps/", views.app_offers_view),
+    path("offers/apps/<slug:id>/subscribe/", views.app_offer_subscribe_view),
+    path("offers/aztelekom/", views.aztelekom_view),
+    path("offers/aztelekom/order/", views.aztelekom_order_view),
+    path("perks/", views.perks_view),
+    path("campaigns/", views.campaigns_view),
+    path("gift-wheel/", views.gift_wheel_view),
+    path("gift-wheel/spin/", views.gift_wheel_spin_view),
+    path("app-rating/", views.app_rating_view),
+    path("about/", views.about_view),
+    path("map/", views.map_view),
+    path("stickers/", views.stickers_view),
+    path("help/", views.help_view),
+    path("problem-report/", views.problem_report_view),
+]
