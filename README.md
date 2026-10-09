@@ -183,6 +183,29 @@ and turns the profile into ranked recommendations and personal offers
   responder. The keyword responder already answers "which tariff suits me"
   from the same numbers.
 
+## Insights
+
+`api/insights/` turns the same figures into things worth telling a subscriber
+([docs/api/insights.md](docs/api/insights.md)): the internet will not last
+until the renewal, the balance does not cover it, packs keep being bought on
+top of the tariff, half of the tariff is left over every month.
+
+- Detectors are plain functions of the subscriber's figures and a snapshot of
+  the catalogue (`detectors.py`). Each returns the facts it found and the
+  priced answers, or nothing. Thresholds are named constants.
+- Offers are picked from the catalogue tables by price and price per
+  gigabyte (`catalogue.py`), so a pack added in the admin is chosen by the
+  same rules. Nothing is hard-coded and no product is invented.
+- The backend writes no sentences. An insight is `evidence` plus `offers`;
+  the assistant or the app words it. Every price and saving is already
+  computed, so a model that words it has nothing to calculate.
+- Delivery is decided on the server: urgent insights always, one new
+  informational one per 48 hours, none at night, a dismissed kind silent for
+  14 days.
+- `GET insights/advisor/` compares what a month costs now with IsteSen
+  redesigned to the usage ("IsteSen+") and with the cheapest plan that covers
+  it.
+
 ## Tariffs
 
 `subscribe/`, `change/` and `my/renew/` charge the wallet and start a full
@@ -233,6 +256,7 @@ DATABASE_URL=postgres://user:password@127.0.0.1:5432/name uv run pytest tests/te
 | `test_catalogue.py` | admin edits reach the API; the cache is per language |
 | `test_usage.py` | profile and top recommendation of each seeded persona; cost arithmetic by hand; offers charge once |
 | `test_statistics.py` | every statistics figure against a hand-built data set; period boundaries; filters; 403 without the permission; a query-count ceiling |
+| `test_insights.py` | the figures; each detector firing and not firing on hand-built data; one open insight per kind; the delivery policy; the advisor's arithmetic |
 | `test_tariff_actions.py` | subscribe, change, renew and redesign; nothing changes without the money |
 | `test_throttling.py`, `test_health.py`, `test_security.py` | limits, probes, deployment settings |
 
@@ -261,7 +285,8 @@ never cached.
 
 **Scheduled work** (Celery beat): expired pack activations are switched off every
 minute; personal offers are created and expired every 15 minutes and subscriber
-insights recomputed hourly; idempotency keys older than `IDEMPOTENCY_KEY_DAYS` are purged hourly.
+insights recomputed hourly; the insight detectors run for everyone at 03:00;
+idempotency keys older than `IDEMPOTENCY_KEY_DAYS` are purged hourly.
 
 **Swagger examples.** Response examples come from `api/common/examples.json`,
 recorded from real answers by `manage.py record_examples` (it runs in a
@@ -288,6 +313,7 @@ Read from the environment, and from `.env` when present.
 | `SEED_STAFF_PASSWORD` | `aicell-demo` | change it on anything public |
 | `THROTTLE_*` | see Limits | |
 | `CATALOGUE_CACHE_SECONDS` | `300` | |
+| `INSIGHTS_QUIET_HOURS` | `true` | `false` delivers insights at night too (23:00 to 08:00 Asia/Baku) |
 | `ASSISTANT_RESPONDER` | `api.assistant.responder.respond` | dotted path to a callable |
 
 With debug off, cookies are secure-only, HSTS is on, HTTP is redirected to
@@ -301,6 +327,12 @@ behind TLS.
 
 ## Known limitations
 
+- Insights rest on what is recorded per day. Signals that need hourly traffic
+  (Teams during work hours, a gigabyte within an hour) are not built. How much
+  of a pack is used is not tracked either: "a pack was used up in three days"
+  is read from the home data of the days after it was bought.
+- Insight detectors run when the app asks and once a night. No purchase or
+  top-up pushes an insight on its own; there is no push channel yet.
 - Usage is synthetic. No network feed exists; the usage histories are written
   by the seed, and nothing decrements a tariff's remaining amounts.
   Recommendations are real arithmetic over that data, so they are only as

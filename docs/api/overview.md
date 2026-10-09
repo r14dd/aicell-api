@@ -14,6 +14,7 @@ domain (`api/urls.py`):
 (path("referral/", include("api.referral.urls")),)
 (path("assistant/", include("api.assistant.urls")),)
 (path("usage/", include("api.usage.urls")),)
+(path("insights/", include("api.insights.urls")),)
 ```
 
 Schema: `GET /api/schema/`, Swagger UI: `GET /api/swagger/`.
