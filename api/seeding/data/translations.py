@@ -431,4 +431,17 @@ TEXTS: dict[str, tuple[str, str]] = {
         "Получите 15 бесплатных минут в первой поездке на Wingz при оплате с баланса Azercell.",
     ),
     "Learn more about the lottery": ("Lotereya haqqında ətraflı", "Подробнее о лотерее"),
+    # --- personal offers ---
+    "You have not used mobile internet yet: try your first pack at half price": (
+        "Hələ mobil internetdən istifadə etməmisiniz: ilk paketinizi yarı qiymətə sınayın",
+        "Вы ещё не пользовались мобильным интернетом: попробуйте первый пакет за полцены",
+    ),
+    "You travel often: a bigger roaming pack for less": (
+        "Tez-tez səfər edirsiniz: daha böyük rouminq paketi daha ucuz",
+        "Вы часто путешествуете: больший роуминг-пакет дешевле",
+    ),
+    "Instagram & Facebook is most of your internet: 5 GB for less": (
+        "İnternetinizin çoxu Instagram və Facebook-a gedir: 5 GB daha ucuz",
+        "Большая часть вашего интернета уходит на Instagram и Facebook: 5 ГБ дешевле",
+    ),
 }

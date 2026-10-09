@@ -10,23 +10,32 @@ TOTAL_PRICE = [
         "heading": "When you use all package, prices will be next:",
         "tone": "secondary",
         "rows": [
-            {"label": "Internet - 1MB", "price": "0.05"},
-            {"label": "Local calls - 1 min.", "price": "0.06"},
-            {"label": "SMS - 1 pcs.", "price": "0.05"},
-            {"label": "International SMS - 1 pcs.", "price": "0.20"},
+            {"key": "data_mb", "label": "Internet - 1MB", "price": "0.05"},
+            {"key": "minute", "label": "Local calls - 1 min.", "price": "0.06"},
+            {"key": "sms", "label": "SMS - 1 pcs.", "price": "0.05"},
+            {"key": "intl_sms", "label": "International SMS - 1 pcs.", "price": "0.20"},
         ],
     },
     {
         "heading": "If monthly fee is not paid:",
         "tone": "red",
         "rows": [
-            {"label": "Internet - 1MB", "price": "0.10"},
-            {"label": "Local calls - 1 min.", "price": "0.10"},
-            {"label": "SMS - 1 pcs.", "price": "0.06"},
-            {"label": "International SMS - 1 pcs.", "price": "0.25"},
+            {"key": "data_mb", "label": "Internet - 1MB", "price": "0.10"},
+            {"key": "minute", "label": "Local calls - 1 min.", "price": "0.10"},
+            {"key": "sms", "label": "SMS - 1 pcs.", "price": "0.06"},
+            {"key": "intl_sms", "label": "International SMS - 1 pcs.", "price": "0.25"},
         ],
     },
 ]
+
+# What each plan includes, as numbers. None means unlimited.
+INCLUDED = {
+    "digimax-5": {"data_mb": 5 * 1024, "minutes": 100, "sms": 50, "roaming_mb": 0},
+    "digimax-10": {"data_mb": 10 * 1024, "minutes": 200, "sms": 100, "roaming_mb": 0},
+    "digimax-25": {"data_mb": 25 * 1024, "minutes": 500, "sms": 200, "roaming_mb": 0},
+    "premium-60": {"data_mb": 60 * 1024, "minutes": None, "sms": 500, "roaming_mb": 1024},
+    "premium-100": {"data_mb": 100 * 1024, "minutes": None, "sms": None, "roaming_mb": 3 * 1024},
+}
 
 
 def _features(internet, minutes, sms, socials=None, roaming=None):
@@ -189,6 +198,7 @@ CHANGE_GROUPS = [
                     {"kind": "minutes", "value": "50 min."},
                 ],
                 "family_id": None,
+                "included": {"data_mb": 3 * 1024, "minutes": 50, "validity_days": 28},
             },
         ],
     },
@@ -223,6 +233,7 @@ CHANGE_GROUPS = [
                     {"kind": "minutes", "value": "1000 min."},
                 ],
                 "family_id": None,
+                "included": {"data_mb": 40 * 1024, "minutes": 1000, "validity_days": 30},
             },
         ],
     },

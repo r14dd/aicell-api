@@ -122,3 +122,16 @@ ROAMING = [
     {"id": "r-2gb", "name": "2 GB", "sub": "10 days", "price": "25.00", "days": 10},
     {"id": "r-5gb", "name": "5 GB", "sub": "30 days", "price": "45.00", "days": 30},
 ]
+
+# Traffic of each pack in MB, for cost projection. Packs left out are unlimited.
+INTERNET_MB = {
+    "hv-20gb": 20 * 1024,
+    "hv-50gb": 50 * 1024,
+    "hv-100gb": 100 * 1024,
+    "weekly-2gb": 2 * 1024,
+    "weekly-5gb": 5 * 1024,
+    "daily-500mb": 500,
+    "daily-1gb": 1024,
+}
+SOCIAL_MB = {"1gb": 1024, "2gb": 2 * 1024, "5gb": 5 * 1024, "10gb": 10 * 1024, "100gb": 100 * 1024}
+ROAMING_MB = {"r-500mb": 500, "r-2gb": 2 * 1024, "r-5gb": 5 * 1024}

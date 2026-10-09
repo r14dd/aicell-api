@@ -8,6 +8,7 @@ from zoneinfo import ZoneInfo
 from django.conf import settings
 from django.core.management.color import no_style
 from django.db import connection, transaction
+from django.utils import timezone
 
 from api.assistant.models import Conversation, Message
 from api.billing.models import SavedCard, SteamAccount, TopUp, Transaction, Wallet
@@ -15,8 +16,10 @@ from api.content.models import Notification
 from api.referral.models import ReferralProfile
 from api.sim.models import SimProfile
 from api.tariffs.models import SubscriberTariff
+from api.usage.models import DailyUsage, OfferRule, PersonalOffer
 from api.users.models import Subscriber
 
+from .stories import DEMO_OFFER_ID, Calendar, demo_offer, demo_usage
 from .translations import localized
 
 BAKU = ZoneInfo("Asia/Baku")
@@ -35,6 +38,7 @@ class Profile:
     puk1: str = "58390447"
     puk2: str = "88154421"
     conversation_id: int | None = DEMO_CONVERSATION_ID
+    offer_id: int | None = DEMO_OFFER_ID
 
 
 def utc(*args):
@@ -169,7 +173,15 @@ def seed_subscriber(msisdn: str, profile: Profile | None = None) -> Subscriber:
     ReferralProfile.objects.create(subscriber=subscriber, code=profile.referral_code)
     if profile.conversation_id:
         _conversation(subscriber, profile.conversation_id)
+    _usage_and_offer(subscriber, profile.offer_id)
     return subscriber
+
+
+def _usage_and_offer(subscriber, offer_id) -> None:
+    demo_usage(subscriber, Calendar(timezone.localdate()))
+    if offer_id and OfferRule.objects.exists():
+        demo_offer(subscriber, offer_id)
+        _advance_sequence(PersonalOffer)
 
 
 @transaction.atomic
@@ -177,6 +189,8 @@ def seed_demo(reset: bool = False) -> tuple[Subscriber, bool]:
     """Create the demo subscriber. Returns (subscriber, created)."""
     existing = Subscriber.objects.filter(msisdn=settings.DEMO_MSISDN).first()
     if existing and not reset:
+        if not DailyUsage.objects.filter(subscriber=existing).exists():
+            _usage_and_offer(existing, DEMO_OFFER_ID)  # seeded before usage existed
         return existing, False
     if existing:
         existing.delete()
