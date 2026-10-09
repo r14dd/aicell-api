@@ -15,7 +15,8 @@ x-app: &app
     SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-false}
     SECURE_COOKIES: ${SECURE_COOKIES:-false}
     # One SQLite file on a volume shared by the web, worker and beat containers.
-    DATABASE_URL: sqlite:////app/data/db.sqlite3
+    # Set DATABASE_URL in .env to a postgres:// URL to use PostgreSQL instead.
+    DATABASE_URL: ${DATABASE_URL:-sqlite:////app/data/db.sqlite3}
     REDIS_URL: redis://redis:6379/0
     DEMO_AUTH: ${DEMO_AUTH:-false}
     GOOGLE_PAY_SIMULATED: ${GOOGLE_PAY_SIMULATED:-true}

@@ -22,6 +22,10 @@ This starts the API (gunicorn), Redis, a Celery worker and Celery beat. The
 database is one SQLite file on a volume the three app containers share. The
 `web` container migrates, collects static files and seeds before it serves.
 
+The stack no longer runs PostgreSQL, and a database from an earlier `docker compose up`
+(the old `pgdata` volume) is not read: the first start creates an empty SQLite file. To
+keep using PostgreSQL, set `DATABASE_URL=postgres://user:password@host:5432/name` in `.env`.
+
 | | |
 |---|---|
 | API | <http://localhost:8010/api/> |
