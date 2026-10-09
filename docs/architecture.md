@@ -190,7 +190,7 @@ Read from the environment, and from `.env` when present.
 | `SECURE_HSTS_SECONDS` | `31536000` | |
 | `DATABASE_URL` | SQLite file | a volume path in Docker; `postgres://…` also works |
 | `REDIS_URL` | none | cache, limits and the Celery broker |
-| `DEMO_AUTH` | `false` | see [Signing in](../README.md#signing-in) |
+| `DEMO_AUTH` | `true` | see [Signing in](../README.md#signing-in) |
 | `GOOGLE_PAY_SIMULATED` | follows `DJANGO_DEBUG` | accepts `payment_token: "simulated"` |
 | `SEED_STAFF_PASSWORD` | `aicell-demo` | change it on anything public |
 | `THROTTLE_*` | see Limits | |

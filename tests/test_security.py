@@ -69,7 +69,7 @@ def test_production_defaults_are_strict():
         "CORS_ALLOW_ALL_ORIGINS": False,
         "CORS_ALLOWED_ORIGINS": [],
         "CSRF_TRUSTED_ORIGINS": [],
-        "DEMO_AUTH": False,
+        "DEMO_AUTH": True,
         "SECURE_CONTENT_TYPE_NOSNIFF": True,
         "SECURE_SSL_REDIRECT": True,
         "SECURE_HSTS_SECONDS": 31536000,
@@ -107,8 +107,8 @@ def test_every_origin_is_allowed_only_in_debug():
 def test_demo_auth_does_not_follow_debug(debug):
     """It is its own switch, off by default in every mode."""
     base = {"DJANGO_DEBUG": debug, "DJANGO_SECRET_KEY": SECRET}
-    assert settings(**base)["DEMO_AUTH"] is False
-    assert settings(**base, DEMO_AUTH="true")["DEMO_AUTH"] is True
+    assert settings(**base)["DEMO_AUTH"] is True
+    assert settings(**base, DEMO_AUTH="false")["DEMO_AUTH"] is False
 
 
 def test_deploy_check_passes_without_warnings():

@@ -212,8 +212,9 @@ if not DEBUG:
 
 # While DEMO_AUTH is on, requests without an Authorization header act as the
 # seeded demo subscriber.
-# Off unless switched on deliberately: it lets anyone use that account.
-DEMO_AUTH = env.flag("DEMO_AUTH", False)
+# On by default for the demo deployment: it lets anyone use that account.
+# Set DEMO_AUTH=false to require a token.
+DEMO_AUTH = env.flag("DEMO_AUTH", True)
 DEMO_MSISDN = env.text("DEMO_MSISDN", "994516643342")
 
 # Sign-in (users/otp/*). No SMS provider yet: every code is OTP_TEST_CODE.

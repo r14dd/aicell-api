@@ -211,9 +211,9 @@ own subscriber's data. Staff accounts cannot sign in this way.
 - `DEMO_AUTH=true` makes requests without an `Authorization` header act as the
   demo subscriber.
 
-`DEMO_AUTH` is off by default and does not follow `DJANGO_DEBUG`. With it on,
-anyone who can reach the server can use that account, so keep it for local work
-and demos. `.env.example` leaves it off; set `DEMO_AUTH=true` in `.env` to use it.
+`DEMO_AUTH` is on by default and does not follow `DJANGO_DEBUG`. While it is on,
+anyone who can reach the server can use that account; set `DEMO_AUTH=false` in
+`.env` to turn it off.
 
 ## Languages
 
