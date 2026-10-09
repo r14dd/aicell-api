@@ -81,3 +81,27 @@ def narrate(insight, language, name):
     if answer is None:
         raise LayaUnavailable()
     return {"speech": answer["speech"], "language": answer["language"]}
+
+
+def done(task, ok, error, language, context):
+    """What to say once the app has run a task. The task already happened, so this never fails."""
+    payload = {"task": task, "ok": ok, "error": error, "language": language, "context": context}
+
+    def valid(answer):
+        reply = answer.get("reply")
+        return (
+            isinstance(reply, str)
+            and reply.strip() != ""
+            and answer.get("language") in tasks.LANGUAGES
+            and not guard.too_long(reply)
+            and not guard.invented_numbers(reply, payload)
+        )
+
+    call = getattr(_brain(), "done", offline.done)
+    try:
+        answer = _ask(call, payload, valid)
+    except LayaUnavailable:
+        answer = None
+    if answer is None:
+        answer = offline.done(payload)
+    return {"reply": answer["reply"], "language": answer["language"]}

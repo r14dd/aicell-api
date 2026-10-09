@@ -9,6 +9,7 @@ when `GEMINI_API_KEY` is set (`GEMINI_*` models), then Claude when
 |---|---|---|---|
 | POST | `plan/` | `ready` | What the user said → reply, task, params |
 | POST | `narrate/` | `ready` | A server insight → one spoken message |
+| POST | `done/` | `ready` | The outcome of a task the app ran → one spoken line |
 
 Every number in an answer must already be in the request; an answer that
 invents one is dropped. `plan/` then answers `task: "none"`, `narrate/`
@@ -39,3 +40,16 @@ returns `dismissInsight` and "why" returns `explainInsight`.
 ```
 
 `speech` is at most 45 words and ends with a question.
+
+## `POST done/`
+
+Call it after the app has run the task from `plan/`, so the reply can say how it went.
+
+```json
+→ { "task": "topUp", "ok": true, "language": "az", "context": { "balance": 21.21 } }
+← 200 { "reply": "Balansınız artırıldı, indi 21.21 ₼.", "language": "az" }
+```
+
+On `ok: false` pass `error` (at most 200 characters); the reply says it did not work and offers a retry.
+This never answers 502: the task already ran, so when the model is down or invents a number a fixed
+"Hazırdır." / "Done." (or its failure line) comes back.

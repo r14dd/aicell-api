@@ -262,6 +262,7 @@ SPECTACULAR_SETTINGS = {
         "`501 not_implemented`. Copy comes back in the language of "
         "`Accept-Language` (`az`, `ru`, `en`)."
     ),
+    "ENUM_NAME_OVERRIDES": {"LayaLanguageEnum": ["az", "en"]},
     "SERVE_INCLUDE_SCHEMA": False,
     "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
     "SERVE_AUTHENTICATION": [],

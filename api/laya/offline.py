@@ -93,6 +93,11 @@ LOST = {
     "az": "Bunu başa düşmədim. Balans, internet qalığı, paket və tarif barədə kömək edə bilərəm.",
     "en": "I did not get that. I can help with balance, remaining internet, packs and tariff.",
 }
+DONE_OK = {"az": "Hazırdır.", "en": "Done."}
+DONE_FAIL = {
+    "az": "Alınmadı. Yenidən cəhd edək?",
+    "en": "That did not work. Shall we try again?",
+}
 TELL = {
     "az": "Sizə bir təklifim var. Baxım?",
     "en": "I have a suggestion for you. Shall I?",
@@ -149,3 +154,9 @@ def plan(payload):
 def narrate(payload):
     lang = payload.get("language") or "az"
     return {"speech": TELL.get(lang, TELL["az"]), "language": lang}
+
+
+def done(payload):
+    lang = payload.get("language") or "az"
+    texts = DONE_OK if payload.get("ok") else DONE_FAIL
+    return {"reply": texts.get(lang, texts["az"]), "language": lang}

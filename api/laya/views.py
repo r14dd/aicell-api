@@ -55,6 +55,30 @@ def plan(request):
     return brain.plan(data["text"], data["context"])
 
 
+class LayaDoneInput(serializers.Serializer):
+    task = serializers.ChoiceField(choices=tasks.TASKS, help_text="The task the app ran")
+    ok = serializers.BooleanField(help_text="Whether the app completed it")
+    error = serializers.CharField(max_length=200, required=False, allow_blank=True, default="")
+    language = serializers.ChoiceField(choices=tasks.LANGUAGES, default="az")
+    context = serializers.DictField(
+        required=False, default=dict, help_text="The account after the task: balance, dataGb ..."
+    )
+
+
+@doc(
+    "Report the outcome of a task the app ran",
+    body=LayaDoneInput,
+    example={"task": "topUp", "ok": True, "language": "en", "context": {"balance": 21.21}},
+    errors=(400,),
+)
+def done(request):
+    """Returns one sentence to say about the outcome. Never fails once the body is valid:
+    when the model is down or answers badly, a fixed "done" / "did not work" line comes back.
+    """
+    data = validated(LayaDoneInput, request)
+    return brain.done(data["task"], data["ok"], data["error"], data["language"], data["context"])
+
+
 @doc(
     "Say an insight aloud",
     body=LayaNarrateInput,
@@ -69,3 +93,4 @@ def narrate(request):
 
 plan_view = route(TAG, post=plan)
 narrate_view = route(TAG, post=narrate)
+done_view = route(TAG, post=done)

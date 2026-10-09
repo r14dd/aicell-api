@@ -23,3 +23,7 @@ def plan(payload):
 
 def narrate(payload):
     return _ask(tasks.NARRATE_SYSTEM, tasks.NARRATE_SCHEMA, payload)
+
+
+def done(payload):
+    return _ask(tasks.DONE_SYSTEM, tasks.DONE_SCHEMA, payload)

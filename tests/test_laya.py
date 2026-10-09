@@ -206,3 +206,38 @@ def test_gemini_top_up_without_an_amount_asks_instead(monkeypatch):
         },
     )
     assert gemini.plan({"text": "top up", "context": {}})["task"] == "none"
+
+
+def done(client, **body):
+    return client.post_json("/api/laya/done/", {"task": "topUp", "ok": True, **body})
+
+
+def test_done_without_a_model_is_a_fixed_line(client):
+    assert done(client, language="en").json() == {"reply": "Done.", "language": "en"}
+    failed = done(client, ok=False, error="cancelled", language="az").json()
+    assert failed["reply"] == "Alınmadı. Yenidən cəhd edək?"
+
+
+def use_done(monkeypatch, call):
+    monkeypatch.setattr(brain, "_brain", lambda: SimpleNamespace(done=call))
+
+
+def test_done_uses_the_brain_and_allows_numbers_from_the_request(client, monkeypatch):
+    use_done(monkeypatch, lambda payload: {"reply": "Topped up, balance 21.21.", "language": "en"})
+    answer = done(client, language="en", context={"balance": 21.21}).json()
+    assert answer["reply"] == "Topped up, balance 21.21."
+
+
+def test_done_replaces_an_invented_number_and_survives_a_failing_brain(client, monkeypatch):
+    use_done(monkeypatch, lambda payload: {"reply": "Balance is 99.", "language": "en"})
+    assert done(client, language="en", context={"balance": 21.21}).json()["reply"] == "Done."
+
+    def boom(payload):
+        raise RuntimeError
+
+    use_done(monkeypatch, boom)
+    assert done(client, language="en").json()["reply"] == "Done."
+
+
+def test_done_rejects_an_unknown_task(client):
+    assert done(client, task="wireMoney").status_code == 400

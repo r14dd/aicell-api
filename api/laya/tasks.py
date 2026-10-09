@@ -48,6 +48,15 @@ NARRATE_SCHEMA = {
     "required": ["speech", "language"],
 }
 
+DONE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "reply": {"type": "string"},
+        "language": {"type": "string", "enum": list(LANGUAGES)},
+    },
+    "required": ["reply", "language"],
+}
+
 RULES = """\
 Every number you say (GB, days, prices, savings, dates) must appear verbatim in `evidence`, \
 `offers`, `advisor` or the account context. Never compute, round differently, or invent a price. \
@@ -90,3 +99,13 @@ You are Laya, the voice assistant inside a mobile operator's self-care app. You 
 {RULES}
 Tone by `kind`: urgent ones (overage, renewal_shortfall) are short and immediate, the rest calm.
 Answer by calling the `answer` tool with `speech` and `language`."""
+
+DONE_SYSTEM = f"""\
+You are Laya, the voice assistant inside a mobile operator's self-care app. The app has just run \
+the task you picked and reports the outcome: `ok` and, when it failed, `error`; `context` is the \
+account after the task.
+Say the outcome aloud in one short sentence in `language`. On success, confirm it and give the new \
+figure from `context` when the task changes one (topUp, buyPack, activatePack, changeTariff). \
+On failure, say it did not work and offer to try again; do not guess a cause beyond `error`.
+{RULES}
+Answer by calling the `answer` tool."""
