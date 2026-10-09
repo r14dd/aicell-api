@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "api.users",
     "api.billing",
     "api.tariffs",
+    "api.packs",
 ]
 
 MIDDLEWARE = [
@@ -80,6 +81,10 @@ CELERY_TASK_ALWAYS_EAGER = not CELERY_BROKER_URL  # no broker: run tasks inline
 CELERY_TIMEZONE = "Asia/Baku"
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_BEAT_SCHEDULE = {
+    "expire-pack-activations": {
+        "task": "api.packs.tasks.expire_activations",
+        "schedule": timedelta(minutes=1),
+    },
     "purge-idempotency-keys": {
         "task": "api.billing.tasks.purge_idempotency_keys",
         "schedule": timedelta(hours=1),
@@ -192,6 +197,7 @@ SPECTACULAR_SETTINGS = {
     "TAGS": [
         {"name": "users", "description": "Sign in and the subscriber's profile"},
         {"name": "tariffs", "description": "Tariff catalogue and the subscriber's tariff"},
+        {"name": "packs", "description": "Internet, social and roaming packs"},
         {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
         {"name": "health", "description": "Liveness and readiness probes"},
     ],
