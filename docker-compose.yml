@@ -33,6 +33,11 @@ x-app: &app
     THROTTLE_MONEY: ${THROTTLE_MONEY:-30/min}
     THROTTLE_SUBSCRIBER: ${THROTTLE_SUBSCRIBER:-300/min}
     GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.1-flash-lite}
+    GEMINI_STT_MODEL: ${GEMINI_STT_MODEL:-gemini-3.8-flash}
+    GEMINI_TTS_MODEL: ${GEMINI_TTS_MODEL:-gemini-3.8-flash-tts}
+    GEMINI_EMBED_MODEL: ${GEMINI_EMBED_MODEL:-gemini-embedding-001}
+    GEMINI_VOICE: ${GEMINI_VOICE:-Kore}
     # A file (Milvus Lite) by default; http://milvus:19530 with `--profile milvus`.
     MILVUS_URI: ${MILVUS_URI:-/app/data/knowledge.db}
   volumes:
