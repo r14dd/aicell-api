@@ -223,7 +223,7 @@ Diqqət: əməliyyat adı (`transactions[].title`) və aktivləşdirmə adı (`a
 | `:todo` | Yol hazırdır, amma `501 not_implemented` qaytarır. `detail`-də göstəriləcək bildiriş mətni var. Tətbiq bu yollara indidən qoşula bilər |
 | `:dummy` | Assistent: başdan-sona işləyir, amma cavabı süni intellekt yox, açar sözlər verir |
 
-124 endpoint-dən 79-u işləyir (73 `ready`, 6 `:dummy`), 45-i `:todo`-dur. Tam siyahı [bölmə 25](#25-bütün-endpoint-lərin-siyahısı)-də.
+126 endpoint-dən 81-i işləyir (75 `ready`, 6 `:dummy`), 45-i `:todo`-dur. `laya/` endpoint-ləri [docs/api/laya.md](api/laya.md)-də təsvir olunub. Tam siyahı [bölmə 25](#25-bütün-endpoint-lərin-siyahısı)-də.
 
 ## 11. Məlumat modeli
 
@@ -2599,5 +2599,7 @@ Abunəçinin tarifi yoxdursa `404`.
 | POST | `/api/insights/<id>/seen/` | `ready` |  | Mark an insight as shown |
 | POST | `/api/insights/<id>/accept/` | `ready` |  | Accept an insight's offer |
 | POST | `/api/insights/<id>/dismiss/` | `ready` |  | Dismiss an insight |
+| POST | `/api/laya/plan/` | `ready` |  | Decide what to do with what the user said |
+| POST | `/api/laya/narrate/` | `ready` |  | Say an insight aloud |
 
 Əlavə olaraq sağlamlıq yoxlamaları (giriş tələb etmir): `GET /api/health/` → `{"status":"ok"}`, `GET /api/health/ready/` → baza, Redis və broker-in vəziyyəti (`200` və ya `503`).
