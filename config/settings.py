@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "api.sim",
     "api.content",
     "api.referral",
+    "api.assistant",
 ]
 
 MIDDLEWARE = [
@@ -208,6 +209,7 @@ SPECTACULAR_SETTINGS = {
             "description": "Home feed, stories, notifications, lottery, games and offers",
         },
         {"name": "referral", "description": "Invite & earn"},
+        {"name": "assistant", "description": "Support inbox and the chat assistant"},
         {"name": "sim", "description": "Line, roaming, SMS, PUK, eSIM and paid services"},
         {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
         {"name": "health", "description": "Liveness and readiness probes"},
@@ -217,3 +219,7 @@ SPECTACULAR_SETTINGS = {
 
 # Google Pay: payment_token == "simulated" completes immediately when enabled.
 GOOGLE_PAY_SIMULATED = env.flag("GOOGLE_PAY_SIMULATED", DEBUG)
+
+ASSISTANT_RESPONDER = env.text("ASSISTANT_RESPONDER", "api.assistant.responder.respond")
+ASSISTANT_RATE_LIMIT = 20  # user messages per minute per subscriber
+ASSISTANT_STREAM_DELAY = float(env.text("ASSISTANT_STREAM_DELAY", "0.04"))
