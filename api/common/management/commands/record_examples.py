@@ -14,7 +14,9 @@ the database exactly as it found it.
 import json
 import re
 import uuid
+from unittest import mock
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.test import override_settings
@@ -58,6 +60,18 @@ def ready_endpoints():
     return sorted(found, key=lambda item: item[0] != "get")
 
 
+def _upload(client, path, headers):
+    """An endpoint that takes a recording: Gemini is faked, so recording needs no key or network."""
+    from api.assistant import gemini
+
+    audio = SimpleUploadedFile("question.wav", b"RIFF", content_type="audio/wav")
+    with (
+        mock.patch.object(gemini, "transcribe", return_value="How much internet do I have left?"),
+        mock.patch.object(gemini, "speak", return_value=b"RIFF"),
+    ):
+        return client.post(path, {"audio": audio}, format="multipart", **headers)
+
+
 def call(client, method, path, handler):
     """Call an endpoint with its sample input. A write is undone afterwards.
 
@@ -74,6 +88,8 @@ def call(client, method, path, handler):
         subscriber = client.handler._force_user
         Wallet.objects.filter(subscriber=subscriber).update(balance=FUNDED[handler.__name__])
     try:
+        if getattr(handler, "upload", False):
+            return _upload(client, path, headers)
         return client.generic(
             method.upper(),
             path,

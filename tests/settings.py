@@ -21,6 +21,7 @@ CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"
 TEST_REDIS_URL = os.environ["TEST_REDIS_URL"]
 CELERY_TASK_ALWAYS_EAGER = True
 LAYA_BRAIN = "api.laya.offline"  # never the network
+ASSISTANT_RESPONDER = "api.assistant.responder.respond"  # nor Gemini
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]  # fast, tests only
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},

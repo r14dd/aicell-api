@@ -1,7 +1,9 @@
 # API — assistant `/api/assistant/` `:dummy`
 
-All endpoints work end to end; answers come from the dummy responder
-(`api/assistant/responder.py`, swapped through `ASSISTANT_RESPONDER`).
+All endpoints work end to end. With `GEMINI_API_KEY` set, Gemini routes each message, the answer
+is built from the subscriber's data or the Milvus knowledge base and written by Gemini
+(`api/assistant/agent.py`); without it the keyword responder answers (`api/assistant/responder.py`).
+`ASSISTANT_RESPONDER` picks which.
 
 | Method | Path | Status | Purpose |
 |---|---|---|---|
@@ -10,6 +12,7 @@ All endpoints work end to end; answers come from the dummy responder
 | POST | `conversations/` | `:dummy` | Start a conversation ("Ask a question") |
 | GET | `conversations/<id>/messages/` | `:dummy` | History |
 | POST | `conversations/<id>/messages/` | `:dummy` | Send a turn, SSE stream back |
+| POST | `conversations/<id>/voice/` | `:dummy` | Send a voice message, spoken answer back |
 | POST | `conversations/<id>/rate/` | `:dummy` | "Rate your conversation" |
 | POST | `feedback/` | `:todo` | "Share your ideas for new features" |
 
@@ -68,6 +71,22 @@ data: {}
 
 Clients that cannot consume SSE may send `Accept: application/json` and
 get the full assistant message in one `201` body instead.
+
+## `POST conversations/<id>/voice/`
+
+`multipart/form-data` with an `audio` file (wav, mp3, m4a, ogg or webm, up to 5 MB). Speech to text,
+the same answer as a text message, then the answer as speech (all Gemini).
+
+```json
+→ audio=<file>
+← 201 { "transcript": "Balansım nə qədərdir?", "user_message_id": 812,
+        "message": { "id": 813, "role": "assistant", "content": "Balansınız 16.21 ₼-dir.", "route": "balance", "created_at": "…" },
+        "action": { "action": "navigate", "to": "/top-up", "label": "Top up balance" },
+        "audio": "<base64 WAV, 24 kHz mono>", "audio_mime": "audio/wav" }
+```
+
+`audio` is `null` when speech synthesis failed; the text is still there. An unintelligible
+recording answers `400`.
 
 ## `POST conversations/<id>/rate/`
 

@@ -60,18 +60,21 @@ class RouteView(APIView):
         return [throttle() for throttle in classes]
 
 
-def route(tag, *, public=False, accept_any=False, throttle=None, **handlers):
+def route(tag, *, public=False, accept_any=False, throttle=None, parsers=None, **handlers):
     """Build a view from per-method handlers, e.g. `route("sim", get=line, patch=line_update)`.
 
     public      no credentials needed (the sign-in endpoints)
     accept_any  do not reject on the `Accept` header
     throttle    `"otp"` applies the sign-in limits instead of the subscriber ones
+    parsers     request parsers instead of the JSON default (file uploads)
     """
     attrs = {
         "handlers": handlers,
         "otp": throttle == "otp",
         "permission_classes": [AllowAny] if public else [IsAuthenticated],
     }
+    if parsers:
+        attrs["parser_classes"] = parsers
     if public:
         attrs["authentication_classes"] = []
     if accept_any:
