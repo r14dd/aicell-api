@@ -9,6 +9,7 @@ from api.seeding import Profile, seed_catalogue, seed_demo, seed_subscriber
 OTHER_MSISDN = "994500000002"
 OTHER_CONVERSATION_ID = 4000001
 OTHER_OFFER_ID = 9500
+OTHER_INSIGHT_ID = 7500
 OTHER = Profile(
     display_name="Other Person",
     balance="99.99",
@@ -19,6 +20,7 @@ OTHER = Profile(
     puk2="33334444",
     conversation_id=OTHER_CONVERSATION_ID,
     offer_id=OTHER_OFFER_ID,
+    insight_id=OTHER_INSIGHT_ID,
 )
 
 
@@ -28,6 +30,7 @@ def _test_settings(settings):
     settings.GOOGLE_PAY_SIMULATED = True
     settings.ASSISTANT_STREAM_DELAY = 0
     settings.THROTTLE_RATES = dict.fromkeys(settings.THROTTLE_RATES)  # all off
+    settings.INSIGHTS_QUIET_HOURS = None  # tests run at any hour
 
 
 @pytest.fixture(autouse=True)

@@ -33,6 +33,7 @@ PARAMS = {
     "content": {"<key>": "especially", "<id>": "wingz", "<slug>": "ninja-saga-2"},
     "assistant": {"<id>": "3513323"},
     "usage": {"<id>": "9001"},
+    "insights": {"<id>": "7001"},
 }
 # Bodies of the implemented writes; everything else is sent `{}`.
 BODIES = {
@@ -71,6 +72,7 @@ def documented_rows():
                 continue
             method, path, status = match.groups()
             path, _, query = path.partition("?")
+            path = path.lstrip("/")  # a domain's root is written `/`
             for placeholder, value in PARAMS.get(page.stem, {}).items():
                 path = path.replace(placeholder, value)
             if path == "offers/apps/wingz/subscribe/":

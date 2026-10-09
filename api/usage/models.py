@@ -33,6 +33,12 @@ class DailyUsage(models.Model):
     sms = models.PositiveIntegerField(default=0)
     roaming_data_mb = models.PositiveIntegerField(default=0)
     roaming_minutes = models.PositiveIntegerField(default=0)
+    overage_mb = models.PositiveIntegerField(
+        default=0, help_text="Part of the data that was outside every package"
+    )
+    overage_amount = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, help_text="What that part cost"
+    )
 
     class Meta:
         unique_together = [("subscriber", "day")]

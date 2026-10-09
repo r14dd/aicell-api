@@ -19,10 +19,10 @@ aicell backend-inə mobil tətbiqi qoşmaq üçün lazım olan hər şey: ünvan
 9. [Dil](#9-dil)
 10. [Endpoint vəziyyətləri](#10-endpoint-vəziyyətləri)
 11. [Məlumat modeli](#11-məlumat-modeli)
-12. Domenlər: [users](#12-users) · [billing](#13-billing) · [tariffs](#14-tariffs) · [packs](#15-packs) · [kredit](#16-kredit) · [sim](#17-sim) · [content](#18-content) · [referral](#19-referral) · [assistant](#20-assistant) · [usage](#21-usage)
-13. [Tipik axınlar](#22-tipik-axınlar)
-14. [Məlum məhdudiyyətlər](#23-məlum-məhdudiyyətlər)
-15. [Bütün endpoint-lərin siyahısı](#24-bütün-endpoint-lərin-siyahısı)
+12. Domenlər: [users](#12-users) · [billing](#13-billing) · [tariffs](#14-tariffs) · [packs](#15-packs) · [kredit](#16-kredit) · [sim](#17-sim) · [content](#18-content) · [referral](#19-referral) · [assistant](#20-assistant) · [usage](#21-usage) · [insights](#22-insights)
+13. [Tipik axınlar](#23-tipik-axınlar)
+14. [Məlum məhdudiyyətlər](#24-məlum-məhdudiyyətlər)
+15. [Bütün endpoint-lərin siyahısı](#25-bütün-endpoint-lərin-siyahısı)
 
 ---
 
@@ -223,7 +223,7 @@ Diqqət: əməliyyat adı (`transactions[].title`) və aktivləşdirmə adı (`a
 | `:todo` | Yol hazırdır, amma `501 not_implemented` qaytarır. `detail`-də göstəriləcək bildiriş mətni var. Tətbiq bu yollara indidən qoşula bilər |
 | `:dummy` | Assistent: başdan-sona işləyir, amma cavabı süni intellekt yox, açar sözlər verir |
 
-119 endpoint-dən 74-ü işləyir (68 `ready`, 6 `:dummy`), 45-i `:todo`-dur. Tam siyahı [bölmə 24](#24-bütün-endpoint-lərin-siyahısı)-də.
+126 endpoint-dən 81-i işləyir (75 `ready`, 6 `:dummy`), 45-i `:todo`-dur. `laya/` endpoint-ləri [docs/api/laya.md](api/laya.md)-də təsvir olunub. Tam siyahı [bölmə 25](#25-bütün-endpoint-lərin-siyahısı)-də.
 
 ## 11. Məlumat modeli
 
@@ -264,7 +264,7 @@ Baza yolu: `/api/users/`
   "app_version": null,
   "display_msisdn": "051 664 33 42",
   "display_name": "Qüdrət Abidzadə",
-  "id": 1,
+  "id": 15,
   "is_premium": false,
   "language": "en",
   "line_type": "prepaid",
@@ -315,14 +315,14 @@ Baza yolu: `/api/billing/`
     {
       "amount": "15.00",
       "created_at": "2026-10-02T12:39:00Z",
-      "id": 2,
+      "id": 34,
       "kind": "top_up",
       "title": "Number balance"
     },
     {
       "amount": "1.00",
       "created_at": "2026-10-02T12:34:00Z",
-      "id": 1,
+      "id": 33,
       "kind": "top_up",
       "title": "Number balance"
     }
@@ -346,8 +346,8 @@ Baza yolu: `/api/billing/`
 {
   "next": null,
   "results": [
-    { "amount": "15.00", "created_at": "2026-10-02T12:39:00Z", "id": 2, "method": "card" },
-    { "amount": "1.00", "created_at": "2026-10-02T12:34:00Z", "id": 1, "method": "card" }
+    { "amount": "15.00", "created_at": "2026-10-02T12:39:00Z", "id": 14, "method": "card" },
+    { "amount": "1.00", "created_at": "2026-10-02T12:34:00Z", "id": 13, "method": "card" }
   ]
 }
 ```
@@ -403,12 +403,12 @@ Cavab `201`:
   "balance": "41.21",
   "top_up": {
     "amount": "25.00",
-    "created_at": "2026-10-09T12:04:43Z",
-    "id": 3,
+    "created_at": "2026-10-09T12:24:05Z",
+    "id": 15,
     "method": "card",
     "status": "completed"
   },
-  "transaction": { "amount": "25.00", "id": 3, "title": "Number balance" }
+  "transaction": { "amount": "25.00", "id": 35, "title": "Number balance" }
 }
 ```
 
@@ -440,12 +440,12 @@ Cavab kart artımı ilə eynidir, üstəgəl `saved_akart`: `save` `true` olanda
   "saved_akart": { "id": 1, "msisdn": "994516643342" },
   "top_up": {
     "amount": "20.00",
-    "created_at": "2026-10-09T12:04:43Z",
-    "id": 3,
+    "created_at": "2026-10-09T12:24:05Z",
+    "id": 15,
     "method": "akart",
     "status": "completed"
   },
-  "transaction": { "amount": "20.00", "id": 3, "title": "Number balance" }
+  "transaction": { "amount": "20.00", "id": 35, "title": "Number balance" }
 }
 ```
 
@@ -468,7 +468,7 @@ Cavab kart artımı ilə eynidir (`method: "google_pay"`). **Real Google Pay tok
 ```jsonc
 {
   "results": [
-    { "brand": "mastercard", "expiry": "09/28", "id": 1, "is_default": true, "last4": "4471" }
+    { "brand": "mastercard", "expiry": "09/28", "id": 3, "is_default": true, "last4": "4471" }
   ]
 }
 ```
@@ -483,7 +483,7 @@ Cavab kart artımı ilə eynidir (`method: "google_pay"`). **Real Google Pay tok
   "limits": { "max": "50.00", "min": "1.00" },
   "results": [
     {
-      "id": 1,
+      "id": 3,
       "last_amount": "10.00",
       "last_topped_at": "2026-10-08T09:00:00Z",
       "name": "gamer_01"
@@ -516,7 +516,7 @@ Cavab `201`:
 {
   "balance": "6.21",
   "steam_top_up": { "account": "gamer_01", "amount": "10.00", "id": 1 },
-  "transaction": { "amount": "-10.00", "id": 3, "title": "Steam balance gamer_01" }
+  "transaction": { "amount": "-10.00", "id": 35, "title": "Steam balance gamer_01" }
 }
 ```
 
@@ -904,15 +904,15 @@ Cavab `201`, üçündə eyni forma:
 {
   "balance": "4.21",
   "tariff": {
-    "activated_at": "2026-10-09T16:04:43+04:00",
+    "activated_at": "2026-10-09T16:24:05+04:00",
     "family": "digimax",
-    "next_payment_at": "2026-11-06T16:04:43+04:00",
+    "next_payment_at": "2026-11-06T16:24:05+04:00",
     "plan_id": "digimax-5",
     "price": "12.00",
     "title": "DigiMax 5GB",
     "validity_days": 28
   },
-  "transaction": { "amount": "-12.00", "id": 3, "title": "DigiMax 5GB tariff" }
+  "transaction": { "amount": "-12.00", "id": 35, "title": "DigiMax 5GB tariff" }
 }
 ```
 
@@ -1077,16 +1077,16 @@ Cavab `201`:
 ```jsonc
 {
   "activation": {
-    "activated_at": "2026-10-09T12:04:43Z",
+    "activated_at": "2026-10-09T12:24:05Z",
     "auto_renew": false,
-    "expires_at": "2026-10-09T13:04:43Z",
-    "id": 1,
+    "expires_at": "2026-10-09T13:24:05Z",
+    "id": 19,
     "label": "Unlimited 1 hour",
     "pack_id": "unlimited-1h",
     "status": "active"
   },
   "balance": "15.22",
-  "transaction": { "amount": "-0.99", "id": 3, "title": "Unlimited 1 hour pack" }
+  "transaction": { "amount": "-0.99", "id": 35, "title": "Unlimited 1 hour pack" }
 }
 ```
 
@@ -1137,16 +1137,16 @@ Xətalar: `400` (naməlum `pack_id`), `402` (balans çatmır). Eyni internet pak
 ```jsonc
 {
   "activation": {
-    "activated_at": "2026-10-09T12:04:43Z",
+    "activated_at": "2026-10-09T12:24:05Z",
     "auto_renew": true,
-    "expires_at": "2026-11-08T12:04:43Z",
-    "id": 1,
+    "expires_at": "2026-11-08T12:24:05Z",
+    "id": 19,
     "label": "Tehsil 100 GB",
     "pack_id": "tehsil",
     "status": "active"
   },
   "balance": "6.31",
-  "transaction": { "amount": "-9.90", "id": 3, "title": "Tehsil 100 GB" }
+  "transaction": { "amount": "-9.90", "id": 35, "title": "Tehsil 100 GB" }
 }
 ```
 
@@ -1181,16 +1181,16 @@ Xətalar: `400` (naməlum plan), `402`, `404` (naməlum paket), `409 already_act
 ```jsonc
 {
   "activation": {
-    "activated_at": "2026-10-09T12:04:43Z",
+    "activated_at": "2026-10-09T12:24:05Z",
     "auto_renew": false,
-    "expires_at": "2026-10-12T12:04:43Z",
-    "id": 1,
+    "expires_at": "2026-10-12T12:24:05Z",
+    "id": 19,
     "label": "Roaming 500 MB",
     "pack_id": "r-500mb",
     "status": "active"
   },
   "balance": "6.21",
-  "transaction": { "amount": "-10.00", "id": 3, "title": "Roaming 500 MB pack" }
+  "transaction": { "amount": "-10.00", "id": 35, "title": "Roaming 500 MB pack" }
 }
 ```
 
@@ -1488,8 +1488,8 @@ Qəbul olunan sahələr: `mobile_internet`, `second_line` (ikisi də bool). Cava
 {
   "balance": "15.31",
   "subscription": {
-    "id": 1,
-    "next_payment_at": "2026-11-08T12:04:43Z",
+    "id": 3,
+    "next_payment_at": "2026-11-08T12:24:05Z",
     "service": "missed-call",
     "status": "active"
   },
@@ -1905,7 +1905,7 @@ Baza yolu: `/api/assistant/`. Vəziyyət `:dummy`: hər şey işləyir, amma cav
 `POST` gövdəsi istəyə görədir: `{ "source": "mobile" }`. Cavab `201`:
 
 ```jsonc
-{ "created_at": "2026-10-09T12:04:43Z", "external_id": "#3513324", "id": 3513324, "status": "open" }
+{ "created_at": "2026-10-09T12:24:05Z", "external_id": "#3513324", "id": 3513324, "status": "open" }
 ```
 
 ### `GET conversations/<id>/messages/` — tarixçə (səhifələnir, köhnədən yeniyə)
@@ -1917,13 +1917,13 @@ Baza yolu: `/api/assistant/`. Vəziyyət `:dummy`: hər şey işləyir, amma cav
     {
       "content": "How much internet do I have left?",
       "created_at": "2026-10-06T14:00:00Z",
-      "id": 1,
+      "id": 5,
       "role": "user"
     },
     {
       "content": "You have 7.20 GB left until 25 October.",
       "created_at": "2026-10-06T14:01:00Z",
-      "id": 2,
+      "id": 6,
       "role": "assistant",
       "route": "usage"
     }
@@ -1982,12 +1982,12 @@ data: {}
   "action": { "action": "navigate", "label": "Open remaining balance", "to": "/remaining-balance" },
   "message": {
     "content": "You have 7.20 GB left until 25 October.",
-    "created_at": "2026-10-09T12:04:43Z",
-    "id": 4,
+    "created_at": "2026-10-09T12:24:05Z",
+    "id": 8,
     "role": "assistant",
     "route": "usage"
   },
-  "user_message_id": 3
+  "user_message_id": 7
 }
 ```
 
@@ -2102,7 +2102,7 @@ Həmişə son 30 gün üçündür.
   "message": "You paid 19.10 ₼ in the last 30 days; with IsteSen, redesigned to your usag…",
   "offer": {
     "action": { "action": "navigate", "label": "See the offer", "to": "/offers/9001" },
-    "expires_at": "2026-10-23T12:04:43Z",
+    "expires_at": "2026-10-23T12:24:04Z",
     "id": 9001,
     "kind": "social_pack",
     "normal_price": "3.00",
@@ -2153,10 +2153,10 @@ Gövdəsizdir, `Idempotency-Key` məcburidir. Paket təklif qiymətinə alınır
 ```jsonc
 {
   "activation": {
-    "activated_at": "2026-10-09T12:04:43Z",
+    "activated_at": "2026-10-09T12:24:05Z",
     "auto_renew": false,
-    "expires_at": "2026-11-08T12:04:43Z",
-    "id": 1,
+    "expires_at": "2026-11-08T12:24:05Z",
+    "id": 19,
     "label": "Instagram & Facebook 5 GB",
     "pack_id": "instagram-facebook",
     "status": "active"
@@ -2164,7 +2164,7 @@ Gövdəsizdir, `Idempotency-Key` məcburidir. Paket təklif qiymətinə alınır
   "balance": "14.21",
   "offer": {
     "action": { "action": "navigate", "label": "See the offer", "to": "/offers/9001" },
-    "expires_at": "2026-10-23T12:04:43Z",
+    "expires_at": "2026-10-23T12:24:04Z",
     "id": 9001,
     "kind": "social_pack",
     "normal_price": "3.00",
@@ -2174,7 +2174,7 @@ Gövdəsizdir, `Idempotency-Key` məcburidir. Paket təklif qiymətinə alınır
     "target_id": "instagram-facebook:5gb",
     "title": "Instagram & Facebook 5 GB"
   },
-  "transaction": { "amount": "-2.00", "id": 3, "title": "Instagram & Facebook 5 GB" }
+  "transaction": { "amount": "-2.00", "id": 35, "title": "Instagram & Facebook 5 GB" }
 }
 ```
 
@@ -2188,7 +2188,7 @@ Tarif təklifi heç nə almır, çünki tarifin təklif qiymətinə alışı hə
 {
   "offer": {
     "action": { "action": "navigate", "label": "See the offer", "to": "/offers/9001" },
-    "expires_at": "2026-10-23T12:04:43Z",
+    "expires_at": "2026-10-23T12:24:04Z",
     "id": 9001,
     "kind": "social_pack",
     "normal_price": "3.00",
@@ -2205,7 +2205,227 @@ Rədd etdikdən sonra 7 gün yeni təklif gəlmir. Yeni təklif yarananda abunə
 
 ---
 
-## 22. Tipik axınlar
+## 22. insights
+
+Baza yolu: `/api/insights/`
+
+Abunəçinin öz rəqəmlərindən **qaydalarla** tapılan müşahidələr və hər biri üçün kataloqdan **hesablanmış** təkliflər. Backend cümlə yazmır: `evidence` faktlardır, `offers` hazır qiymət və qənaətdir; mətni göstərən tərəf (assistent, kart, bildiriş) qurur. Heç bir model çağırılmır.
+
+### `GET /` — indi göstərilə bilən insight-lar
+
+```jsonc
+{
+  "results": [
+    {
+      "created_at": "2026-10-09T16:24:04+04:00",
+      "evidence": {
+        "by_app_gb": { "instagram_facebook": 7.0, "other": 2.5, "tiktok": 0.6, "whatsapp": 0.7, "youtube": 1.9 },
+        "social_share": 0.55,
+        "tiktok_gb_month": 0.6
+      },
+      "expires_at": "2026-10-16T16:24:04+04:00",
+      "id": 7001,
+      "kind": "social_heavy",
+      "offers": [
+        {
+          "data_gb": 14.0,
+          "label": "IsteSen+",
+          "per_gb": null,
+          "price": "18.10",
+          "ref": "redesign",
+          "saving": "1.00",
+          "saving_year": "12.00",
+          "task": {
+            "name": "applyRedesign",
+            "params": { "calls": 30, "instagramFb": 5, "internet": 6, "tiktok": 1, "youtube": 2 }
+          },
+          "validity": null,
+          "values": { "calls": 30, "instagramFb": 5, "internet": 6, "tiktok": 1, "youtube": 2 }
+        }
+        // … daha 1 element
+      ],
+      "recommended": 0,
+      "severity": "info",
+      "status": "new"
+    }
+  ]
+}
+```
+
+| Sahə | Mənası |
+|---|---|
+| `id` | Insight-ın id-si (`seen/`, `accept/`, `dismiss/` üçün) |
+| `kind` | Növ (aşağıdakı cədvəl) |
+| `severity` | `urgent` və ya `info`. `urgent` olanlar siyahıda birinci gəlir |
+| `status` | `new`, `seen` (cavablananlar siyahıda olmur) |
+| `created_at`, `expires_at` | Bakı vaxtı ilə (`+04:00`). 7 gündən sonra insight düşür |
+| `evidence` | Faktlar. Hər `kind` üçün sahələr sabitdir |
+| `offers[]` | Təkliflər, ən yaxşısı birinci |
+| `recommended` | Tövsiyə olunan təklifin `offers`-dəki indeksi |
+
+`offers[]` elementi:
+
+| Sahə | Mənası |
+|---|---|
+| `ref` | Sabit açar: `internet:<slug>`, `social:<pack>:<plan>`, `roaming:<slug>`, `tariff:<slug>`, `redesign`, `top_up`, `kredit:<slug>` |
+| `label`, `validity` | Ad və müddət, seçilmiş dildə (`validity` olmaya bilər: `null`) |
+| `price` | Qiymət (sətir) |
+| `data_gb`, `per_gb` | Həcm və 1 GB-ın qiyməti (limitsizdə `null`) |
+| `saving` | Aylıq qənaət; yoxdursa və ya təklif indikindən bahadırsa `null` |
+| `task` | Təklifi icra etmək üçün əməliyyat: `name` və `params` (aşağıda) |
+
+Növlər:
+
+| `kind` | Nə vaxt | `severity` |
+|---|---|---|
+| `overage` | Tarifin interneti bitib və bu gün paketdən kənar 20 MB-dan çox yazılıb | `urgent` |
+| `renewal_shortfall` | Yenilənməyə 2 gün və ya az qalıb, balans çatmır | `urgent` |
+| `video_heavy` | 5 GB+ paket 3 günə bitib və trafikin 60%-i videodur | `info` |
+| `repeat_packs` | Cari dövrdə 2 və ya daha çox əlavə paket alınıb | `info` |
+| `forecast_gap` | Tarifin 70%-i işlənib və cari templə yenilənməyə qədər çatmayacaq | `info` |
+| `social_heavy` | Instagram & Facebook trafikin 40%-idir və ya TikTok ayda 4 GB-dır | `info` |
+| `underused` | Son 3 dövrün hər birində internetin yarısı və ya çoxu qalıb | `info` |
+| `roaming` | Son 3 gündə rouminqdə internet işlənib, rouminq paketi yoxdur | `info` |
+
+`task` və onu icra edən endpoint (bu domen pul köçürmür):
+
+| `task.name` | `params` | Endpoint |
+|---|---|---|
+| `buyPack` | `kind` (`internet` / `roaming`), `pack_id` | `POST packs/internet/purchase/` və ya `packs/roaming/purchase/`, gövdə `{ "pack_id" }` |
+| `activatePack` | `slug`, `plan` | `POST packs/social/<slug>/activate/`, gövdə `{ "plan_id": plan }` |
+| `changeTariff` | `plan` | `POST tariffs/subscribe/`, gövdə `{ "plan_id": plan }` |
+| `applyRedesign` | sürgü dəyərləri | `POST tariffs/my/redesign/`, gövdə `{ "values": params }` |
+| `topUp` | `amount` | `POST billing/top-up/card/` və ya başqa artım üsulu |
+| `takeKredit` | `slug` | `POST kredit/products/<slug>/take/` (hələ `:todo`) |
+
+Çatdırılma qaydaları serverdədir, tətbiq əlavə süzgəc qoymamalıdır:
+
+- Hər çağırışda detektorlar yenidən işləyir: alış və ya balans artımı növbəti `GET`-də əks olunur.
+- 23:00–08:00 (Bakı) arasında siyahı boş gəlir.
+- `urgent` hamısı gəlir; yeni `info` insight 48 saatda bir dəfə verilir (göstərilən cavablanana və ya düşənə qədər eyni qalır).
+- Eyni növdən ikinci açıq insight olmur; şərt aradan qalxanda insight özü bağlanır.
+
+### `POST <id>/seen/`, `POST <id>/accept/`, `POST <id>/dismiss/`
+
+- `seen/`: tətbiq insight-ı göstərdi (`new` → `seen`).
+- `accept/`: istifadəçi "hə" dedi. Gövdə istəyə görə `{ "offer": 1 }` (verilməsə tövsiyə olunan). Cavabda insight və seçilmiş təklifin `task`-ı gəlir; **pul tutulmur**, `task` yuxarıdakı endpoint ilə icra olunur. Sonra həmin növ 2 gün yazılmır.
+- `dismiss/`: istifadəçi "yox" dedi. Həmin növ 14 gün yazılmır.
+- Təkrar cavab heç nəyi dəyişmir; başqasının insight-ı `404`; siyahıda olmayan `offer` `400`.
+
+```jsonc
+{
+  "created_at": "2026-10-09T16:24:04+04:00",
+  "evidence": {
+    "by_app_gb": { "instagram_facebook": 7.0, "other": 2.5, "tiktok": 0.6, "whatsapp": 0.7, "youtube": 1.9 },
+    "social_share": 0.55,
+    "tiktok_gb_month": 0.6
+  },
+  "expires_at": "2026-10-16T16:24:04+04:00",
+  "id": 7001,
+  "kind": "social_heavy",
+  "offers": [
+    {
+      "data_gb": 14.0,
+      "label": "IsteSen+",
+      "per_gb": null,
+      "price": "18.10",
+      "ref": "redesign",
+      "saving": "1.00",
+      "saving_year": "12.00",
+      "task": {
+        "name": "applyRedesign",
+        "params": { "calls": 30, "instagramFb": 5, "internet": 6, "tiktok": 1, "youtube": 2 }
+      },
+      "validity": null,
+      "values": { "calls": 30, "instagramFb": 5, "internet": 6, "tiktok": 1, "youtube": 2 }
+    },
+    {
+      "data_gb": 5.0,
+      "label": "Instagram & Facebook 5 GB",
+      "per_gb": "0.60",
+      "price": "3.00",
+      "ref": "social:instagram-facebook:5gb",
+      "saving": null,
+      "task": {
+        "name": "activatePack",
+        "params": { "plan": "5gb", "slug": "instagram-facebook" }
+      },
+      "validity": "30 d."
+    }
+  ],
+  "recommended": 0,
+  "severity": "info",
+  "status": "accepted",
+  "task": {
+    "name": "applyRedesign",
+    "params": { "calls": 30, "instagramFb": 5, "internet": 6, "tiktok": 1, "youtube": 2 }
+  }
+}
+```
+
+### `GET advisor/` — istifadəyə uyğun tarif
+
+Ayın indiki xərci ilə istifadəyə uyğun variantların müqayisəsi. "IsteSen+" ayrı tarif deyil: IsteSen konstruktorunun istifadəyə görə hesablanmış sürgü dəyərləridir, qiyməti `tariffs/my/redesign/`-dəki düsturla hesablanır.
+
+```jsonc
+{
+  "candidates": [
+    {
+      "data_gb": 14,
+      "id": "istesen-plus",
+      "minutes": 30,
+      "price": "18.10",
+      "redesign": { "calls": 30, "instagramFb": 5, "internet": 6, "tiktok": 1, "youtube": 2 },
+      "saving_month": "1.00",
+      "saving_year": "12.00",
+      "task": {
+        "name": "applyRedesign",
+        "params": { "calls": 30, "instagramFb": 5, "internet": 6, "tiktok": 1, "youtube": 2 }
+      },
+      "title": "IsteSen+",
+      "total_month": "18.10"
+    },
+    {
+      "data_gb": 25,
+      "id": "digimax-25",
+      "minutes": 500,
+      "price": "30.00",
+      "saving_month": "-10.90",
+      "task": {
+        "name": "changeTariff",
+        "params": { "plan": "digimax-25" }
+      },
+      "title": "DigiMax 25GB",
+      "total_month": "30.00"
+    }
+    // … daha 1 element
+  ],
+  "current": { "packs_month": "0.00", "price": "19.10", "tariff": "IsteSen", "total_month": "19.10" },
+  "effective_from": "2026-10-25",
+  "period_days": 30,
+  "profile": {
+    "by_app_gb": { "instagram_facebook": 7.0, "other": 2.5, "tiktok": 0.6, "whatsapp": 0.7, "youtube": 1.9 },
+    "data_gb_month": 12.7,
+    "minutes_month": 20
+  },
+  "recommended": "istesen-plus"
+}
+```
+
+| Sahə | Mənası |
+|---|---|
+| `period_days` | Hesabın söykəndiyi tarixçə (ən çox 60 gün) |
+| `profile` | Aylıq trafik (`data_gb_month`), tətbiqlərə görə GB, aylıq dəqiqə |
+| `current` | İndiki tarif, qiyməti, aylıq paket xərci, aylıq cəm |
+| `candidates[]` | Variantlar: `id`, `title`, `price`, `total_month`, `saving_month`, `data_gb`, `minutes`, `task`. `rejected` varsa variant uyğun deyil (`does_not_cover`, `usage_x4.7`) |
+| `recommended` | Qalib variantın `id`-si; dəyişiklik 1 ₼-dan az qənaət verirsə `"current"` |
+| `effective_from` | Növbəti yenilənmə tarixi (redesign o vaxt qüvvəyə minir) |
+
+Abunəçinin tarifi yoxdursa `404`.
+
+---
+
+## 23. Tipik axınlar
 
 **Ana səhifənin yüklənməsi** (hamısı paralel göndərilə bilər):
 
@@ -2233,13 +2453,14 @@ Rədd etdikdən sonra 7 gün yeni təklif gəlmir. Yeni təklif yarananda abunə
 
 **Tövsiyə və təklif:** `GET usage/recommendations/` → `fits` `false` isə ilk tövsiyəni `evidence` ilə göstər, `action.to`-ya apar; `offer` varsa kart kimi göstər → `POST usage/offers/<id>/accept/` + `Idempotency-Key` və ya `…/decline/`.
 
-## 23. Məlum məhdudiyyətlər
+## 24. Məlum məhdudiyyətlər
 
 - **İstifadə məlumatı sintetikdir.** Şəbəkədən real axın yoxdur; 30 günlük tarixçələr seed ilə yazılır. Tövsiyələr həmin məlumat üzərində real hesablamadır.
 - **Keçid yolları təxminidir.** `action.to` dəyərləri (`/offers/<id>`, `/my-tariff/redesign`, `/internet-packs/<slug>`) backend-in fərziyyəsidir; tətbiqdəki real yollarla uzlaşdırılmalıdır.
 - **Şəkil faylları hələ serverdə yoxdur.** `image` URL-ləri düzgün formadadır, amma `404` qaytarır. Tətbiqdə ehtiyat şəkil nəzərdə tutun.
 - **Kataloqun bir hissəsi yer tutucudur.** Story səhifələri, bannerlərin çoxu, lotereya bölmələri, oyunlar, təkliflər və bəzi paketlər prototip üçün yazılıb; forması sabitdir, məzmunu dəyişəcək.
 - **Tərcümələr prototip üçün yazılıb**, operatorun təsdiqlənmiş mətnləri deyil.
+- **Insight-lar da sintetik istifadə üzərində işləyir.** Qaydalar realdır, məlumat seed-dir. Saatlıq trafik olmadığı üçün "Teams" və "1 saatda 1 GB" siqnalları qurulmayıb.
 - **Tarifin real sərfiyyatı izlənmir.** Tarif alınanda və yenilənəndə qalıqlar tam həcmə qayıdır, amma istifadə etdikcə azalmır (şəbəkə axını yoxdur).
 - **`501` bildiriş mətnləri** əksər hallarda ümumi qəlibdədir ("… hələ bu prototipdə yoxdur").
 - **Giriş yoxdur**: OTP, token yeniləmə və çıxış `501` qaytarır.
@@ -2248,7 +2469,7 @@ Rədd etdikdən sonra 7 gün yeni təklif gəlmir. Yeni təklif yarananda abunə
 - **Google Pay** yalnız `"simulated"` tokeni qəbul edir.
 - **`X-Platform`** oxunmur.
 
-## 24. Bütün endpoint-lərin siyahısı
+## 25. Bütün endpoint-lərin siyahısı
 
 `pul` sütununda işarə olanlar `Idempotency-Key` tələb edir.
 
@@ -2373,5 +2594,12 @@ Rədd etdikdən sonra 7 gün yeni təklif gəlmir. Yeni təklif yarananda abunə
 | GET | `/api/usage/recommendations/` | `ready` |  | Recommendations and the open personal offer |
 | POST | `/api/usage/offers/<id>/accept/` | `ready` | ✓ | Accept a personal offer |
 | POST | `/api/usage/offers/<id>/decline/` | `ready` |  | Decline a personal offer |
+| GET | `/api/insights/` | `ready` |  | Insights to show now |
+| GET | `/api/insights/advisor/` | `ready` |  | The tariff setup that fits the usage |
+| POST | `/api/insights/<id>/seen/` | `ready` |  | Mark an insight as shown |
+| POST | `/api/insights/<id>/accept/` | `ready` |  | Accept an insight's offer |
+| POST | `/api/insights/<id>/dismiss/` | `ready` |  | Dismiss an insight |
+| POST | `/api/laya/plan/` | `ready` |  | Decide what to do with what the user said |
+| POST | `/api/laya/narrate/` | `ready` |  | Say an insight aloud |
 
 Əlavə olaraq sağlamlıq yoxlamaları (giriş tələb etmir): `GET /api/health/` → `{"status":"ok"}`, `GET /api/health/ready/` → baza, Redis və broker-in vəziyyəti (`200` və ya `503`).

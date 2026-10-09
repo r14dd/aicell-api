@@ -20,7 +20,7 @@ from api.tariffs.models import TariffPlan
 from api.users.models import Subscriber
 
 API_APPS = {
-    "users", "billing", "tariffs", "packs", "kredit", "sim", "content", "referral", "assistant", "usage",
+    "users", "billing", "tariffs", "packs", "kredit", "sim", "content", "referral", "assistant", "usage", "insights",
 }  # fmt: skip
 API_MODELS = [model for model in apps.get_models() if model._meta.app_label in API_APPS]
 REGISTERED = sorted(admin.site._registry, key=lambda model: model._meta.label)

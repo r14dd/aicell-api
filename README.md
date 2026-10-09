@@ -14,13 +14,13 @@ is the guide for wiring a client to it (in Azerbaijani).
 ### Docker
 
 ```sh
-cp .env.example .env     # set DJANGO_SECRET_KEY and POSTGRES_PASSWORD
+cp .env.example .env     # set DJANGO_SECRET_KEY
 docker compose up --build
 ```
 
-This starts the API (gunicorn), PostgreSQL, Redis, a Celery worker and Celery
-beat. The `web` container migrates, collects static files and seeds before it
-serves.
+This starts the API (gunicorn), Redis, a Celery worker and Celery beat. The
+database is one SQLite file on a volume the three app containers share. The
+`web` container migrates, collects static files and seeds before it serves.
 
 | | |
 |---|---|
@@ -39,8 +39,8 @@ python scripts/smoke.py http://localhost:8010 \
 
 ### Local
 
-Needs [uv](https://docs.astral.sh/uv/). Without `DATABASE_URL` and `REDIS_URL`
-it uses SQLite and an in-process cache, and Celery tasks run inline.
+Needs [uv](https://docs.astral.sh/uv/). The database is `db.sqlite3`; without
+`REDIS_URL` the cache is in-process and Celery tasks run inline.
 
 ```sh
 cp .env.example .env
@@ -183,6 +183,29 @@ and turns the profile into ranked recommendations and personal offers
   responder. The keyword responder already answers "which tariff suits me"
   from the same numbers.
 
+## Insights
+
+`api/insights/` turns the same figures into things worth telling a subscriber
+([docs/api/insights.md](docs/api/insights.md)): the internet will not last
+until the renewal, the balance does not cover it, packs keep being bought on
+top of the tariff, half of the tariff is left over every month.
+
+- Detectors are plain functions of the subscriber's figures and a snapshot of
+  the catalogue (`detectors.py`). Each returns the facts it found and the
+  priced answers, or nothing. Thresholds are named constants.
+- Offers are picked from the catalogue tables by price and price per
+  gigabyte (`catalogue.py`), so a pack added in the admin is chosen by the
+  same rules. Nothing is hard-coded and no product is invented.
+- The backend writes no sentences. An insight is `evidence` plus `offers`;
+  the assistant or the app words it. Every price and saving is already
+  computed, so a model that words it has nothing to calculate.
+- Delivery is decided on the server: urgent insights always, one new
+  informational one per 48 hours, none at night, a dismissed kind silent for
+  14 days.
+- `GET insights/advisor/` compares what a month costs now with IsteSen
+  redesigned to the usage ("IsteSen+") and with the cheapest plan that covers
+  it.
+
 ## Tariffs
 
 `subscribe/`, `change/` and `my/renew/` charge the wallet and start a full
@@ -193,8 +216,11 @@ packs, as the aggregation sheet describes.
 
 ## Money
 
-- A balance change runs in one transaction and locks the subscriber's wallet row
-  first (`select_for_update`), so concurrent requests cannot overdraw it.
+- A balance change runs in one transaction that holds a lock before it reads
+  the balance, so concurrent requests cannot overdraw it. On SQLite the
+  transaction takes the database's write lock as it begins
+  (`transaction_mode: IMMEDIATE`); on PostgreSQL the wallet row is locked
+  (`select_for_update`).
 - Every money-moving `POST` needs `Idempotency-Key: <uuid>`. The key is stored
   with the charge; a repeat returns the first answer and charges nothing, even
   when both requests arrive together.
@@ -204,19 +230,18 @@ packs, as the aggregation sheet describes.
 ## Tests
 
 ```sh
-uv run pytest                              # SQLite; Postgres and Redis tests are skipped
+uv run pytest                              # SQLite; the PostgreSQL and Redis tests are skipped
 uv run ruff check . && uv run ruff format --check .
 ```
 
-To run everything, including the parallel-request tests, start the database
-services and point the suite at them (use a Redis database of its own; tests
-clear it):
+The Redis tests run when `REDIS_URL` is set (use a database of its own; tests
+clear it). The parallel-request tests need row locks, so they run only against
+a PostgreSQL server given in `DATABASE_URL`:
 
 ```sh
-docker compose up -d db redis
-DATABASE_URL=postgres://aicell:<POSTGRES_PASSWORD>@127.0.0.1:54329/aicell \
-REDIS_URL=redis://127.0.0.1:63799/15 \
-uv run pytest
+docker compose up -d redis
+REDIS_URL=redis://127.0.0.1:63799/15 uv run pytest
+DATABASE_URL=postgres://user:password@127.0.0.1:5432/name uv run pytest tests/test_concurrency.py
 ```
 
 | File | Covers |
@@ -224,13 +249,14 @@ uv run pytest
 | `test_docs_conformance.py` | every row of `docs/api/*.md` exists and behaves as tagged |
 | `test_isolation.py` | two subscribers: no read leaks, foreign ids are `404`, no token is `401` |
 | `test_robustness.py` | malformed bodies, queries and content types never give a `500` |
-| `test_concurrency.py` | Postgres only: parallel purchases and top-ups, one key sent twice at once |
+| `test_concurrency.py` | PostgreSQL only: parallel purchases and top-ups, one key sent twice at once |
 | `test_languages.py` | every read in az/ru/en, nothing untranslated |
 | `test_swagger.py` | schema validity, recorded examples against live answers |
 | `test_admin.py` | every model's pages open, roles see their share, money is read-only |
 | `test_catalogue.py` | admin edits reach the API; the cache is per language |
 | `test_usage.py` | profile and top recommendation of each seeded persona; cost arithmetic by hand; offers charge once |
 | `test_statistics.py` | every statistics figure against a hand-built data set; period boundaries; filters; 403 without the permission; a query-count ceiling |
+| `test_insights.py` | the figures; each detector firing and not firing on hand-built data; one open insight per kind; the delivery policy; the advisor's arithmetic |
 | `test_tariff_actions.py` | subscribe, change, renew and redesign; nothing changes without the money |
 | `test_throttling.py`, `test_health.py`, `test_security.py` | limits, probes, deployment settings |
 
@@ -259,7 +285,8 @@ never cached.
 
 **Scheduled work** (Celery beat): expired pack activations are switched off every
 minute; personal offers are created and expired every 15 minutes and subscriber
-insights recomputed hourly; idempotency keys older than `IDEMPOTENCY_KEY_DAYS` are purged hourly.
+insights recomputed hourly; the insight detectors run for everyone at 03:00;
+idempotency keys older than `IDEMPOTENCY_KEY_DAYS` are purged hourly.
 
 **Swagger examples.** Response examples come from `api/common/examples.json`,
 recorded from real answers by `manage.py record_examples` (it runs in a
@@ -279,13 +306,14 @@ Read from the environment, and from `.env` when present.
 | `CSRF_TRUSTED_ORIGINS` | none | origins the admin is served from |
 | `SECURE_SSL_REDIRECT`, `SECURE_COOKIES` | `true` | `false` only for plain-HTTP local runs |
 | `SECURE_HSTS_SECONDS` | `31536000` | |
-| `DATABASE_URL` | SQLite file | `postgres://…` in Docker |
+| `DATABASE_URL` | SQLite file | a volume path in Docker; `postgres://…` also works |
 | `REDIS_URL` | none | cache, limits and the Celery broker |
 | `DEMO_AUTH` | `false` | see [Signing in](#signing-in) |
 | `GOOGLE_PAY_SIMULATED` | follows `DJANGO_DEBUG` | accepts `payment_token: "simulated"` |
 | `SEED_STAFF_PASSWORD` | `aicell-demo` | change it on anything public |
 | `THROTTLE_*` | see Limits | |
 | `CATALOGUE_CACHE_SECONDS` | `300` | |
+| `INSIGHTS_QUIET_HOURS` | `true` | `false` delivers insights at night too (23:00 to 08:00 Asia/Baku) |
 | `ASSISTANT_RESPONDER` | `api.assistant.responder.respond` | dotted path to a callable |
 
 With debug off, cookies are secure-only, HSTS is on, HTTP is redirected to
@@ -299,6 +327,12 @@ behind TLS.
 
 ## Known limitations
 
+- Insights rest on what is recorded per day. Signals that need hourly traffic
+  (Teams during work hours, a gigabyte within an hour) are not built. How much
+  of a pack is used is not tracked either: "a pack was used up in three days"
+  is read from the home data of the days after it was bought.
+- Insight detectors run when the app asks and once a night. No purchase or
+  top-up pushes an insight on its own; there is no push channel yet.
 - Usage is synthetic. No network feed exists; the usage histories are written
   by the seed, and nothing decrements a tariff's remaining amounts.
   Recommendations are real arithmetic over that data, so they are only as
@@ -335,5 +369,5 @@ Where the docs leave a shape open: `stories/` and `internet/top/` return
 ## Stack
 
 Django 5.2, Django REST framework, SimpleJWT, drf-spectacular, django-unfold,
-django-modeltranslation, Celery, Redis, PostgreSQL, gunicorn, WhiteNoise, pytest.
+django-modeltranslation, Celery, Redis, SQLite, gunicorn, WhiteNoise, pytest.
 All data is synthetic.

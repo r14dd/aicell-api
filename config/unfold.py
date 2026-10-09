@@ -92,6 +92,7 @@ MENU = [
         _item("Daily usage", "data_usage", "usage.DailyUsage"),
         _item("App usage", "apps", "usage.AppUsage"),
         _item("Subscriber insights", "insights", "usage.SubscriberInsight"),
+        _item("Insights", "lightbulb", "insights.Insight"),
         _item("Personal offers", "local_offer", "usage.PersonalOffer"),
         _item("Offer rules", "rule", "usage.OfferRule"),
     ),
