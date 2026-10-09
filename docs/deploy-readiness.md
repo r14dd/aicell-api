@@ -2,7 +2,22 @@
 
 Yoxlama tarixi: 9 oktyabr 2026. Branch: `white-collar` (`dev` ilə eyni kod + bu yoxlamada edilən 3 düzəliş).
 
-**Hökm.** Kod deploya hazırdır: təmiz volume ilə stack səhvsiz qalxır, testlər və kənardan yoxlama (`smoke.py`) yaşıldır, real sorğularla yoxlamada server xətası, məlumat sızması və ya pulun iki dəfə tutulması tapılmadı. Amma **açıq serverə `.env.example`-dakı dəyərlərlə çıxmaq olmaz**: `DEMO_AUTH=true` və admin şifrəsi `aicell-demo` qalsa, hər kəs demo abunəçi kimi işləyə və admin panelə girə bilər. Bundan başqa giriş (OTP) hələ yazılmayıb, ona görə mobil tətbiqin real istifadəçini tanıması üçün yol yoxdur (bax [Açıq suallar](#açıq-suallar)).
+**Hökm.** Kod demo kimi deploya hazırdır: təmiz volume ilə stack səhvsiz qalxır, testlər və kənardan yoxlama (`smoke.py`) yaşıldır, real sorğularla yoxlamada server xətası, məlumat sızması və ya pulun iki dəfə tutulması tapılmadı. Serverə çıxmazdan əvvəl bircə şey mütləq dəyişməlidir: **admin şifrəsi** (`SEED_STAFF_PASSWORD`, indi `aicell-demo`). Giriş (OTP) hələ yazılmayıb; qərara görə tətbiq serverdə `DEMO_AUTH=true` ilə demo abunəçi kimi işləyəcək.
+
+## Qəbul edilmiş qərarlar (9 oktyabr)
+
+| Məsələ | Qərar | Nəticəsi |
+|---|---|---|
+| `DEMO_AUTH` | `true` qalır | `Authorization` başlığı olmayan hər sorğu demo abunəçi (`994516643342`) kimi işləyir. Serverin ünvanını bilən hər kəs onun balansını xərcləyə və tarifini dəyişə bilər; bu, demo üçün qəbul olunub |
+| Baza | SQLite qalır | Bir fayl, `data` volume-unda. Ehtiyat nüsxə əl ilə (əmr aşağıdadır) |
+| Demo abunəçilər və simulyasiya olunan ödənişlər | Qalır | İstənilən abunəçi real ödəniş olmadan balansını artıra bilir (`GOOGLE_PAY_SIMULATED=true`, kart və akart artımı heç bir ödəniş sisteminə getmir) |
+
+Bu konfiqurasiya (SQLite, `DEBUG=false`, `DEMO_AUTH=true`, simulyasiya olunan ödəniş) qərardan sonra təmiz stack-də yenidən yoxlandı:
+
+- effektiv ayarlar konteynerdə oxundu: `DEBUG False | DEMO_AUTH True | DB sqlite3 /app/data/db.sqlite3 | GPAY_SIM True`;
+- tokensiz axın: `GET users/me/` → demo abunəçi; kartla 10.00 və Google Pay (`simulated`) ilə 5.00 artım → `201`; sonra `POST tariffs/my/renew/` → `201` (əvvəl balans çatmırdı); `GET insights/` → `social_heavy`;
+- `smoke.py` (tokenlə) → `All good.`; 32 qeyri-adi sorğudan heç biri `5xx` vermədi; başqasının id-ləri `404`;
+- paralel pul sorğuları SQLite-da: 5.00 balansa 12 alış → 5 × `201`, 7 × `402`, balans `0.00`; eyni açarla 8 artım → balans bir dəfə artdı.
 
 Bu sənəddə "yoxlandı" yazılan hər şey 9 oktyabrda lokal maşında, ayrıca qaldırılmış təmiz stack üzərində (`docker compose -p aicell-audit`, port 8030) yoxlanıb. Real serverdə, TLS arxasında və real domen ilə **heç nə yoxlanmayıb**.
 
@@ -112,13 +127,13 @@ docker compose cp web:/app/data/backup.sqlite3 ./backup-$(date +%F).sqlite3
 |---|---|---|---|
 | `DJANGO_SECRET_KEY` | `change-me-to-a-long-random-string` | uzun təsadüfi sətir | JWT tokenlər və admin sessiyaları bu açarla imzalanır; açarı bilən istənilən abunəçi üçün token düzəldə bilər. Boş olsa server qalxmır |
 | `SEED_STAFF_PASSWORD` | `aicell-demo` | güclü şifrə, **ilk `up`-dan əvvəl** | `superadmin / aicell-demo` ilə hər kəs admin panelə girir (şifrə README-də və bu sənəddə açıq yazılıb) |
-| `DEMO_AUTH` | `true` | `false` | `Authorization` başlığı olmayan hər sorğu demo abunəçi (`994516643342`) kimi işləyir: balansını xərcləyə, tarifini dəyişə bilər. Yoxlandı: tokensiz `GET /api/users/me/` → `200` |
+| `DEMO_AUTH` | `true` | `true` (qərar) | `Authorization` başlığı olmayan hər sorğu demo abunəçi (`994516643342`) kimi işləyir. `false` edilsə tokensiz sorğular `401` alır və tətbiqə token paylamaq lazım olur |
 | `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1` | serverin domeni (və daxili ad lazımdırsa `web`) | başqa host adı ilə gələn hər sorğu `400 Bad Request` |
 | `CSRF_TRUSTED_ORIGINS` | `http://localhost:8010` | `https://<domen>` | admin panelə giriş və hər forma `403 CSRF verification failed` |
 | `CORS_ALLOWED_ORIGINS` | boş | brauzerdən çağıran saytların origin-ləri (mobil tətbiqə lazım deyil) | boş qalsa brauzer başqa origin-dən gələn sorğuları bloklayır; mobil tətbiqə təsir etmir |
 | `SECURE_SSL_REDIRECT` | `false` | TLS arxasında `true` | `false` qalsa HTTP-dən HTTPS-ə yönləndirmə və HSTS olmur. TLS olmadan `true` etsəniz hər sorğu `301` ilə işləməyən `https://`-ə gedir (health yolları istisna) |
 | `SECURE_COOKIES` | `false` | TLS arxasında `true` | `false` qalsa admin sessiya kuki-si şifrələnməmiş kanalla da göndərilir. TLS olmadan `true` etsəniz admin panelə girmək olmur |
-| `GOOGLE_PAY_SIMULATED` | `true` | qərar lazımdır | `true`: `payment_token: "simulated"` ilə balans artır (real ödəniş yoxdur). `false`: Google Pay endpoint-i `501` qaytarır, çünki real token yoxlaması yazılmayıb |
+| `GOOGLE_PAY_SIMULATED` | `true` | `true` (qərar) | `true`: `payment_token: "simulated"` ilə balans artır (real ödəniş yoxdur). `false`: Google Pay endpoint-i `501` qaytarır, çünki real token yoxlaması yazılmayıb |
 | `ANTHROPIC_API_KEY` | boş | Laya model ilə işləməlidirsə açar | boş: Laya açar sözlərlə cavab verir (`narrate` hər insight üçün eyni ümumi cümləni deyir). Yoxlama zamanı bu dəyişən konteynerə ötürülmürdü, düzəldildi (`21cbd68`) |
 | `INSIGHTS_QUIET_HOURS` | `true` | demo gecə göstəriləcəksə `false` | `true`: 23:00–08:00 (Bakı) arasında `GET /api/insights/` boş siyahı qaytarır |
 | `THROTTLE_*` | 5, 5, 30, 300 /dəq | olduğu kimi qala bilər | boş dəyər həmin limiti söndürür |
@@ -214,7 +229,7 @@ Sənədlər (`docs/api/*.md`) real cavablarla avtomatik tutuşdurulur: `tests/te
 
 **İşinizə mane olanlar:**
 
-1. **Giriş yoxdur.** `users/otp/*` və `token/refresh/` `501` qaytarır. Token almağın iki yolu var: server tərəfdə `manage.py demo_token <nömrə>` (30 günlük JWT), və ya serverdə `DEMO_AUTH=true` olanda başlıqsız sorğu (yalnız demo abunəçi). Refresh olmadığı üçün 30 gündən sonra yeni token lazımdır.
+1. **Giriş yoxdur.** `users/otp/*` və `token/refresh/` `501` qaytarır. Serverdə `DEMO_AUTH=true` olacaq: `Authorization` başlığı göndərməyən tətbiq demo abunəçi (`994516643342`) kimi işləyir. Başqa abunəçi (məsələn `994501000001`) üçün server tərəfdə `manage.py demo_token <nömrə>` ilə 30 günlük JWT alınır; refresh yoxdur.
 2. **Aktiv paketlərin siyahısı yoxdur** (`packs/active/` `501`). Aktivləşmə yalnız alış cavabında gəlir; tətbiq onu özü saxlamalıdır.
 3. **Şəkillər yüklənmir.** `image` sahələri düzgün formada URL-dir, amma `404` verir. Ehtiyat şəkil nəzərdə tutun.
 4. **Push yoxdur** (`users/devices/` `501`). Insight-lar yalnız tətbiq `GET insights/` çağıranda gəlir.
@@ -235,11 +250,8 @@ Sənədlər (`docs/api/*.md`) real cavablarla avtomatik tutuşdurulur: `tests/te
 
 ## Açıq suallar
 
-1. **Hansı branch deploy olunur?** `dev` (#5 merge olunub) ilə `white-collar` eyni koddur; fərq bu yoxlamadakı 3 düzəliş və bu sənəddir, onlar hələ push olunmayıb. Push və `dev`-ə yeni PR lazımdır.
+1. **Push və PR.** `white-collar`-da 3 düzəliş və bu sənəd var, hələ push olunmayıb. Push və `dev`-ə yeni PR lazımdır; yoxsa serverə düzəlişsiz kod gedər (məsələn Laya açarı konteynerə çatmaz).
 2. **PR #6 (`feature/insights`) ilə nə edilir?** O, insight işini ayrıca yazıb və `dev` ilə 15 faylda həqiqi konfliktdədir (`git merge-tree origin/dev origin/feature/insights`). İki tətbiq uyğun deyil: #6 cavabı `{ "insights": […] }` açarı ilə qaytarır, `dev`-dəki `{ "results": […] }`; `evidence` sahələri, nümunə id (`9101` / `7001`) və model (#6-da abunəçi və növ üzrə bir sətir) fərqlidir. Hər ikisi merge oluna bilməz. Laya `dev`-dəki forma ilə birlikdə yoxlandı (`narrate` və `plan` cavab verir). Qərar: #6 bağlanır, yoxsa `dev`-dəki insight kodu onunla əvəz olunur.
-3. **Mobil tətbiq serverdə kim kimi işləyəcək?** OTP yazılana qədər seçim ikidir: `DEMO_AUTH=true` (hər kəs demo abunəçidir, açıq serverdə risklidir) və ya əl ilə paylanan 30 günlük tokenlər.
-4. **Baza SQLite qalır?** MVP üçün işləyir və paralel pul əməliyyatları yoxlanıb. PostgreSQL-ə qayıtmaq üçün `DATABASE_URL` vermək və compose-a `db` servisi əlavə etmək kifayətdir; kod hər ikisini dəstəkləyir, amma PostgreSQL ilə son vəziyyət yoxlanmayıb.
-5. **Demo abunəçilər real serverdə qalsın?** Seed hər başlanğıcda onları yaradır.
-6. **`GOOGLE_PAY_SIMULATED` və ödənişlər.** Real ödəniş olmadığı üçün istənilən abunəçi balansını pulsuz artıra bilər. Açıq serverdə bu qəbul olunandırmı?
-7. **Laya `insight_id` məsələsi** (yuxarıda): `params`-dan çıxarılır, yoxsa tətbiq süzür.
-8. **TLS, media və ehtiyat nüsxə** kimin öhdəsindədir və hansı proxy işlədiləcək.
+3. **Laya `insight_id` məsələsi** (yuxarıda): `params`-dan backend çıxarır, yoxsa tətbiq süzür.
+4. **TLS, media və ehtiyat nüsxə** kimin öhdəsindədir və hansı proxy işlədiləcək.
+5. **Laya üçün açar** (`ANTHROPIC_API_KEY`) serverdə veriləcəkmi? Verilməsə `narrate` hər insight üçün eyni ümumi cümləni deyir.
