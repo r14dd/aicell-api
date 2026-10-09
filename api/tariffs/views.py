@@ -2,8 +2,10 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from api.billing.idempotency import idempotent
+from api.billing.presenters import transaction_brief
 from api.common.docs import doc
-from api.common.http import iso_local, media, money, validated_query
+from api.common.http import iso_local, media, money, validated, validated_query
 from api.common.routing import Todo, route
 
 from . import catalogue, services, texts
@@ -68,8 +70,14 @@ def premium(request):
 # --- my tariff --------------------------------------------------------------
 
 
-def _ratio(remaining, total):
-    return round(float(remaining) / total, 2) if total else 0
+def _ratio(remaining, total) -> float:
+    """Share that is left; a redesigned tariff may include none of something."""
+    return round(float(remaining) / float(total), 2) if total else 0.0
+
+
+def _gb(amount) -> str:
+    """Whole gigabytes without decimals ("20"), anything else with two ("16.49")."""
+    return str(int(amount)) if amount == int(amount) else money(amount)
 
 
 def usage_rows(tariff):
@@ -119,7 +127,7 @@ def my(request):
         "pills": [_("CURRENT TARIFF"), line_type],
         "lines": [
             {"label": _("Current tariff"), "value": _monthly(tariff.price)},
-            {"label": _("Next renewal"), "value": _monthly(services.estimate(tariff.redesign))},
+            {"label": _("Next renewal"), "value": _monthly(services.next_price(tariff))},
         ],
         "usage": usage_rows(tariff),
         "payment_details": [
@@ -145,8 +153,13 @@ def my(request):
 
 @doc("Remaining balance of my tariff", errors=(404,))
 def usage(request):
-    """Home card, Remaining balance page and the aggregation sheet copy."""
+    """Home card, Remaining balance page and the aggregation sheet copy.
+
+    `remaining.data_gb` and `data_total_gb` add the active internet packs to the
+    tariff, as the aggregation sheet says; `rows` are the tariff alone.
+    """
     tariff = services.tariff_of(request.user)
+    data_left, data_total = services.data_with_packs(request.user, tariff)
     left = services.period_left(tariff)
     renews_at = timezone.localtime(tariff.next_payment_at)
     return {
@@ -155,8 +168,8 @@ def usage(request):
         % {"day": services.renewal_day(tariff), "time": f"{renews_at:%H:%M}"},
         "period_left": {"days": left.days, "hours": left.seconds // 3600},
         "remaining": {
-            "data_gb": money(tariff.data_remaining_gb),
-            "data_total_gb": str(tariff.data_total_gb),
+            "data_gb": money(data_left),
+            "data_total_gb": _gb(data_total),
             "minutes": tariff.minutes_remaining,
             "minutes_total": tariff.minutes_total,
         },
@@ -165,10 +178,7 @@ def usage(request):
     }
 
 
-@doc("Redesign sliders and current estimate", errors=(404,))
-def redesign(request):
-    """The client computes the live estimate with `pricing`."""
-    tariff = services.tariff_of(request.user)
+def redesign_json(tariff):
     return {
         "sliders": [
             {**slider, "value": tariff.redesign.get(slider["key"], slider["min"])}
@@ -179,36 +189,108 @@ def redesign(request):
     }
 
 
+@doc("Redesign sliders and current estimate", errors=(404,))
+def redesign(request):
+    """The client computes the live estimate with `pricing`."""
+    return redesign_json(services.tariff_of(request.user))
+
+
+class RedesignInput(serializers.Serializer):
+    values = serializers.DictField(
+        child=serializers.IntegerField(), help_text="One whole number per slider `key`"
+    )
+
+
+@doc(
+    "Save a redesigned tariff",
+    body=RedesignInput,
+    example={"values": {"internet": 10, "calls": 100, "instagramFb": 5, "youtube": 2, "tiktok": 0}},
+    errors=(400, 404),
+)
+def redesign_save(request):
+    """Stores the sliders ("Save: 19.10 ₼"). Nothing is charged: the new price and amounts
+    apply from the next renewal, and `my/` shows the price as "Next renewal"."""
+    values = validated(RedesignInput, request)["values"]
+    return redesign_json(services.save_redesign(request.user, values))
+
+
+# --- paying for a tariff ----------------------------------------------------
+
+
+def paid_json(paid):
+    tariff = paid.tariff
+    return {
+        "tariff": {
+            "family": tariff.family,
+            "plan_id": tariff.plan_slug or None,
+            "title": tariff.title,
+            "price": money(tariff.price),
+            "validity_days": tariff.validity_days,
+            "activated_at": iso_local(tariff.activated_at),
+            "next_payment_at": iso_local(tariff.next_payment_at),
+        },
+        "transaction": transaction_brief(paid.transaction),
+        "balance": money(paid.balance),
+    }
+
+
+class PlanChoice(serializers.Serializer):
+    plan_id = serializers.CharField(help_text="`id` of a plan from `catalogue/`")
+
+
+@doc(
+    "Subscribe to a tariff plan",
+    body=PlanChoice,
+    example={"plan_id": "digimax-5"},
+    errors=(400, 402, 409),
+    status=201,
+)
+@idempotent
+def subscribe(request):
+    """Charges the plan's price and replaces the current tariff ("Subscribe for X ₼").
+    What was left of the old tariff is annulled; active packs stay."""
+    plan_id = validated(PlanChoice, request)["plan_id"]
+    return paid_json(services.subscribe(request.user, plan_id)), 201
+
+
+class TariffChoice(serializers.Serializer):
+    tariff_id = serializers.CharField(help_text="`id` of a card whose `family_id` is null")
+
+
+@doc(
+    "Change to a tariff without a catalogue page",
+    body=TariffChoice,
+    example={"tariff_id": "digimax-3gb"},
+    errors=(400, 402, 409),
+    status=201,
+)
+@idempotent
+def change_to(request):
+    """Charges the card's price and replaces the current tariff. A card with a
+    `family_id` is `400`: its plans are chosen with `subscribe/`."""
+    tariff_id = validated(TariffChoice, request)["tariff_id"]
+    return paid_json(services.change(request.user, tariff_id)), 201
+
+
+@doc("Renew my tariff", errors=(400, 402, 404), status=201)
+@idempotent
+def renew(request):
+    """Pays for a new period now (Renew tariff sheet → Renew): amounts are back to
+    full and the dates move on. IsteSen renews with its saved slider values."""
+    return paid_json(services.renew(request.user)), 201
+
+
 # --- routes -----------------------------------------------------------------
 
 catalogue_view = route(TAG, get=families)
 catalogue_family_view = route(TAG, get=family)
 hot_view = route(TAG, get=hot)
-subscribe_view = route(
-    TAG,
-    post=Todo(
-        _("Tariff subscription is not part of this prototype yet"),
-        "Subscribe to a tariff plan",
-    ),
-)
+subscribe_view = route(TAG, post=subscribe)
 my_view = route(TAG, get=my)
 usage_view = route(TAG, get=usage)
-renew_view = route(
-    TAG, post=Todo(_("Tariff renewal is not part of this prototype yet"), "Renew my tariff")
-)
-redesign_view = route(
-    TAG,
-    get=redesign,
-    post=Todo(
-        _("Saving a redesigned tariff is not part of this prototype yet"),
-        "Save a redesigned tariff",
-    ),
-)
-change_view = route(
-    TAG,
-    get=change,
-    post=Todo(_("Changing tariff is not part of this prototype yet"), "Change tariff"),
-)
+renew_view = route(TAG, post=renew)
+redesign_view = route(TAG, get=redesign, post=redesign_save)
+change_view = route(TAG, get=change, post=change_to)
 premium_view = route(TAG, get=premium)
 premium_activate_view = route(
     TAG,

@@ -42,6 +42,12 @@ class AlreadyActive(ApiError):
     default_detail = _("Already active")
 
 
+class OfferClosed(ApiError):
+    status_code = 409
+    code = "offer_closed"
+    default_detail = _("This offer is no longer available")
+
+
 class RateLimited(ApiError):
     status_code = 429
     code = "rate_limited"

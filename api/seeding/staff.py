@@ -37,6 +37,10 @@ SUPPORT_MODELS = [
     "referral.ReferralProfile",
     "assistant.Conversation",
     "assistant.Message",
+    "usage.DailyUsage",
+    "usage.AppUsage",
+    "usage.PersonalOffer",
+    "usage.SubscriberInsight",
 ]
 
 FINANCE_MODELS = [

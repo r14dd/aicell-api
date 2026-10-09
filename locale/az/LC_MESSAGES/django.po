@@ -170,6 +170,10 @@ msgid "This is not part of this prototype yet"
 msgstr "Bu hələ prototipdə yoxdur"
 
 #: api/common/exceptions.py
+msgid "This offer is no longer available"
+msgstr "Bu təklif artıq keçərli deyil"
+
+#: api/common/exceptions.py
 msgid "Token expired"
 msgstr "Tokenin vaxtı bitib"
 
@@ -319,7 +323,7 @@ msgstr "%(label)s paketi"
 msgid "Not enough balance for this pack"
 msgstr "Bu paket üçün balans kifayət etmir"
 
-#: api/packs/services.py
+#: api/packs/services.py api/usage/offers.py api/usage/recommendations.py
 msgid "Roaming %(name)s"
 msgstr "Rouminq %(name)s"
 
@@ -331,7 +335,7 @@ msgstr "Bu paket artıq aktivdir"
 msgid "Unknown pack"
 msgstr "Naməlum paket"
 
-#: api/packs/services.py
+#: api/packs/services.py api/tariffs/services.py
 msgid "Unknown plan"
 msgstr "Naməlum plan"
 
@@ -669,8 +673,52 @@ msgid "eSIM transfer is not part of this prototype yet"
 msgstr "eSIM-ə keçid hələ bu prototipdə yoxdur"
 
 #: api/tariffs/services.py
+msgid "%(title)s tariff"
+msgstr "%(title)s tarifi"
+
+#: api/tariffs/services.py
+msgid "%(title)s tariff renewal"
+msgstr "%(title)s tarifinin yenilənməsi"
+
+#: api/tariffs/services.py
+msgid "Give a value for this slider"
+msgstr "Bu sürgü üçün dəyər verin"
+
+#: api/tariffs/services.py
+msgid "Must be between %(min)s and %(max)s in steps of %(step)s"
+msgstr "%(min)s ilə %(max)s arasında, %(step)s addımı ilə olmalıdır"
+
+#: api/tariffs/services.py
+msgid "Not enough balance for this tariff"
+msgstr "Bu tarif üçün balans kifayət etmir"
+
+#: api/tariffs/services.py
+msgid "Only the IsteSen tariff can be redesigned"
+msgstr "Yalnız IsteSen tarifini yenidən qurmaq olar"
+
+#: api/tariffs/services.py
+msgid "This tariff cannot be chosen in the app yet"
+msgstr "Bu tarifi hələ tətbiqdə seçmək olmur"
+
+#: api/tariffs/services.py
+msgid "This tariff has plans: choose one on its page"
+msgstr "Bu tarifin planları var: səhifəsində birini seçin"
+
+#: api/tariffs/services.py
 msgid "Unknown plan '%(plan)s'"
 msgstr "Naməlum plan: '%(plan)s'"
+
+#: api/tariffs/services.py
+msgid "Unknown slider"
+msgstr "Naməlum sürgü"
+
+#: api/tariffs/services.py
+msgid "Unknown tariff"
+msgstr "Naməlum tarif"
+
+#: api/tariffs/services.py
+msgid "You are already on this tariff"
+msgstr "Siz artıq bu tarifdəsiniz"
 
 #: api/tariffs/texts.py
 msgid "All you need and more!"
@@ -749,10 +797,6 @@ msgid "CURRENT TARIFF"
 msgstr "CARİ TARİF"
 
 #: api/tariffs/views.py
-msgid "Changing tariff is not part of this prototype yet"
-msgstr "Tarifin dəyişdirilməsi hələ bu prototipdə yoxdur"
-
-#: api/tariffs/views.py
 msgid "Current tariff"
 msgstr "Cari tarif"
 
@@ -780,7 +824,7 @@ msgstr "MB"
 msgid "MIN."
 msgstr "DƏQ."
 
-#: api/tariffs/views.py
+#: api/tariffs/views.py api/usage/taxonomy.py
 msgid "Messaging"
 msgstr "Mesajlaşma"
 
@@ -812,17 +856,134 @@ msgstr "Premium-un aktivləşdirilməsi hələ bu prototipdə yoxdur"
 msgid "Renews %(day)s, %(time)s"
 msgstr "%(day)s, %(time)s-da yenilənir"
 
-#: api/tariffs/views.py
-msgid "Saving a redesigned tariff is not part of this prototype yet"
-msgstr "Yenidən qurulmuş tarifin saxlanması hələ bu prototipdə yoxdur"
+#: api/usage/offers.py
+msgid "%(title)s for %(offer)s ₼ instead of %(normal)s ₼. %(reason)s"
+msgstr "%(title)s: %(normal)s ₼ əvəzinə %(offer)s ₼. %(reason)s"
 
-#: api/tariffs/views.py
-msgid "Tariff renewal is not part of this prototype yet"
-msgstr "Tarifin yenilənməsi hələ bu prototipdə yoxdur"
+#: api/usage/offers.py
+msgid "A personal offer for you"
+msgstr "Sizə xüsusi təklif"
 
-#: api/tariffs/views.py
-msgid "Tariff subscription is not part of this prototype yet"
-msgstr "Tarifə qoşulma hələ bu prototipdə yoxdur"
+#: api/usage/offers.py api/usage/recommendations.py api/usage/views.py
+msgid "See the offer"
+msgstr "Təklifə bax"
+
+#: api/usage/recommendations.py
+msgid "%(app)s %(share)s%% of data"
+msgstr "İnternetin %(share)s%%-i %(app)s"
+
+#: api/usage/recommendations.py
+msgid "%(category)s: %(share)s%% of your data"
+msgstr "%(category)s: internetinizin %(share)s%%-i"
+
+#: api/usage/recommendations.py
+msgid "%(count)s add-on packs, %(amount)s ₼"
+msgstr "%(count)s əlavə paket, %(amount)s ₼"
+
+#: api/usage/recommendations.py
+msgid "%(count)s roaming packs, %(amount)s ₼ for %(used)s GB abroad"
+msgstr "%(count)s rouminq paketi, xaricdə %(used)s GB üçün %(amount)s ₼"
+
+#: api/usage/recommendations.py
+msgid "%(tariff)s, redesigned to your usage"
+msgstr "%(tariff)s, istifadənizə uyğun qurulmuş"
+
+#: api/usage/recommendations.py
+msgid "%(used)s GB used in %(days)s days, tariff includes %(included)s GB"
+msgstr ""
+"%(days)s gündə %(used)s GB istifadə olunub, tarifə %(included)s GB daxildir"
+
+#: api/usage/recommendations.py
+msgid "Included internet ran out on day %(day)s of %(days)s"
+msgstr "Tarifə daxil olan internet %(days)s günün %(day)s-cü günündə bitib"
+
+#: api/usage/recommendations.py
+msgid "Open internet packs"
+msgstr "İnternet paketlərini aç"
+
+#: api/usage/recommendations.py
+msgid "Open remaining balance"
+msgstr "Qalığı aç"
+
+#: api/usage/recommendations.py
+msgid "Open roaming packs"
+msgstr "Rouminq paketlərini aç"
+
+#: api/usage/recommendations.py
+msgid "Redesign my tariff"
+msgstr "Tarifimi yenidən qur"
+
+#: api/usage/recommendations.py
+msgid "See the pack"
+msgstr "Paketə bax"
+
+#: api/usage/recommendations.py api/usage/views.py
+msgid "See the tariff"
+msgstr "Tarifə bax"
+
+#: api/usage/recommendations.py
+msgid "Social network GB in your tariff"
+msgstr "Tarifinizdə sosial şəbəkə GB-ları"
+
+#: api/usage/recommendations.py
+msgid "Your tariff's messaging allowance: %(gb)s GB"
+msgstr "Tarifinizdəki mesajlaşma həcmi: %(gb)s GB"
+
+#: api/usage/taxonomy.py
+msgid "Games"
+msgstr "Oyunlar"
+
+#: api/usage/taxonomy.py
+msgid "Other"
+msgstr "Digər"
+
+#: api/usage/taxonomy.py
+msgid "Social networks"
+msgstr "Sosial şəbəkələr"
+
+#: api/usage/taxonomy.py
+msgid "Video"
+msgstr "Video"
+
+#: api/usage/texts.py
+msgid "Balanced use"
+msgstr "Tarazlı istifadə"
+
+#: api/usage/texts.py
+msgid "Calls only"
+msgstr "Yalnız zənglər"
+
+#: api/usage/texts.py
+msgid "Frequent traveller"
+msgstr "Tez-tez səfər edən"
+
+#: api/usage/texts.py
+msgid "Heavy internet user"
+msgstr "İnternetdən çox istifadə edən"
+
+#: api/usage/texts.py
+msgid "Light use"
+msgstr "Az istifadə"
+
+#: api/usage/texts.py
+msgid "Your current plan fits how you use your number"
+msgstr "Cari tarifiniz nömrənizdən istifadə tərzinizə uyğundur"
+
+#: api/usage/views.py
+msgid ""
+"%(gb)s GB, %(minutes)s min. and %(sms)s SMS in %(days)s days; %(paid)s ₼ "
+"paid"
+msgstr ""
+"%(days)s gündə %(gb)s GB, %(minutes)s dəq. və %(sms)s SMS; %(paid)s ₼ "
+"ödənilib"
+
+#: api/usage/views.py
+msgid ""
+"You paid %(current)s ₼ in the last 30 days; with %(title)s it would have "
+"been %(projected)s ₼"
+msgstr ""
+"Son 30 gündə %(current)s ₼ ödəmisiniz; %(title)s ilə bu, %(projected)s ₼ "
+"olardı"
 
 #: api/users/views.py
 msgid "App settings are not part of this prototype yet"

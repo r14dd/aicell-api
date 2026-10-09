@@ -22,7 +22,7 @@ def counts():
 
 
 def test_every_catalogue_model_is_seeded(catalogue):
-    assert len(CATALOGUE_MODELS) == 23
+    assert len(CATALOGUE_MODELS) == 24
     empty = [name for name, count in counts().items() if count == 0]
     assert not empty
 

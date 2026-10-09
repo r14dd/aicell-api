@@ -40,7 +40,10 @@ class SubscriberTariffAdmin(BaseAdmin):
     autocomplete_fields = ("subscriber",)
     readonly_fields = ("activated_at", "last_payment_at")
     fieldsets = (
-        (None, {"fields": ("subscriber", "family", "title", "price", "validity_days")}),
+        (
+            None,
+            {"fields": ("subscriber", "family", "plan_slug", "title", "price", "validity_days")},
+        ),
         ("Payments", {"fields": ("activated_at", "last_payment_at", "next_payment_at")}),
         (
             "Remaining",
@@ -94,7 +97,13 @@ class TariffFamilyAdmin(CatalogueAdmin):
 
 @admin.register(TariffPlan)
 class TariffPlanAdmin(CatalogueAdmin):
-    general = ("family", "slug", "price", ("hot", "is_default"))
+    general = (
+        "family",
+        "slug",
+        "price",
+        ("hot", "is_default"),
+        ("data_mb", "minutes", "sms", "roaming_mb"),
+    )
     translated = ("title", "features", "hot_features")
     list_display = (
         "title",
@@ -167,7 +176,15 @@ class ChangeGroupAdmin(CatalogueAdmin):
 
 @admin.register(ChangeCard)
 class ChangeCardAdmin(CatalogueAdmin):
-    general = ("group", "slug", "price", "is_new", "socials", "family")
+    general = (
+        "group",
+        "slug",
+        "price",
+        "is_new",
+        "socials",
+        "family",
+        ("data_mb", "minutes", "validity_days"),
+    )
     translated = ("title", "period", "tagline", "features")
     list_display = ("title", "group", "price", "is_new", "family", "order", "is_active")
     list_filter = (

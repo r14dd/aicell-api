@@ -1,0 +1,157 @@
+{% extends 'admin/base.html' %}
+
+{% load unfold %}
+
+{% block title %}{{ title }} | {{ site_title }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+    {% include "admin/usage/_styles.html" %}
+    {% component "unfold/components/container.html" %}
+        <div class="flex flex-col gap-3 mb-6" data-test="usage-filters">
+            {% for group in filter_groups %}
+                <div class="flex flex-row flex-wrap gap-2 items-center">
+                    <span class="font-semibold text-important text-sm mr-2" style="min-width: 70px">{{ group.title }}</span>
+                    {% for option in group.options %}
+                        {% if option.selected %}
+                            {% component "unfold/components/button.html" with href=option.href size="sm" %}{{ option.label }}{% endcomponent %}
+                        {% else %}
+                            {% component "unfold/components/button.html" with href=option.href size="sm" variant="default" %}{{ option.label }}{% endcomponent %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            {% component "unfold/components/text.html" with class="text-xs" %}
+                {{ period }}, compared with {{ previous_period }}. Days are counted in Asia/Baku.
+            {% endcomponent %}
+        </div>
+
+        <div class="grid gap-4 mb-8 md:grid-cols-2 lg:grid-cols-3" data-test="usage-tiles">
+            {% for tile in tiles %}
+                {% component "unfold/components/card.html" %}
+                    <div class="flex flex-row items-start justify-between">
+                        {% component "unfold/components/text.html" %}{{ tile.title }}{% endcomponent %}
+                        <span class="material-symbols-outlined text-primary-600">{{ tile.icon }}</span>
+                    </div>
+                    {% component "unfold/components/title.html" with class="usage-number" %}{{ tile.value }}{% endcomponent %}
+                    {% component "unfold/components/text.html" with class="text-xs" %}{{ tile.note }}{% endcomponent %}
+                    <p class="font-medium mt-2 text-xs usage-{{ tile.change.direction }}">{{ tile.change.text }}</p>
+                {% endcomponent %}
+            {% endfor %}
+        </div>
+
+        <div class="grid gap-4 mb-8 lg:grid-cols-2" data-test="usage-trend">
+            {% component "unfold/components/card.html" with title="Mobile data per day (GB)" %}
+                {% if trend.empty %}
+                    {% component "unfold/components/text.html" with class="py-8 text-center" %}No usage in this period for this filter.{% endcomponent %}
+                {% else %}
+                    {% component "unfold/components/chart/line.html" with data=trend.data height=240 %}{% endcomponent %}
+                {% endif %}
+            {% endcomponent %}
+            {% component "unfold/components/card.html" with title="Call minutes per day (min)" %}
+                {% if trend.empty %}
+                    {% component "unfold/components/text.html" with class="py-8 text-center" %}No usage in this period for this filter.{% endcomponent %}
+                {% else %}
+                    {% component "unfold/components/chart/line.html" with data=trend.minutes height=240 %}{% endcomponent %}
+                {% endif %}
+            {% endcomponent %}
+        </div>
+
+        <div class="grid gap-4 mb-8 lg:grid-cols-2" id="categories" data-test="usage-categories">
+            {% component "unfold/components/card.html" with title="Mobile data by category" description="Select a category to see its apps" %}
+                {% if categories.empty %}
+                    {% component "unfold/components/text.html" with class="py-8 text-center" %}No mobile data in this period for this filter.{% endcomponent %}
+                {% else %}
+                    <div class="usage-bar mb-4">
+                        {% for row in categories.rows %}<span style="width: {{ row.width }}%; background-color: {{ row.colour }}" title="{{ row.label }}: {{ row.share }}"></span>{% endfor %}
+                    </div>
+                    <table class="w-full text-sm">
+                        {% for row in categories.rows %}
+                            <tr class="{% if row.selected %}usage-selected{% endif %}">
+                                <td class="px-3 py-2"><a class="usage-link" href="{{ row.href }}"><span class="usage-dot" style="background-color: {{ row.colour }}"></span>{{ row.label }}</a></td>
+                                <td class="px-3 py-2 text-right usage-number">{{ row.share }}</td>
+                                <td class="px-3 py-2 text-right usage-number">{{ row.data }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            {% endcomponent %}
+
+            {% if categories.selected %}
+                {% component "unfold/components/card.html" with title="Apps in "|add:categories.selected.label description="Share of the category's data" %}
+                    <table class="w-full text-sm">
+                        {% for app in categories.selected.apps %}
+                            <tr>
+                                <td class="px-3 py-2 whitespace-nowrap">{{ app.label }}</td>
+                                <td class="px-3 py-2 w-full"><div class="usage-bar"><span style="width: {{ app.width }}%; background-color: {{ categories.selected.colour }}"></span></div></td>
+                                <td class="px-3 py-2 text-right usage-number">{{ app.share }}</td>
+                                <td class="px-3 py-2 text-right whitespace-nowrap usage-number">{{ app.data }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endcomponent %}
+            {% else %}
+                {% component "unfold/components/card.html" with title="Apps" %}
+                    {% component "unfold/components/text.html" with class="py-8 text-center" %}
+                        {% if categories.empty %}Nothing to break down.{% else %}Select a category on the left to see how its data splits between apps.{% endif %}
+                    {% endcomponent %}
+                {% endcomponent %}
+            {% endif %}
+        </div>
+
+        <div class="grid gap-4 mb-8 lg:grid-cols-2" data-test="usage-segments">
+            {% component "unfold/components/card.html" with title="Segments" description="How subscribers used their number in the last 30 days" %}
+                {% if segments.empty %}
+                    {% component "unfold/components/text.html" with class="py-8 text-center" %}No subscriber has a segment yet for this filter.{% endcomponent %}
+                {% else %}
+                    {% component "unfold/components/table.html" with table=segments.table card_included=1 %}{% endcomponent %}
+                {% endif %}
+            {% endcomponent %}
+
+            {% component "unfold/components/card.html" with title="Sales" description="Personal offers made in the period, and savings on the table today" %}
+                <div class="grid gap-4 grid-cols-2 mb-4" data-test="usage-sales">
+                    {% for title, value, note in sales.offers %}
+                        <div>
+                            {% component "unfold/components/text.html" with class="text-xs" %}{{ title }}{% endcomponent %}
+                            {% component "unfold/components/title.html" with class="usage-number" %}{{ value }}{% endcomponent %}
+                            {% component "unfold/components/text.html" with class="text-xs" %}{{ note }}{% endcomponent %}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if sales.no_offers %}
+                    {% component "unfold/components/text.html" with class="mb-4 text-xs" %}No personal offer was made in this period for this filter.{% endcomponent %}
+                {% endif %}
+                <div class="border-t border-base-200 pt-4 dark:border-base-800">
+                    {% component "unfold/components/text.html" with class="text-xs" %}Subscribers with a recommendation that saves them money{% endcomponent %}
+                    {% component "unfold/components/title.html" with class="usage-number" %}{{ sales.can_save }}{% endcomponent %}
+                    {% component "unfold/components/text.html" with class="text-xs" %}{{ sales.saving }} a month projected saving in total{% endcomponent %}
+                </div>
+            {% endcomponent %}
+        </div>
+
+        <div id="top" data-test="usage-top">
+            {% component "unfold/components/card.html" with title="Top subscribers" description="Sort by a column heading" class="mb-4" %}
+                {% if top.empty %}
+                    {% component "unfold/components/text.html" with class="py-8 text-center" %}No subscriber has usage in this period for this filter.{% endcomponent %}
+                {% else %}
+                    {% component "unfold/components/table.html" with table=top.table card_included=1 striped=1 %}{% endcomponent %}
+                {% endif %}
+            {% endcomponent %}
+            {% if not top.empty %}
+                <div class="flex flex-row gap-2 items-center mb-8">
+                    {% if top.previous %}{% component "unfold/components/button.html" with href=top.previous size="sm" variant="default" %}Previous{% endcomponent %}{% endif %}
+                    {% if top.next %}{% component "unfold/components/button.html" with href=top.next size="sm" variant="default" %}Next{% endcomponent %}{% endif %}
+                    {% component "unfold/components/text.html" with class="text-xs" %}Page {{ top.page.number }} of {{ top.page.paginator.num_pages }} · {{ top.page.paginator.count }} subscribers{% endcomponent %}
+                </div>
+            {% endif %}
+        </div>
+
+        {% component "unfold/components/text.html" with class="text-xs" %}
+            {% if refreshed %}Segments and recommendations as of {{ refreshed|date:"j M Y, H:i" }}; they are recomputed every hour.{% else %}Segments and recommendations have not been computed yet; run the seed or wait for the hourly task.{% endif %}
+            Usage in this prototype is synthetic seed data.
+        {% endcomponent %}
+    {% endcomponent %}
+{% endblock %}

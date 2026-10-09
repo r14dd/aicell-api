@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as DjangoGroupAdmin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Group
+from django.utils.safestring import mark_safe
 from rest_framework.authtoken.admin import TokenAdmin as DrfTokenAdmin
 from rest_framework.authtoken.models import TokenProxy
 from unfold.admin import TabularInline
@@ -12,6 +13,7 @@ from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationFo
 from api.billing.models import SavedCard, Transaction
 from api.common.admin import BaseAdmin, ReadOnlyInline, manat, signed_manat
 from api.packs.models import PackActivation
+from api.usage import statistics_admin as usage_admin
 
 from .models import Subscriber
 
@@ -71,6 +73,7 @@ class SubscriberAdmin(DjangoUserAdmin, BaseAdmin):
     )
     list_filter = (
         ("line_type", ChoicesDropdownFilter),
+        ("insight__segment", ChoicesDropdownFilter),
         ("is_premium", BooleanRadioFilter),
         ("is_active", BooleanRadioFilter),
         ("is_staff", BooleanRadioFilter),
@@ -80,7 +83,7 @@ class SubscriberAdmin(DjangoUserAdmin, BaseAdmin):
     date_hierarchy = "created_at"
     ordering = ("-created_at",)
     list_select_related = ("wallet",)
-    readonly_fields = ("id", "balance", "created_at", "last_login")
+    readonly_fields = ("id", "balance", "created_at", "last_login", "usage")
     filter_horizontal = ("groups", "user_permissions")
     inlines = (CardInline, TransactionInline, PackInline)
 
@@ -96,6 +99,7 @@ class SubscriberAdmin(DjangoUserAdmin, BaseAdmin):
         ),
         ("Dates", {"classes": ["tab"], "fields": ("created_at", "last_login")}),
     )
+    usage_fieldset = ("Usage", {"classes": ["tab"], "fields": ("usage",)})
     add_fieldsets = (
         (None, {"classes": ("wide",), "fields": ("msisdn", "password1", "password2")}),
     )
@@ -107,6 +111,17 @@ class SubscriberAdmin(DjangoUserAdmin, BaseAdmin):
     )
     def line_type_badge(self, obj):
         return obj.line_type
+
+    def get_fieldsets(self, request, obj=None):
+        """Staff who may view usage data get the "Usage" tab of an existing subscriber."""
+        fieldsets = super().get_fieldsets(request, obj)
+        if obj is not None and request.user.has_perm(usage_admin.PERMISSION):
+            return (*fieldsets, self.usage_fieldset)
+        return fieldsets
+
+    @display(description="Last 30 days")
+    def usage(self, obj):
+        return mark_safe(usage_admin.subscriber_block(obj))  # noqa: S308 - a rendered template
 
     @display(description="Balance", ordering="wallet__balance")
     def balance(self, obj):

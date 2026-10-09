@@ -15,6 +15,9 @@ class SubscriberTariff(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="tariff"
     )
     family = models.CharField(max_length=40, default="istesen")
+    plan_slug = models.CharField(
+        max_length=40, blank=True, help_text="Catalogue plan this tariff is, if it is one"
+    )
     title = models.CharField(max_length=60, default="IsteSen")
     price = models.DecimalField(max_digits=8, decimal_places=2, default=Decimal("19.10"))
     validity_days = models.PositiveSmallIntegerField(default=30)
@@ -59,6 +62,12 @@ class TariffPlan(CatalogueItem):
     hot = models.BooleanField(default=False)
     is_default = models.BooleanField(default=False, help_text="Selected when no ?plan= is given")
     features = models.JSONField(default=list, help_text='[{"kind", "label", "value", "socials"?}]')
+
+    # What the plan includes, as numbers (the features above are display text).
+    data_mb = models.PositiveIntegerField(null=True, blank=True, help_text="Empty = unlimited")
+    minutes = models.PositiveIntegerField(null=True, blank=True, help_text="Empty = unlimited")
+    sms = models.PositiveIntegerField(null=True, blank=True, help_text="Empty = unlimited")
+    roaming_mb = models.PositiveIntegerField(default=0)
 
     # "Hot offers on tariffs" card; empty position means the plan is not on the shelf.
     hot_position = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -114,6 +123,11 @@ class ChangeCard(CatalogueItem):
         related_name="change_cards",
         help_text="Set when the card opens a catalogue page",
     )
+
+    # A card without a page is chosen directly, so it says what it includes itself.
+    data_mb = models.PositiveIntegerField(null=True, blank=True)
+    minutes = models.PositiveIntegerField(null=True, blank=True)
+    validity_days = models.PositiveSmallIntegerField(default=28)
 
     objects = ActiveQuerySet.as_manager()
 

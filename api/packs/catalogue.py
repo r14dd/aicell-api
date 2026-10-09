@@ -40,6 +40,46 @@ def top() -> list[dict]:
     return [_internet_pack(pack) for pack in packs.order_by("top_position", "id")]
 
 
+@cached("packs.priced")
+def priced() -> dict[str, list[dict]]:
+    """Packs with their traffic in MB, for cost projection (None = unlimited)."""
+    internet = [
+        {
+            "id": p.slug,
+            "title": p.label,
+            "price": money(p.price),
+            "data_mb": p.data_mb,
+            "hours": p.hours,
+        }
+        for p in InternetPack.objects.active().filter(category__is_active=True)
+    ]
+    social = [
+        {
+            "id": pack.slug,
+            "plan_id": plan.slug,
+            "pack_title": pack.title,
+            "title": f"{pack.title} {plan.title}",
+            "price": money(plan.price),
+            "data_mb": plan.data_mb,
+            "days": plan.days,
+        }
+        for pack in SocialPack.objects.active().prefetch_related("plans")
+        for plan in pack.plans.all()
+        if plan.is_active
+    ]
+    roaming = [
+        {
+            "id": p.slug,
+            "title": p.name,
+            "price": money(p.price),
+            "data_mb": p.data_mb,
+            "days": p.days,
+        }
+        for p in RoamingPack.objects.active()
+    ]
+    return {"internet": internet, "social": social, "roaming": roaming}
+
+
 def _social_plans(pack) -> list[dict]:
     return [
         {

@@ -34,8 +34,9 @@ from api.tariffs.models import (
     TariffFamily,
     TariffPlan,
 )
+from api.usage.models import OfferRule
 
-from .data import content, kredit, packs, referral, sim, tariffs
+from .data import content, kredit, packs, referral, sim, tariffs, usage
 from .translations import localized
 
 
@@ -83,6 +84,7 @@ def _tariffs(load):
                 hot_position=position,
                 hot_socials=card["socials"] if card else [],
                 hot_features=card["features"] if card else [],
+                **tariffs.INCLUDED[plan["id"]],
             )
             plan_order += 1
 
@@ -112,6 +114,7 @@ def _tariffs(load):
                 socials=card["socials"],
                 features=card["features"],
                 family=families.get(card["family_id"]),
+                **card.get("included", {}),
             )
             card_order += 1
 
@@ -151,6 +154,7 @@ def _packs(load):
                 price=Decimal(pack["price"]),
                 renews=pack["renews"],
                 hours=pack["hours"],
+                data_mb=packs.INTERNET_MB.get(pack["id"]),
                 top_position=packs.TOP.index(pack["id"]) + 1 if pack["id"] in packs.TOP else None,
             )
             order += 1
@@ -179,6 +183,7 @@ def _packs(load):
                 price=Decimal(plan["price"]),
                 validity=plan["validity"],
                 days=plan["days"],
+                data_mb=packs.SOCIAL_MB[plan["id"]],
             )
 
     for order, pack in enumerate(packs.ROAMING):
@@ -190,6 +195,7 @@ def _packs(load):
             sub=pack["sub"],
             price=Decimal(pack["price"]),
             days=pack["days"],
+            data_mb=packs.ROAMING_MB[pack["id"]],
         )
 
 
@@ -325,9 +331,23 @@ def _referral(load):
         load(ReferralStep, {"order": order}, title=step["title"], body=step["body"])
 
 
+def _offer_rules(load):
+    for order, rule in enumerate(usage.OFFER_RULES):
+        load(
+            OfferRule,
+            {"segment": rule["segment"], "target_id": rule["target_id"]},
+            order=order,
+            target_kind=rule["target_kind"],
+            offer_price=Decimal(rule["offer_price"]),
+            valid_days=rule["valid_days"],
+            reason=rule["reason"],
+            is_active=rule["is_active"],
+        )
+
+
 @transaction.atomic
 def seed_catalogue(refresh: bool = False) -> None:
     """Create the catalogue rows that are missing; with `refresh`, reset the seeded ones too."""
     load = Loader(refresh)
-    for section in (_tariffs, _packs, _kredit, _sim, _content, _referral):
+    for section in (_tariffs, _packs, _kredit, _sim, _content, _referral, _offer_rules):
         section(load)

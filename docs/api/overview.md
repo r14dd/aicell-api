@@ -13,6 +13,7 @@ domain (`api/urls.py`):
 (path("content/", include("api.content.urls")),)
 (path("referral/", include("api.referral.urls")),)
 (path("assistant/", include("api.assistant.urls")),)
+(path("usage/", include("api.usage.urls")),)
 ```
 
 Schema: `GET /api/schema/`, Swagger UI: `GET /api/swagger/`.
@@ -55,6 +56,7 @@ Schema: `GET /api/schema/`, Swagger UI: `GET /api/swagger/`.
 | 403 | `forbidden` | not the owner / not premium |
 | 404 | `not_found` | |
 | 409 | `already_active` | pack / service already active |
+| 409 | `offer_closed` | personal offer already accepted, declined or expired |
 | 429 | `rate_limited` | OTP sends, assistant messages |
 | 501 | `not_implemented` | every `:todo` endpoint returns this with `detail` = the mobile notice text, so the client can keep showing the same toast |
 
@@ -76,3 +78,4 @@ final paths now.
 - [content](content.md)
 - [referral](referral.md)
 - [assistant](assistant.md)
+- [usage](usage.md)

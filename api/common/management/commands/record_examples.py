@@ -21,10 +21,14 @@ from django.test import override_settings
 from django.urls import get_resolver
 from rest_framework.test import APIClient
 
+from api.billing.models import Wallet
 from api.common import schema
 from api.common.routing import Todo
 from api.seeding import seed_catalogue, seed_demo
 
+# Handlers the demo subscriber cannot afford with its seeded balance: their
+# example is recorded with this much in the wallet (and undone like any write).
+FUNDED = {"renew": "50.00"}
 PARAMETER = re.compile(r"<(?:\w+:)?(\w+)>")
 
 
@@ -54,22 +58,41 @@ def ready_endpoints():
     return sorted(found, key=lambda item: item[0] != "get")
 
 
-def record() -> dict:
-    subscriber, _created = seed_demo(reset=True)
-    client = APIClient(SERVER_NAME="localhost")
-    client.force_authenticate(user=subscriber)
-    recorded = {}
-    for method, path, handler in ready_endpoints():
-        headers = {"HTTP_ACCEPT": "application/json"}
-        if getattr(handler, "idempotent", False):
-            headers["HTTP_IDEMPOTENCY_KEY"] = str(uuid.uuid4())
-        response = client.generic(
+def call(client, method, path, handler):
+    """Call an endpoint with its sample input. A write is undone afterwards.
+
+    Undoing writes means each one is answered from the same seeded state, so
+    an example does not depend on which endpoints were called before it (an
+    offer can be accepted in one example and declined in the next).
+    Must run inside a transaction.
+    """
+    headers = {"HTTP_ACCEPT": "application/json"}
+    if getattr(handler, "idempotent", False):
+        headers["HTTP_IDEMPOTENCY_KEY"] = str(uuid.uuid4())
+    savepoint = None if method == "get" else transaction.savepoint()
+    if savepoint and handler.__name__ in FUNDED:
+        subscriber = client.handler._force_user
+        Wallet.objects.filter(subscriber=subscriber).update(balance=FUNDED[handler.__name__])
+    try:
+        return client.generic(
             method.upper(),
             path,
             json.dumps(handler.doc.example or {}),
             content_type="application/json",
             **headers,
         )
+    finally:
+        if savepoint:
+            transaction.savepoint_rollback(savepoint)
+
+
+def record() -> dict:
+    subscriber, _created = seed_demo(reset=True)
+    client = APIClient(SERVER_NAME="localhost")
+    client.force_authenticate(user=subscriber)
+    recorded = {}
+    for method, path, handler in ready_endpoints():
+        response = call(client, method, path, handler)
         if response.status_code != handler.doc.status and not handler.doc.streams:
             raise RuntimeError(f"{method.upper()} {path} answered {response.status_code}")
         recorded[schema.example_key(method, handler)] = response.json()

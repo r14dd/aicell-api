@@ -20,16 +20,8 @@ from api.tariffs.models import TariffPlan
 from api.users.models import Subscriber
 
 API_APPS = {
-    "users",
-    "billing",
-    "tariffs",
-    "packs",
-    "kredit",
-    "sim",
-    "content",
-    "referral",
-    "assistant",
-}
+    "users", "billing", "tariffs", "packs", "kredit", "sim", "content", "referral", "assistant", "usage",
+}  # fmt: skip
 API_MODELS = [model for model in apps.get_models() if model._meta.app_label in API_APPS]
 REGISTERED = sorted(admin.site._registry, key=lambda model: model._meta.label)
 ROLES = ["superadmin", "content", "support", "finance"]
@@ -175,8 +167,8 @@ def test_the_menu_lists_only_what_the_role_may_see(panel, login):
 @pytest.mark.parametrize(
     "login,groups",
     [
-        ("content", ["Tariff catalogue", "Packs and services", "Content"]),
-        ("support", ["Subscribers", "Billing", "Content", "Activity"]),
+        ("content", ["Tariff catalogue", "Packs and services", "Content", "Usage and offers"]),
+        ("support", ["Subscribers", "Billing", "Content", "Activity", "Usage and offers"]),
         ("finance", ["Billing"]),
     ],
 )

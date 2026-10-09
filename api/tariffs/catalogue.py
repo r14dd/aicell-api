@@ -46,8 +46,38 @@ def families() -> list[dict]:
 @cached("tariffs.price_groups")
 def price_groups() -> list[dict]:
     return [
-        {"heading": group.heading, "tone": group.tone, "rows": group.rows}
+        {
+            "heading": group.heading,
+            "tone": group.tone,
+            "rows": [{"label": row["label"], "price": row["price"]} for row in group.rows],
+        }
         for group in PriceGroup.objects.active()
+    ]
+
+
+@cached("tariffs.overage_rates")
+def overage_rates() -> dict[str, str]:
+    """Out-of-package prices by row key (`data_mb`, `minute`, `sms`), from the first price group."""
+    group = PriceGroup.objects.active().first()
+    return {row["key"]: row["price"] for row in (group.rows if group else []) if "key" in row}
+
+
+@cached("tariffs.plans")
+def plans() -> list[dict]:
+    """Every active plan with what it includes as numbers (None = unlimited)."""
+    queryset = TariffPlan.objects.active().filter(family__is_active=True).select_related("family")
+    return [
+        {
+            "id": plan.slug,
+            "family_id": plan.family.slug,
+            "title": plan.title,
+            "price": money(plan.price),
+            "data_mb": plan.data_mb,
+            "minutes": plan.minutes,
+            "sms": plan.sms,
+            "roaming_mb": plan.roaming_mb,
+        }
+        for plan in queryset
     ]
 
 
