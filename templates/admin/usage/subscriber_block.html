@@ -1,0 +1,41 @@
+{% include "admin/usage/_styles.html" %}
+<div class="flex flex-col gap-4 w-full" data-test="usage-block">
+    {% if empty %}
+        <p class="text-sm">No usage recorded in the last 30 days ({{ period }}).</p>
+    {% else %}
+        <p class="text-sm">Last 30 days ({{ period }}) · segment <strong class="text-important">{{ segment }}</strong></p>
+        <div class="flex flex-row flex-wrap gap-6">
+            {% for title, value in figures %}
+                <div>
+                    <p class="text-xs">{{ title }}</p>
+                    <p class="font-semibold text-important text-lg usage-number">{{ value }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        {% if has_data %}
+            <div>
+                <p class="mb-2 text-xs">Mobile data by category</p>
+                <div class="usage-bar mb-2">
+                    {% for row in categories %}<span style="width: {{ row.width }}%; background-color: {{ row.colour }}" title="{{ row.label }}: {{ row.share }}"></span>{% endfor %}
+                </div>
+                <div class="flex flex-row flex-wrap gap-4 text-sm">
+                    {% for row in categories %}
+                        <span class="whitespace-nowrap"><span class="usage-dot" style="background-color: {{ row.colour }}"></span>{{ row.label }} {{ row.share }} · {{ row.data }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+    <div>
+        <p class="mb-1 text-xs">Top recommendation</p>
+        {% if recommendation %}
+            <p class="font-semibold text-important text-sm">{{ recommendation.title }}</p>
+            <p class="text-sm usage-number">
+                {{ recommendation.current }} now → {{ recommendation.projected }} projected a month{% if recommendation.saves %} · <span class="usage-up">saves {{ recommendation.saving }}</span>{% endif %}
+            </p>
+            {% for line in recommendation.evidence %}<p class="text-xs">{{ line }}</p>{% endfor %}
+        {% else %}
+            <p class="text-sm">Nothing in the catalogue beats what this subscriber has now.</p>
+        {% endif %}
+    </div>
+</div>

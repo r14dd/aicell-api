@@ -1,0 +1,17 @@
+{# The few things unfold's stylesheet has no class for. Colours are unfold's own tokens. #}
+<style>
+    .usage-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 8px; }
+    .usage-bar { display: flex; height: 12px; overflow: hidden; border-radius: 6px; background-color: var(--color-base-100); }
+    .dark .usage-bar { background-color: var(--color-base-800); }
+    .usage-bar > span { display: block; height: 100%; }
+    .usage-link { color: var(--color-primary-600); font-weight: 500; }
+    .dark .usage-link { color: var(--color-primary-500); }
+    .usage-link:hover { text-decoration: underline; }
+    .usage-up { color: var(--color-green-700); }
+    .usage-down { color: var(--color-red-600); }
+    .dark .usage-up { color: var(--color-green-400); }
+    .dark .usage-down { color: var(--color-red-400); }
+    .usage-number { font-variant-numeric: tabular-nums; }
+    .usage-selected { background-color: var(--color-base-100); }
+    .dark .usage-selected { background-color: var(--color-base-800); }
+</style>

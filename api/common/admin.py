@@ -17,6 +17,10 @@ STATUS_COLOURS = {
     "failed": "danger",
     "cancelled": "danger",
     "closed": "info",
+    "new": "info",
+    "shown": "warning",
+    "accepted": "success",
+    "declined": "danger",
 }
 
 

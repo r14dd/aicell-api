@@ -4,8 +4,19 @@ from django.urls import reverse
 
 
 def _item(title, icon, model):
-    """A menu entry for a model: (title, icon, "app_label.Model")."""
-    return title, icon, model
+    """A menu entry for a model's list: (title, icon, "app_label.Model")."""
+    app_label, model_name = model.lower().split(".")
+    return (
+        title,
+        icon,
+        f"{app_label}.view_{model_name}",
+        f"admin:{app_label}_{model_name}_changelist",
+    )
+
+
+def _page(title, icon, permission, url_name):
+    """A menu entry for a page that is not a model's list."""
+    return title, icon, permission, url_name
 
 
 def _group(title, *items):
@@ -76,6 +87,15 @@ MENU = [
         _item("App ratings", "star", "content.AppRating"),
     ),
     _group(
+        "Usage and offers",
+        _page("Usage statistics", "monitoring", "usage.view_dailyusage", "admin:usage_statistics"),
+        _item("Daily usage", "data_usage", "usage.DailyUsage"),
+        _item("App usage", "apps", "usage.AppUsage"),
+        _item("Subscriber insights", "insights", "usage.SubscriberInsight"),
+        _item("Personal offers", "local_offer", "usage.PersonalOffer"),
+        _item("Offer rules", "rule", "usage.OfferRule"),
+    ),
+    _group(
         "Access",
         _item("Roles", "admin_panel_settings", "auth.Group"),
         _item("Service tokens", "vpn_key", "authtoken.TokenProxy"),
@@ -84,17 +104,16 @@ MENU = [
 
 
 def navigation(request):
-    """The menu for the signed-in account: only models it may view, no empty groups."""
+    """The menu for the signed-in account: only what it may view, no empty groups."""
     groups = [
         {"items": [{"title": "Dashboard", "icon": "dashboard", "link": reverse("admin:index")}]}
     ]
     for title, entries in MENU:
-        items = []
-        for item_title, icon, model in entries:
-            app_label, model_name = model.lower().split(".")
-            if request.user.has_perm(f"{app_label}.view_{model_name}"):
-                link = reverse(f"admin:{app_label}_{model_name}_changelist")
-                items.append({"title": item_title, "icon": icon, "link": link})
+        items = [
+            {"title": item_title, "icon": icon, "link": reverse(url_name)}
+            for item_title, icon, permission, url_name in entries
+            if request.user.has_perm(permission)
+        ]
         if items:
             groups.append({"title": title, "separator": True, "collapsible": True, "items": items})
     return groups
