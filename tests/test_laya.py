@@ -168,3 +168,26 @@ def test_claude_reads_the_forced_tool_call(settings, monkeypatch):
     assert answer == {"speech": "ok", "language": "en"}
     assert seen["model"] == settings.LAYA_NARRATE_MODEL
     assert seen["tool_choice"] == {"type": "tool", "name": "answer"}
+
+
+def test_an_answer_without_params_is_still_an_answer(client, swap):
+    swap(plan={"reply": "Açıram.", "task": "openTariff", "language": "az"})
+    response = plan(client, "tarifim")
+    assert response.status_code == 200
+    assert response.json() == {
+        "reply": "Açıram.",
+        "task": "openTariff",
+        "params": None,
+        "amount": None,
+        "language": "az",
+    }
+
+
+@pytest.mark.parametrize("answer", [None, "Açıram.", ["openTariff"], 7])
+def test_an_answer_that_is_not_an_object_is_rejected(client, swap, answer):
+    swap(plan=answer, narrate=answer)
+    lost = plan(client, "tarifim")
+    assert (lost.status_code, lost.json()["task"]) == (200, "none")
+    narrated = client.post_json("/api/laya/narrate/", {"insight": {"id": 1}})
+    assert narrated.status_code == 502
+    assert narrated.json()["code"] == "laya_unavailable"
