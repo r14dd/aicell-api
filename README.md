@@ -104,7 +104,7 @@ cheaper the answer is "your plan fits", and when a change saves less than
 
 | | |
 |---|---|
-| Endpoints | 126 documented in [docs/api](docs/api/overview.md): 81 working, 45 routed and answering `501` with the app's notice text (sign-in among them) |
+| Endpoints | 127 documented in [docs/api](docs/api/overview.md): 82 working, 45 routed and answering `501` with the app's notice text (sign-in among them) |
 | Languages | Azerbaijani, Russian, English, from `Accept-Language` |
 | Tests | 1470, every documented endpoint checked against the docs in three languages |
 | Money | One code path for every balance change, row-locked, idempotent; parallel requests cannot overdraw |
