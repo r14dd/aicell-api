@@ -160,3 +160,34 @@ def test_different_payments_at_once_add_up(subscriber):
     assert balance_of(subscriber) == Decimal("19.31")
     total = sum(tx.amount for tx in Transaction.objects.filter(subscriber=subscriber))
     assert Decimal("0.21") + total == balance_of(subscriber)  # 0.21 was carried over
+
+
+def test_the_message_limit_holds_under_parallel_sends(subscriber, settings):
+    """Limit 3, eight messages at once: exactly three are stored, the rest get 429."""
+    from api.assistant.models import Conversation, Message
+
+    settings.ASSISTANT_RATE_LIMIT = 3
+    conversation = Conversation.objects.create(subscriber=subscriber)
+    path = f"/api/assistant/conversations/{conversation.id}/messages/"
+    barrier = threading.Barrier(8)
+    codes = []
+
+    def send():
+        try:
+            client = client_for(subscriber)
+            barrier.wait(timeout=10)
+            response = client.post_json(path, {"content": "hi"})
+            if response.streaming:
+                b"".join(response.streaming_content)
+            codes.append(response.status_code)
+        finally:
+            connections.close_all()
+
+    threads = [threading.Thread(target=send) for _ in range(8)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=30)
+
+    assert sorted(codes) == [200] * 3 + [429] * 5
+    assert Message.objects.filter(conversation=conversation, role="user").count() == 3

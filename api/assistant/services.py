@@ -41,6 +41,9 @@ def mark_seen(conversation) -> None:
 
 
 def _check_rate_limit(subscriber) -> None:
+    """Call inside a transaction: the subscriber row is locked until it ends, so two
+    requests cannot both count the same messages and both pass."""
+    type(subscriber).objects.select_for_update().filter(pk=subscriber.pk).first()
     window_start = timezone.now() - timedelta(minutes=1)
     sent = Message.objects.filter(
         conversation__subscriber=subscriber, role="user", created_at__gte=window_start
@@ -52,21 +55,27 @@ def _check_rate_limit(subscriber) -> None:
 def send_turn(subscriber, conversation, content: str) -> Turn:
     """Store the subscriber's message and the responder's answer to it.
 
-    The responder runs outside the transaction: on SQLite an open transaction holds the
-    write lock, and a slow answer would block every other writer.
+    The message is stored (and counted against the limit) first, in its own short
+    transaction. The responder runs outside any transaction: on SQLite an open one holds
+    the write lock, and a slow answer would block every other writer. If the responder
+    fails the message is removed again.
     """
-    _check_rate_limit(subscriber)
-    asked_at = timezone.now()
+    with transaction.atomic():
+        _check_rate_limit(subscriber)
+        user_message = Message.objects.create(
+            conversation=conversation, role="user", content=content
+        )
 
     respond = import_string(settings.ASSISTANT_RESPONDER)
     started = time.monotonic()
-    answer = respond(subscriber, content)
+    try:
+        answer = respond(subscriber, content)
+    except Exception:
+        user_message.delete()
+        raise
     latency_ms = int((time.monotonic() - started) * 1000)
 
     with transaction.atomic():
-        user_message = Message.objects.create(
-            conversation=conversation, role="user", content=content, created_at=asked_at
-        )
         reply = Message.objects.create(
             conversation=conversation,
             role="assistant",
