@@ -49,6 +49,8 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "api.common.middleware.ApiLanguageMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 AUTH_USER_MODEL = "users.Subscriber"
@@ -132,6 +134,7 @@ CORS_ALLOW_HEADERS = [
     "x-app-version",
     "x-platform",
 ]
+CSRF_TRUSTED_ORIGINS = env.items("CSRF_TRUSTED_ORIGINS")
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
@@ -143,6 +146,8 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = env.number("SECURE_HSTS_SECONDS", 31536000)
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = env.flag("SECURE_COOKIES", True)
+    CSRF_COOKIE_SECURE = env.flag("SECURE_COOKIES", True)
 
 # --- API ----------------------------------------------------------------------
 
@@ -223,3 +228,6 @@ GOOGLE_PAY_SIMULATED = env.flag("GOOGLE_PAY_SIMULATED", DEBUG)
 ASSISTANT_RESPONDER = env.text("ASSISTANT_RESPONDER", "api.assistant.responder.respond")
 ASSISTANT_RATE_LIMIT = 20  # user messages per minute per subscriber
 ASSISTANT_STREAM_DELAY = float(env.text("ASSISTANT_STREAM_DELAY", "0.04"))
+
+# Passwords of the admin accounts `manage.py seed` creates (see README).
+SEED_STAFF_PASSWORD = env.text("SEED_STAFF_PASSWORD", "aicell-demo")
