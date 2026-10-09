@@ -1,92 +1,201 @@
-from decimal import Decimal
+import json
 
 import pytest
 
-from api.assistant.models import Conversation
-from api.assistant.sse import chunks
-from api.billing import services as billing
+from api.assistant import responder
+from api.assistant.models import Message
+from api.seeding import DEMO_CONVERSATION_ID
+
+SEEDED = f"/api/assistant/conversations/{DEMO_CONVERSATION_ID}"
 
 
-@pytest.fixture(autouse=True)
-def _no_stream_delay(settings):
-    settings.ASSISTANT_STREAM_DELAY = 0
+def events(response):
+    """Parse an SSE body into (event, data) pairs; unnamed events are `None`."""
+    body = b"".join(response.streaming_content).decode()
+    parsed = []
+    for block in body.strip().split("\n\n"):
+        event, data = None, None
+        for line in block.splitlines():
+            if line.startswith("event: "):
+                event = line[7:]
+            elif line.startswith("data: "):
+                data = json.loads(line[6:])
+        parsed.append((event, data))
+    return parsed
 
 
-@pytest.fixture
-def conversation(client):
-    res = client.post_json("/api/assistant/conversations/", {})
-    assert res.status_code == 201
-    return res.json()["id"]
+def start(client):
+    return client.post_json("/api/assistant/conversations/", {"source": "mobile"}).json()["id"]
 
 
-def ask(client, conversation, text, accept="application/json"):
-    return client.post_json(
+def test_inbox_shows_the_rate_prompt(client):
+    body = client.get("/api/assistant/inbox/").json()
+    assert body["greeting"] == "How can we support you?"
+    assert body["unread"] == 1
+    assert body["items"][0] == {
+        "conversation_id": DEMO_CONVERSATION_ID,
+        "external_id": f"#{DEMO_CONVERSATION_ID}",
+        "title": "Rate your conversation",
+        "by": "AI Chat Bot",
+        "last_message_at": "2026-10-06T14:01:00Z",
+        "unread": True,
+        "kind": "rate_prompt",
+    }
+    assert [action["key"] for action in body["actions"]] == ["ask", "ideas"]
+
+
+def test_rating_clears_the_prompt(client):
+    response = client.post_json(f"{SEEDED}/rate/", {"stars": 4, "comment": ""})
+    assert response.status_code == 201
+    assert response.json() == {"message": "Thanks! Your rating helps us a lot"}
+    body = client.get("/api/assistant/inbox/").json()
+    assert body["unread"] == 0
+    assert body["items"][0]["kind"] == "conversation"
+    assert client.post_json(f"{SEEDED}/rate/", {"stars": 0}).status_code == 400
+
+
+def test_start_conversation_continues_the_id_sequence(client):
+    response = client.post_json("/api/assistant/conversations/", {"source": "mobile"})
+    assert response.status_code == 201
+    body = response.json()
+    assert body["id"] == DEMO_CONVERSATION_ID + 1
+    assert body["external_id"] == f"#{DEMO_CONVERSATION_ID + 1}"
+    assert body["status"] == "open"
+    assert len(client.get("/api/assistant/conversations/").json()["results"]) == 2
+
+
+def test_history(client):
+    body = client.get(f"{SEEDED}/messages/").json()
+    assert [m["role"] for m in body["results"]] == ["user", "assistant"]
+    assert body["results"][1]["route"] == "usage"
+    assert "route" not in body["results"][0]
+    assert body["next"] is None
+
+
+def test_send_streams_sse_in_the_documented_order(client):
+    conversation = start(client)
+    response = client.post(
         f"/api/assistant/conversations/{conversation}/messages/",
-        {"content": text},
-        HTTP_ACCEPT=accept,
+        {"content": "How much internet do I have left?", "source": "mobile"},
+        format="json",
+        HTTP_ACCEPT="text/event-stream",
     )
+    assert response.status_code == 200
+    assert response["Content-Type"].startswith("text/event-stream")
+    assert response["Cache-Control"] == "no-cache"
+    assert response["X-Accel-Buffering"] == "no"
+
+    stream = events(response)
+    names = [event for event, _ in stream]
+    assert names[0] == "message" and names[-3:] == ["action", "log", "done"]
+    assert all(name is None for name in names[1:-3])
+
+    text = "".join(data["text"] for event, data in stream if event is None)
+    assert text == "You have 7.20 GB left until 25 October."
+    assert stream[0][1]["role"] == "user"
+    assert stream[-3][1] == {
+        "action": "navigate",
+        "to": "/remaining-balance",
+        "label": "Open remaining balance",
+    }
+    log = stream[-2][1]
+    assert log["route"] == "usage" and log["message_id"] == stream[0][1]["message_id"] + 1
+    assert set(log) == {"message_id", "route", "tokens_in", "tokens_out", "cost", "latency_ms"}
+    assert stream[-1][1] == {}
+
+    history = client.get(f"/api/assistant/conversations/{conversation}/messages/").json()["results"]
+    assert [m["content"] for m in history] == ["How much internet do I have left?", text]
 
 
-def test_balance_question_routes_to_balance(client, subscriber, conversation):
-    billing.top_up(subscriber, "card", Decimal("4.00"))
-    body = ask(client, conversation, "What is my balance?").json()
+def test_send_with_accept_json_returns_one_body(client):
+    conversation = start(client)
+    response = client.post(
+        f"/api/assistant/conversations/{conversation}/messages/",
+        {"content": "What is my balance?"},
+        format="json",
+        HTTP_ACCEPT="application/json",
+    )
+    assert response.status_code == 201
+    body = response.json()
+    assert body["message"]["role"] == "assistant"
+    assert body["message"]["content"] == "Your balance is 16.21 ₼."
     assert body["message"]["route"] == "balance"
-    assert "4.00 ₼" in body["message"]["content"]
     assert body["action"]["to"] == "/top-up"
 
 
-def test_unknown_question_falls_back(client, conversation):
-    assert ask(client, conversation, "tell me a joke").json()["message"]["route"] == "fallback"
+def test_answers_use_live_subscriber_data(client):
+    conversation = start(client)
+    client.pay("/api/billing/top-up/card/", {"card_bin": "416300", "amount": "10.00"})
+    response = client.post(
+        f"/api/assistant/conversations/{conversation}/messages/",
+        {"content": "balans"},
+        format="json",
+        HTTP_ACCEPT="application/json",
+    )
+    assert response.json()["message"]["content"] == "Your balance is 26.21 ₼."
 
 
-def test_stream_has_the_documented_events(client, conversation):
-    res = ask(client, conversation, "roaming?", accept="text/event-stream")
-    assert res["Content-Type"] == "text/event-stream"
-    text = b"".join(res.streaming_content).decode()
-    for name in ("message", "action", "log", "done"):
-        assert f"event: {name}\n" in text
+@pytest.mark.parametrize(
+    "text,route",
+    [
+        ("How much internet do I have left?", "usage"),
+        ("İnternet qalığım nə qədərdir?", "usage"),
+        ("What is my number balance?", "balance"),
+        ("Which tariff am I on?", "tariff"),
+        ("Show me internet packs", "packs"),
+        ("How do I turn on roaming?", "roaming"),
+        ("I need a kredit", "kredit"),
+        ("Tell me a joke", "fallback"),
+    ],
+)
+def test_dummy_responder_routes(subscriber, text, route):
+    assert responder.respond(subscriber, text).route == route
 
 
-def test_history_is_oldest_first_and_private(client, conversation):
-    ask(client, conversation, "balance")
-    body = client.get(f"/api/assistant/conversations/{conversation}/messages/").json()
-    assert [m["role"] for m in body["results"]] == ["user", "assistant"]
-    other = Conversation.objects.create(subscriber=_other())
-    assert client.get(f"/api/assistant/conversations/{other.id}/messages/").status_code == 404
+def test_fallback_has_no_action_event(client):
+    conversation = start(client)
+    response = client.post(
+        f"/api/assistant/conversations/{conversation}/messages/",
+        {"content": "Tell me a joke"},
+        format="json",
+    )
+    assert [event for event, _ in events(response) if event] == ["message", "log", "done"]
 
 
-def _other():
+def test_rate_limit_is_20_messages_per_minute(client):
+    conversation = start(client)
+    url = f"/api/assistant/conversations/{conversation}/messages/"
+    for _ in range(20):
+        assert (
+            client.post(
+                url, {"content": "hi"}, format="json", HTTP_ACCEPT="application/json"
+            ).status_code
+            == 201
+        )
+    limited = client.post(url, {"content": "hi"}, format="json", HTTP_ACCEPT="application/json")
+    assert limited.status_code == 429
+    assert limited.json()["code"] == "rate_limited"
+    assert Message.objects.filter(conversation_id=conversation, role="user").count() == 20
+
+
+def test_other_subscribers_conversations_are_not_reachable(client, subscriber):
+    from api.assistant.models import Conversation
     from api.users.models import Subscriber
 
-    return Subscriber.objects.create_user("994500000001")
-
-
-def test_rate_limit(client, conversation, settings):
-    settings.ASSISTANT_RATE_LIMIT = 2
-    assert ask(client, conversation, "a").status_code == 201
-    assert ask(client, conversation, "b").status_code == 201
-    assert ask(client, conversation, "c").status_code == 429
-
-
-def test_rating_clears_the_prompt(client, conversation):
-    Conversation.objects.filter(id=conversation).update(status="closed", unread=True)
-    item = client.get("/api/assistant/inbox/").json()["items"][0]
-    assert item["kind"] == "rate_prompt"
+    other = Subscriber.objects.create_user("994500000000")
+    foreign = Conversation.objects.create(subscriber=other)
+    assert client.get(f"/api/assistant/conversations/{foreign.id}/messages/").status_code == 404
     assert (
         client.post_json(
-            f"/api/assistant/conversations/{conversation}/rate/", {"stars": 5}
+            f"/api/assistant/conversations/{foreign.id}/messages/", {"content": "hi"}
         ).status_code
-        == 201
-    )
-    assert client.get("/api/assistant/inbox/").json()["items"][0]["kind"] == "conversation"
-    assert (
-        client.post_json(
-            f"/api/assistant/conversations/{conversation}/rate/", {"stars": 9}
-        ).status_code
-        == 400
+        == 404
     )
 
 
-def test_chunks_join_back():
-    text = "Your balance is 4.00 ₼. Top up?"
-    assert "".join(chunks(text)) == text
+def test_empty_message_is_rejected(client):
+    conversation = start(client)
+    response = client.post_json(
+        f"/api/assistant/conversations/{conversation}/messages/", {"content": ""}
+    )
+    assert response.status_code == 400
