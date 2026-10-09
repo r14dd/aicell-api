@@ -14,6 +14,7 @@ urlpatterns = [
     path("tariffs/", include("api.tariffs.urls")),
     path("packs/", include("api.packs.urls")),
     path("kredit/", include("api.kredit.urls")),
+    path("sim/", include("api.sim.urls")),
     # Unknown API paths answer in the JSON error shape, in DEBUG too.
     re_path(r"^.*$", not_found_view),
 ]
