@@ -39,7 +39,8 @@ def _family(family) -> dict:
 @cached("tariffs.families")
 def families() -> list[dict]:
     queryset = TariffFamily.objects.active().prefetch_related("plans")
-    return [_family(family) for family in queryset]
+    found = [_family(family) for family in queryset]
+    return [family for family in found if family["plans"]]
 
 
 @cached("tariffs.price_groups")

@@ -19,6 +19,7 @@ urlpatterns = [
     path("referral/", include("api.referral.urls")),
     path("assistant/", include("api.assistant.urls")),
     path("usage/", include("api.usage.urls")),
+    path("laya/", include("api.laya.urls")),
     # Unknown API paths answer in the JSON error shape, in DEBUG too.
     re_path(r"^.*$", not_found_view),
 ]

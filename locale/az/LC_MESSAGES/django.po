@@ -162,6 +162,10 @@ msgid "Not found."
 msgstr "Tapılmadı."
 
 #: api/common/exceptions.py
+msgid "Server error"
+msgstr "Server xətası"
+
+#: api/common/exceptions.py
 msgid "This is not part of this prototype yet"
 msgstr "Bu hələ prototipdə yoxdur"
 
@@ -306,6 +310,10 @@ msgstr "Balansınız çatmayanda 50.00 ₼-dək borc götürməyə icazə verin"
 #: api/kredit/views.py
 msgid "no items"
 msgstr "borc yoxdur"
+
+#: api/laya/brain.py
+msgid "Laya is not available right now"
+msgstr "Laya hazırda əlçatan deyil"
 
 #: api/packs/services.py
 msgid "%(label)s pack"

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "api.referral",
     "api.assistant",
     "api.usage",
+    "api.laya",
 ]
 
 MIDDLEWARE = [
@@ -254,6 +255,10 @@ SPECTACULAR_SETTINGS = {
         {"name": "referral", "description": "Invite & earn"},
         {"name": "assistant", "description": "Support inbox and the chat assistant"},
         {"name": "usage", "description": "30-day usage profile, recommendations, personal offers"},
+        {
+            "name": "laya",
+            "description": "Laya, the voice assistant: plan a task, narrate an insight",
+        },
         {"name": "sim", "description": "Line, roaming, SMS, PUK, eSIM and paid services"},
         {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
         {"name": "health", "description": "Liveness and readiness probes"},
@@ -267,6 +272,12 @@ GOOGLE_PAY_SIMULATED = env.flag("GOOGLE_PAY_SIMULATED", DEBUG)
 ASSISTANT_RESPONDER = env.text("ASSISTANT_RESPONDER", "api.assistant.responder.respond")
 ASSISTANT_RATE_LIMIT = 20  # user messages per minute per subscriber
 ASSISTANT_STREAM_DELAY = float(env.text("ASSISTANT_STREAM_DELAY", "0.04"))
+
+# Laya's brain: a model when ANTHROPIC_API_KEY is set, keyword rules otherwise.
+ANTHROPIC_API_KEY = env.text("ANTHROPIC_API_KEY")
+LAYA_BRAIN = env.text("LAYA_BRAIN", "api.laya.claude" if ANTHROPIC_API_KEY else "api.laya.offline")
+LAYA_PLAN_MODEL = env.text("LAYA_PLAN_MODEL", "claude-sonnet-5-5")
+LAYA_NARRATE_MODEL = env.text("LAYA_NARRATE_MODEL", "claude-haiku-5-5")
 
 # Passwords of the admin accounts `manage.py seed` creates (see README).
 SEED_STAFF_PASSWORD = env.text("SEED_STAFF_PASSWORD", "aicell-demo")

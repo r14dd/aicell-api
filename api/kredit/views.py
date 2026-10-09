@@ -1,5 +1,4 @@
-from contextlib import suppress
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
@@ -94,8 +93,10 @@ def take_notice(request, slug):
         }
     amount = item["amount"]
     # An unusable amount keeps the product's default in the notice.
-    with suppress(InvalidOperation, AttributeError):
-        amount = money(Decimal(str(request.data.get("amount", amount))))
+    data = request.data if isinstance(request.data, dict) else {}
+    form = TakeInput(data=data)
+    if form.is_valid() and "amount" in form.validated_data:
+        amount = money(form.validated_data["amount"])
     return _("%(name)s %(amount)s ₼ will be added to your balance (prototype)") % {
         "name": item["name"],
         "amount": amount,

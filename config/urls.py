@@ -9,3 +9,4 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = "api.common.exceptions.not_found_view"
+handler500 = "api.common.exceptions.server_error_view"

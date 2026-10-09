@@ -23,6 +23,7 @@ ERROR_NOTES = {
     409: "`already_active` — the pack or service is already on",
     429: "`rate_limited` — see the `Retry-After` header",
     501: "`not_implemented` — `detail` is the app's notice text",
+    502: "`laya_unavailable` — the model failed or gave an answer that was rejected",
 }
 ERROR_EXAMPLES = {
     400: {
@@ -37,6 +38,7 @@ ERROR_EXAMPLES = {
     409: {"code": "already_active", "detail": "This service is already active"},
     429: {"code": "rate_limited", "detail": "Too many requests, try again in 42 seconds"},
     501: {"code": "not_implemented", "detail": "This is not part of this prototype yet"},
+    502: {"code": "laya_unavailable", "detail": "Laya is not available right now"},
 }
 
 

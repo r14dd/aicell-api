@@ -161,6 +161,10 @@ msgid "Not found."
 msgstr "Не найдено."
 
 #: api/common/exceptions.py
+msgid "Server error"
+msgstr "Ошибка сервера"
+
+#: api/common/exceptions.py
 msgid "This is not part of this prototype yet"
 msgstr "Этого пока нет в прототипе"
 
@@ -305,6 +309,10 @@ msgstr "Разрешите брать в долг до 50.00 ₼, когда б�
 #: api/kredit/views.py
 msgid "no items"
 msgstr "долгов нет"
+
+#: api/laya/brain.py
+msgid "Laya is not available right now"
+msgstr "Лая сейчас недоступна"
 
 #: api/packs/services.py
 msgid "%(label)s pack"

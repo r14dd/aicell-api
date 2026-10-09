@@ -109,3 +109,17 @@ def test_probes_answer_over_plain_http_when_tls_is_enforced(anon, settings, path
     settings.SECURE_REDIRECT_EXEMPT = [r"^api/health/"]
     assert anon.get(path).status_code == 200
     assert anon.get("/api/users/me/").status_code == 301
+
+
+def test_swagger_ui_renders_without_credentials(anon):
+    response = anon.get("/api/swagger/")
+    assert response.status_code == 200
+    assert response["Content-Type"].startswith("text/html")
+
+
+def test_unhandled_error_is_a_json_500(client):
+    with mock.patch("api.billing.services.balance_of", side_effect=RuntimeError("boom")):
+        response = client.get("/api/billing/balance/")
+    assert response.status_code == 500
+    assert response["Content-Type"].startswith("application/json")
+    assert response.json()["code"] == "server_error"
