@@ -17,6 +17,7 @@ dependencies = [
     "djangorestframework-simplejwt>=5.5",
     "django-modeltranslation>=0.19",
     "polib>=1.2",
+    "django-unfold>=0.50",
 ]
 
 [dependency-groups]
