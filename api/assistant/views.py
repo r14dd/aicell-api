@@ -1,3 +1,4 @@
+from django.db.models import OuterRef, Subquery
 from django.http import StreamingHttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
@@ -7,9 +8,10 @@ from api.common.http import PageQuery, iso, paginate, validated
 from api.common.routing import Todo, route
 
 from . import services, sse
-from .models import Conversation
+from .models import Conversation, Message
 
 TAG = "assistant"
+INBOX_LIMIT = 50
 
 
 def conversation_json(conversation):
@@ -41,8 +43,8 @@ def inbox_item(conversation):
     if rate_prompt:
         title = _("Rate your conversation")
     else:
-        first = conversation.messages.filter(role="user").order_by("id").first()
-        title = first.content[:80] if first else _("New conversation")
+        first = conversation.first_content
+        title = first[:80] if first else _("New conversation")
     return {
         "conversation_id": conversation.id,
         "external_id": conversation.external_id,
@@ -57,13 +59,16 @@ def inbox_item(conversation):
 @doc("Support inbox")
 def inbox(request):
     """Greeting, unread badge, the subscriber's conversation cards and the two actions."""
-    conversations = Conversation.objects.filter(subscriber=request.user).order_by(
-        "-last_message_at", "-id"
-    )
+    conversations = Conversation.objects.filter(subscriber=request.user)
+    first_message = Message.objects.filter(conversation=OuterRef("pk"), role="user").order_by("id")
+    latest = conversations.annotate(first_content=Subquery(first_message.values("content")[:1]))
     return {
         "greeting": _("How can we support you?"),
         "unread": conversations.filter(unread=True).count(),
-        "items": [inbox_item(conversation) for conversation in conversations],
+        "items": [
+            inbox_item(conversation)
+            for conversation in latest.order_by("-last_message_at", "-id")[:INBOX_LIMIT]
+        ],
         "actions": [
             {
                 "key": "ask",

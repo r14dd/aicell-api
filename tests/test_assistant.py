@@ -202,3 +202,15 @@ def test_empty_message_is_rejected(client):
         f"/api/assistant/conversations/{conversation}/messages/", {"content": ""}
     )
     assert response.status_code == 400
+
+
+def test_inbox_query_count_does_not_grow_with_conversations(client, django_assert_max_num_queries):
+    from api.assistant.models import Conversation
+
+    owner = Conversation.objects.get(id=DEMO_CONVERSATION_ID).subscriber
+    for _ in range(60):
+        conversation = Conversation.objects.create(subscriber=owner)
+        Message.objects.create(conversation=conversation, role="user", content="hi")
+    with django_assert_max_num_queries(8):
+        body = client.get("/api/assistant/inbox/").json()
+    assert len(body["items"]) == 50
