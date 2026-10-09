@@ -44,6 +44,14 @@ msgid "Thanks! Your rating helps us a lot"
 msgstr "Спасибо! Ваша оценка нам очень помогает"
 
 #: api/assistant/views.py
+msgid "The recording is too long"
+msgstr "Запись слишком длинная"
+
+#: api/assistant/views.py
+msgid "We could not understand the recording"
+msgstr "Не удалось разобрать запись"
+
+#: api/assistant/views.py
 msgid "We're here to help, just ask away!"
 msgstr "Мы готовы помочь, просто спросите!"
 

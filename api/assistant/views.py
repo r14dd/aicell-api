@@ -1,16 +1,23 @@
+import base64
+import logging
+
 from django.db.models import OuterRef, Subquery
 from django.http import StreamingHttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+from rest_framework.parsers import MultiPartParser
 
 from api.common.docs import doc
 from api.common.http import PageQuery, iso, paginate, validated
 from api.common.routing import Todo, route
 
-from . import services, sse
+from . import gemini, services, sse
 from .models import Conversation, Message
 
+log = logging.getLogger(__name__)
+
 TAG = "assistant"
+AUDIO_MAX_BYTES = 5 * 1024 * 1024
 INBOX_LIMIT = 50
 
 
@@ -161,6 +168,55 @@ def message_send(request, id):
     return response
 
 
+class VoiceInput(serializers.Serializer):
+    audio = serializers.FileField(
+        help_text="The recorded question (wav, mp3, m4a, ogg, webm), up to 5 MB"
+    )
+
+
+@doc(
+    "Send a voice message",
+    body=VoiceInput,
+    path={"id": 3513323},
+    errors=(400, 404, 429),
+    status=201,
+)
+def voice_send(request, id):
+    """Speech to text, the same answer as a text message, then the answer as speech.
+
+    Send `multipart/form-data` with an `audio` file. The answer carries the transcript, the
+    assistant message, its `action`, and `audio`: the spoken answer as a base64 WAV (24 kHz,
+    mono), or `null` when speech synthesis failed and only the text is available.
+    """
+    conversation = services.conversation_of(request.user, id)
+    data = validated(VoiceInput, request)
+    upload = data["audio"]
+    if upload.size > AUDIO_MAX_BYTES:
+        raise serializers.ValidationError({"audio": _("The recording is too long")})
+    try:
+        transcript = gemini.transcribe(upload.read(), upload.content_type or "audio/wav")
+    except gemini.GeminiError:
+        log.exception("speech to text failed")
+        transcript = ""
+    if not transcript:
+        raise serializers.ValidationError({"audio": _("We could not understand the recording")})
+
+    turn = services.send_turn(request.user, conversation, transcript[:2000])
+    try:
+        audio = base64.b64encode(gemini.speak(turn.reply.content)).decode()
+    except gemini.GeminiError:
+        log.exception("text to speech failed")
+        audio = None
+    return {
+        "transcript": transcript,
+        "user_message_id": turn.user_message.id,
+        "message": message_json(turn.reply),
+        "action": turn.reply.action,
+        "audio": audio,
+        "audio_mime": "audio/wav",
+    }, 201
+
+
 # --- rating -----------------------------------------------------------------
 
 
@@ -191,6 +247,8 @@ inbox_view = route(TAG, get=inbox)
 conversations_view = route(TAG, get=conversations, post=conversation_create)
 # accept_any: the SSE client sends `Accept: text/event-stream`, which must not 406.
 messages_view = route(TAG, accept_any=True, get=messages, post=message_send)
+voice_send.upload = True  # the examples recorder sends a recording, not JSON
+voice_view = route(TAG, parsers=[MultiPartParser], post=voice_send)
 rate_view = route(TAG, post=rate)
 feedback_view = route(
     TAG,

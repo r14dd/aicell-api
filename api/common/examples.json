@@ -797,7 +797,7 @@
   "GET insights.insights": {
     "results": [
       {
-        "created_at": "2026-10-09T18:41:34+04:00",
+        "created_at": "2026-10-09T18:46:47+04:00",
         "evidence": {
           "by_app_gb": {
             "instagram_facebook": 7.0,
@@ -809,7 +809,7 @@
           "social_share": 0.55,
           "tiktok_gb_month": 0.6
         },
-        "expires_at": "2026-10-16T18:41:34+04:00",
+        "expires_at": "2026-10-16T18:46:47+04:00",
         "id": 7001,
         "kind": "social_heavy",
         "offers": [
@@ -2464,7 +2464,7 @@
         "label": "See the offer",
         "to": "/offers/9001"
       },
-      "expires_at": "2026-10-23T14:41:34Z",
+      "expires_at": "2026-10-23T14:46:47Z",
       "id": 9001,
       "kind": "social_pack",
       "normal_price": "3.00",
@@ -2639,7 +2639,7 @@
     }
   },
   "PATCH sim.roaming_update": {
-    "changed_at": "2026-10-09T14:41:34Z",
+    "changed_at": "2026-10-09T14:46:48Z",
     "enabled": true,
     "texts": {
       "packs_title": "Roaming packs",
@@ -2670,7 +2670,7 @@
     }
   },
   "POST assistant.conversation_create": {
-    "created_at": "2026-10-09T14:41:34Z",
+    "created_at": "2026-10-09T14:46:48Z",
     "external_id": "#3513324",
     "id": 3513324,
     "status": "open"
@@ -2683,7 +2683,7 @@
     },
     "message": {
       "content": "You have 7.20 GB left until 25 October.",
-      "created_at": "2026-10-09T14:41:34Z",
+      "created_at": "2026-10-09T14:46:48Z",
       "id": 8,
       "role": "assistant",
       "route": "usage"
@@ -2692,6 +2692,24 @@
   },
   "POST assistant.rate": {
     "message": "Thanks! Your rating helps us a lot"
+  },
+  "POST assistant.voice_send": {
+    "action": {
+      "action": "navigate",
+      "label": "Open remaining balance",
+      "to": "/remaining-balance"
+    },
+    "audio": "UklGRg==",
+    "audio_mime": "audio/wav",
+    "message": {
+      "content": "You have 7.20 GB left until 25 October.",
+      "created_at": "2026-10-09T14:46:48Z",
+      "id": 8,
+      "role": "assistant",
+      "route": "usage"
+    },
+    "transcript": "How much internet do I have left?",
+    "user_message_id": 7
   },
   "POST billing.steam_top_up": {
     "balance": "6.21",
@@ -2714,7 +2732,7 @@
     },
     "top_up": {
       "amount": "20.00",
-      "created_at": "2026-10-09T14:41:34Z",
+      "created_at": "2026-10-09T14:46:48Z",
       "id": 15,
       "method": "akart",
       "status": "completed"
@@ -2729,7 +2747,7 @@
     "balance": "41.21",
     "top_up": {
       "amount": "25.00",
-      "created_at": "2026-10-09T14:41:34Z",
+      "created_at": "2026-10-09T14:46:48Z",
       "id": 15,
       "method": "card",
       "status": "completed"
@@ -2744,7 +2762,7 @@
     "balance": "36.21",
     "top_up": {
       "amount": "20.00",
-      "created_at": "2026-10-09T14:41:34Z",
+      "created_at": "2026-10-09T14:46:48Z",
       "id": 15,
       "method": "google_pay",
       "status": "completed"
@@ -2771,7 +2789,7 @@
     "viewed": true
   },
   "POST insights.accept": {
-    "created_at": "2026-10-09T18:41:34+04:00",
+    "created_at": "2026-10-09T18:46:47+04:00",
     "evidence": {
       "by_app_gb": {
         "instagram_facebook": 7.0,
@@ -2783,7 +2801,7 @@
       "social_share": 0.55,
       "tiktok_gb_month": 0.6
     },
-    "expires_at": "2026-10-16T18:41:34+04:00",
+    "expires_at": "2026-10-16T18:46:47+04:00",
     "id": 7001,
     "kind": "social_heavy",
     "offers": [
@@ -2846,7 +2864,7 @@
     }
   },
   "POST insights.dismiss": {
-    "created_at": "2026-10-09T18:41:34+04:00",
+    "created_at": "2026-10-09T18:46:47+04:00",
     "evidence": {
       "by_app_gb": {
         "instagram_facebook": 7.0,
@@ -2858,7 +2876,7 @@
       "social_share": 0.55,
       "tiktok_gb_month": 0.6
     },
-    "expires_at": "2026-10-16T18:41:34+04:00",
+    "expires_at": "2026-10-16T18:46:47+04:00",
     "id": 7001,
     "kind": "social_heavy",
     "offers": [
@@ -2911,7 +2929,7 @@
     "status": "dismissed"
   },
   "POST insights.seen": {
-    "created_at": "2026-10-09T18:41:34+04:00",
+    "created_at": "2026-10-09T18:46:47+04:00",
     "evidence": {
       "by_app_gb": {
         "instagram_facebook": 7.0,
@@ -2923,7 +2941,7 @@
       "social_share": 0.55,
       "tiktok_gb_month": 0.6
     },
-    "expires_at": "2026-10-16T18:41:34+04:00",
+    "expires_at": "2026-10-16T18:46:47+04:00",
     "id": 7001,
     "kind": "social_heavy",
     "offers": [
@@ -2988,9 +3006,9 @@
   },
   "POST packs.internet_purchase": {
     "activation": {
-      "activated_at": "2026-10-09T14:41:34Z",
+      "activated_at": "2026-10-09T14:46:48Z",
       "auto_renew": false,
-      "expires_at": "2026-10-09T15:41:34Z",
+      "expires_at": "2026-10-09T15:46:48Z",
       "id": 19,
       "label": "Unlimited 1 hour",
       "pack_id": "unlimited-1h",
@@ -3005,9 +3023,9 @@
   },
   "POST packs.roaming_purchase": {
     "activation": {
-      "activated_at": "2026-10-09T14:41:34Z",
+      "activated_at": "2026-10-09T14:46:48Z",
       "auto_renew": false,
-      "expires_at": "2026-10-12T14:41:34Z",
+      "expires_at": "2026-10-12T14:46:48Z",
       "id": 19,
       "label": "Roaming 500 MB",
       "pack_id": "r-500mb",
@@ -3022,9 +3040,9 @@
   },
   "POST packs.social_activate": {
     "activation": {
-      "activated_at": "2026-10-09T14:41:34Z",
+      "activated_at": "2026-10-09T14:46:48Z",
       "auto_renew": true,
-      "expires_at": "2026-11-08T14:41:34Z",
+      "expires_at": "2026-11-08T14:46:48Z",
       "id": 19,
       "label": "Tehsil 100 GB",
       "pack_id": "tehsil",
@@ -3041,7 +3059,7 @@
     "balance": "15.31",
     "subscription": {
       "id": 3,
-      "next_payment_at": "2026-11-08T14:41:34Z",
+      "next_payment_at": "2026-11-08T14:46:48Z",
       "service": "missed-call",
       "status": "active"
     },
@@ -3053,9 +3071,9 @@
   "POST tariffs.change_to": {
     "balance": "7.21",
     "tariff": {
-      "activated_at": "2026-10-09T18:41:34+04:00",
+      "activated_at": "2026-10-09T18:46:48+04:00",
       "family": "digimax",
-      "next_payment_at": "2026-11-06T18:41:34+04:00",
+      "next_payment_at": "2026-11-06T18:46:48+04:00",
       "plan_id": "digimax-3gb",
       "price": "9.00",
       "title": "DigiMax 3GB",
@@ -3122,7 +3140,7 @@
     "tariff": {
       "activated_at": "2026-09-24T00:00:00+04:00",
       "family": "istesen",
-      "next_payment_at": "2026-11-08T18:41:34+04:00",
+      "next_payment_at": "2026-11-08T18:46:48+04:00",
       "plan_id": null,
       "price": "19.10",
       "title": "IsteSen",
@@ -3137,9 +3155,9 @@
   "POST tariffs.subscribe": {
     "balance": "4.21",
     "tariff": {
-      "activated_at": "2026-10-09T18:41:34+04:00",
+      "activated_at": "2026-10-09T18:46:48+04:00",
       "family": "digimax",
-      "next_payment_at": "2026-11-06T18:41:34+04:00",
+      "next_payment_at": "2026-11-06T18:46:48+04:00",
       "plan_id": "digimax-5",
       "price": "12.00",
       "title": "DigiMax 5GB",
@@ -3153,9 +3171,9 @@
   },
   "POST usage.offer_accept": {
     "activation": {
-      "activated_at": "2026-10-09T14:41:34Z",
+      "activated_at": "2026-10-09T14:46:48Z",
       "auto_renew": false,
-      "expires_at": "2026-11-08T14:41:34Z",
+      "expires_at": "2026-11-08T14:46:48Z",
       "id": 19,
       "label": "Instagram & Facebook 5 GB",
       "pack_id": "instagram-facebook",
@@ -3168,7 +3186,7 @@
         "label": "See the offer",
         "to": "/offers/9001"
       },
-      "expires_at": "2026-10-23T14:41:34Z",
+      "expires_at": "2026-10-23T14:46:47Z",
       "id": 9001,
       "kind": "social_pack",
       "normal_price": "3.00",
@@ -3191,7 +3209,7 @@
         "label": "See the offer",
         "to": "/offers/9001"
       },
-      "expires_at": "2026-10-23T14:41:34Z",
+      "expires_at": "2026-10-23T14:46:47Z",
       "id": 9001,
       "kind": "social_pack",
       "normal_price": "3.00",
@@ -3203,13 +3221,13 @@
     }
   },
   "POST users.otp_send_post": {
-    "request_id": "63c8aaaace2fb6a1b218e7aa4e03e426",
+    "request_id": "211be609d0a1e28431b79c8c93e28fc0",
     "resend_after": 60,
     "ttl": 300
   },
   "POST users.otp_verify_post": {
-    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk0MTQ4ODk0LCJpYXQiOjE3OTE1NTY4OTQsImp0aSI6IjdlZjczODRkNmFkOTQzNjdiMzI1YWQyOTJhMzQ5OWNjIiwidXNlcl9pZCI6IjE1In0.vxH5ys9X343BwaYplyCfx9V8pb3I4ZVDF956QySu9cg",
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5OTMzMjg5NCwiaWF0IjoxNzkxNTU2ODk0LCJqdGkiOiJjYjQ0ODlhYzMxOGE0ZThjYjk0YjFhOTAyOWQyNzk5ZSIsInVzZXJfaWQiOiIxNSJ9.DbRUOCtYPADGACpgFwyouJPNJ8wHSqRsy4GroDAHAqg",
+    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk0MTQ5MjA4LCJpYXQiOjE3OTE1NTcyMDgsImp0aSI6IjJmZmM3ZGY5MzExMTQ3Yjk4MGQxMTJiOTE3MzQxMzk3IiwidXNlcl9pZCI6IjE1In0.yAVjyOUVnXnjBnYC2mxZ4d7QtIFFS81qdAfrlC5bZz0",
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5OTMzMzIwOCwiaWF0IjoxNzkxNTU3MjA4LCJqdGkiOiJlOTE2ZDJhZWE2YWI0ZTkwYTRmMWY5YTE4ZWNlOGE4OCIsInVzZXJfaWQiOiIxNSJ9.tJ2O8wDK67kKZmV1lChDZGDWgVqF7Er6TgO2Ek-jcjU",
     "subscriber": {
       "app_version": null,
       "display_msisdn": "051 664 33 42",
@@ -3222,6 +3240,6 @@
     }
   },
   "POST users.token_refresh_post": {
-    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk0MTQ4ODk0LCJpYXQiOjE3OTE1NTY4OTQsImp0aSI6IjExOWFlY2YwNjJiNDQ0ZmQ5YmI2OWQwNTZkOWZmYzI3IiwidXNlcl9pZCI6IjE1In0.he-GzO6T0nLZbXumQNDrYpMM5PItO3jl0usYZ0gD9AA"
+    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk0MTQ5MjA4LCJpYXQiOjE3OTE1NTcyMDgsImp0aSI6IjViYzAxYmYyMzJiODRjZDE4MzllMjUzNzYwODY3MDkyIiwidXNlcl9pZCI6IjE1In0.bw9kV-li5EPVUj6aIRP8us7dL6D0U2H9YHnaBiEqXB8"
   }
 }
