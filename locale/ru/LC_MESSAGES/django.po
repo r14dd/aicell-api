@@ -272,6 +272,22 @@ msgstr "Турнира пока нет в этом прототипе"
 msgid "Tournament rules are not part of this prototype yet"
 msgstr "Правил турнира пока нет в этом прототипе"
 
+#: api/insights/services.py
+msgid "This insight has no such offer"
+msgstr "У этой подсказки нет такого предложения"
+
+#: api/insights/views.py api/tariffs/views.py
+msgid "%(days)s d."
+msgstr "%(days)s дн."
+
+#: api/insights/views.py
+msgid "%(hours)s h."
+msgstr "%(hours)s ч."
+
+#: api/insights/views.py
+msgid "Top up %(amount)s ₼"
+msgstr "Пополнить на %(amount)s ₼"
+
 #: api/kredit/views.py
 msgid "%(count)s items"
 msgstr "Долгов: %(count)s"
@@ -785,10 +801,6 @@ msgstr ""
 #: api/tariffs/views.py
 msgid "%(amount)s ₼/month"
 msgstr "%(amount)s ₼/мес."
-
-#: api/tariffs/views.py
-msgid "%(days)s d."
-msgstr "%(days)s дн."
 
 #: api/tariffs/views.py
 msgid "Activation date"
