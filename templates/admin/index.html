@@ -1,0 +1,43 @@
+{% extends 'admin/base.html' %}
+
+{% load i18n unfold %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+    {% component "unfold/components/container.html" %}
+        {% if cards %}
+            <div class="grid gap-4 mb-8 md:grid-cols-2 xl:grid-cols-4" data-test="dashboard-cards">
+                {% for card in cards %}
+                    {% component "unfold/components/card.html" with href=card.link %}
+                        <div class="flex flex-row items-start justify-between">
+                            {% component "unfold/components/text.html" %}{{ card.title }}{% endcomponent %}
+                            <span class="material-symbols-outlined text-primary-600">{{ card.icon }}</span>
+                        </div>
+                        {% component "unfold/components/title.html" %}{{ card.value }}{% endcomponent %}
+                        {% component "unfold/components/text.html" with class="text-xs" %}{{ card.note }}{% endcomponent %}
+                    {% endcomponent %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if recent_transactions %}
+            {% trans "Latest transactions" as table_title %}
+            {% component "unfold/components/card.html" with title=table_title class="mb-8" %}
+                {% component "unfold/components/table.html" with table=recent_transactions card_included=1 striped=1 %}{% endcomponent %}
+            {% endcomponent %}
+        {% endif %}
+
+        {% if not cards %}
+            {% component "unfold/components/card.html" %}
+                {% component "unfold/components/text.html" %}
+                    {% trans "Pick a section from the menu on the left." %}
+                {% endcomponent %}
+            {% endcomponent %}
+        {% endif %}
+    {% endcomponent %}
+{% endblock %}
