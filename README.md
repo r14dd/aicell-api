@@ -193,11 +193,13 @@ removes it.
 ## Signing in
 
 The app sends `Authorization: Bearer <access-jwt>`; services can use
-`Token <key>`. There is no login screen yet (`users/otp/*` answers `501`), so
-for now:
+`Token <key>`. A subscriber signs in with the number alone: `users/otp/send/`
+starts a sign-in and `users/otp/verify/` accepts `000000` (`OTP_TEST_CODE`)
+for every number until an SMS provider is wired in. Each token sees only its
+own subscriber's data. Staff accounts cannot sign in this way.
 
-- `manage.py demo_token` prints a 30-day token for the demo subscriber. Paste
-  it into Swagger's **Authorize** dialog.
+- `manage.py demo_token <msisdn>` prints a 30-day token without the round trip.
+  Paste it into Swagger's **Authorize** dialog.
 - `DEMO_AUTH=true` makes requests without an `Authorization` header act as the
   demo subscriber.
 

@@ -31,6 +31,22 @@ from api.seeding import seed_catalogue, seed_demo
 # Handlers the demo subscriber cannot afford with its seeded balance: their
 # example is recorded with this much in the wallet (and undone like any write).
 FUNDED = {"renew": "50.00"}
+
+
+def _sign_in_body(subscriber):
+    from api.users import services
+
+    return {"request_id": services.start(subscriber.msisdn), "code": "000000"}
+
+
+def _refresh_body(subscriber):
+    from rest_framework_simplejwt.tokens import RefreshToken
+
+    return {"refresh": str(RefreshToken.for_user(subscriber))}
+
+
+# Handlers whose input only exists at run time: a function of the subscriber gives it.
+BODIES = {"otp_verify_post": _sign_in_body, "token_refresh_post": _refresh_body}
 PARAMETER = re.compile(r"<(?:\w+:)?(\w+)>")
 
 
@@ -87,13 +103,16 @@ def call(client, method, path, handler):
     if savepoint and handler.__name__ in FUNDED:
         subscriber = client.handler._force_user
         Wallet.objects.filter(subscriber=subscriber).update(balance=FUNDED[handler.__name__])
+    body = handler.doc.example or {}
+    if handler.__name__ in BODIES:
+        body = BODIES[handler.__name__](client.handler._force_user)
     try:
         if getattr(handler, "upload", False):
             return _upload(client, path, headers)
         return client.generic(
             method.upper(),
             path,
-            json.dumps(handler.doc.example or {}),
+            json.dumps(body),
             content_type="application/json",
             **headers,
         )
@@ -125,6 +144,8 @@ class Command(BaseCommand):
         GOOGLE_PAY_SIMULATED=True,
         LAYA_BRAIN="api.laya.offline",
         SECURE_SSL_REDIRECT=False,
+        # Sign-in requests live in the cache; keep them out of a real Redis.
+        CACHES={"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}},
     )
     def handle(self, *args, **options):
         with transaction.atomic():

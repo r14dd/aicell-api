@@ -1005,6 +1005,26 @@ msgstr ""
 "Son 30 gündə %(current)s ₼ ödəmisiniz; %(title)s ilə bu, %(projected)s ₼ "
 "olardı"
 
+#: api/users/services.py
+msgid "No subscriber with this number"
+msgstr "Bu nömrə ilə abunəçi yoxdur"
+
+#: api/users/services.py
+msgid "The code has expired, request a new one"
+msgstr "Kodun vaxtı bitib, yenisini istəyin"
+
+#: api/users/services.py
+msgid "The refresh token is invalid or has expired"
+msgstr "Yeniləmə tokeni yanlışdır və ya vaxtı bitib"
+
+#: api/users/services.py
+msgid "Try again in %(wait)d seconds"
+msgstr "%(wait)d saniyədən sonra yenidən cəhd edin"
+
+#: api/users/services.py
+msgid "Wrong code"
+msgstr "Kod yanlışdır"
+
 #: api/users/views.py
 msgid "App settings are not part of this prototype yet"
 msgstr "Tətbiq ayarları hələ bu prototipdə yoxdur"
@@ -1016,10 +1036,6 @@ msgstr "Profil ayarları hələ bu prototipdə yoxdur"
 #: api/users/views.py
 msgid "Push notifications are not part of this prototype yet"
 msgstr "Push bildirişlər hələ bu prototipdə yoxdur"
-
-#: api/users/views.py
-msgid "Sign in is not part of this prototype yet"
-msgstr "Giriş hələ bu prototipdə yoxdur"
 
 #: api/users/views.py
 msgid "Sign out is not part of this prototype yet"
