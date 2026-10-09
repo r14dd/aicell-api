@@ -18,8 +18,6 @@ def test_screens_and_languages(client):
     body = plan(client, "where can I top up my balance").json()
     assert (body["task"], body["language"]) == ("topUp", "en")
     assert plan(client, "balansımı göstər").json()["task"] == "checkBalance"
-    ru = plan(client, "покажи тариф").json()
-    assert (ru["task"], ru["language"]) == ("openTariff", "ru")
 
 
 def test_unknown_request_does_nothing(client):
@@ -53,7 +51,7 @@ def test_plan_needs_text_and_a_subscriber(client, anon):
 
 def test_narrate_answers_in_the_asked_language(client):
     insight = {"id": 1, "kind": "overage", "evidence": {}, "offers": []}
-    for language in ("az", "en", "ru"):
+    for language in ("az", "en"):
         body = client.post_json(
             "/api/laya/narrate/", {"language": language, "insight": insight}
         ).json()
@@ -191,3 +189,20 @@ def test_an_answer_that_is_not_an_object_is_rejected(client, swap, answer):
     narrated = client.post_json("/api/laya/narrate/", {"insight": {"id": 1}})
     assert narrated.status_code == 502
     assert narrated.json()["code"] == "laya_unavailable"
+
+
+def test_gemini_top_up_without_an_amount_asks_instead(monkeypatch):
+    from api.laya import gemini
+
+    monkeypatch.setattr(
+        gemini,
+        "_ask",
+        lambda *_: {
+            "reply": "How much?",
+            "task": "topUp",
+            "params": None,
+            "amount": None,
+            "language": "en",
+        },
+    )
+    assert gemini.plan({"text": "top up", "context": {}})["task"] == "none"

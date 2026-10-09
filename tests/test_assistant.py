@@ -147,7 +147,6 @@ def test_answers_use_live_subscriber_data(client):
         ("I need a kredit", "kredit"),
         ("Which tariff suits me?", "recommendation"),
         ("Mənə hansı paket uyğundur?", "recommendation"),
-        ("Какой тариф мне подходит?", "recommendation"),
         ("Tell me a joke", "fallback"),
     ],
 )

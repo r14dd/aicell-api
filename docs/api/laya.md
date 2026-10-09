@@ -1,9 +1,9 @@
 # API — laya `/api/laya/` `ready`
 
 Laya is the voice assistant in the app. The app sends what the user said and
-runs the task that comes back; nothing here moves money. The brain is Claude
-when `ANTHROPIC_API_KEY` is set (`LAYA_PLAN_MODEL`, `LAYA_NARRATE_MODEL`) and
-keyword rules otherwise (`LAYA_BRAIN`).
+runs the task that comes back; nothing here moves money. The brain is Gemini
+when `GEMINI_API_KEY` is set (`GEMINI_*` models), then Claude when
+`ANTHROPIC_API_KEY` is set, and keyword rules otherwise (`LAYA_BRAIN`).
 
 | Method | Path | Status | Purpose |
 |---|---|---|---|

@@ -6,115 +6,101 @@ it is what tests and `record_examples` run on. Same two functions as `claude`.
 
 import re
 
-AGREE = {"hə", "he", "bəli", "qoş", "et", "keç", "yes", "yeah", "ok", "okay", "да", "давай"}
-DECLINE = {"yox", "sonra", "no", "нет", "xeyr"}
-DECLINE_PHRASES = ("lazım deyil", "не надо", "no thanks")
-WHY = {"niyə", "nəyə", "why", "почему", "зачем"}
+AGREE = {"hə", "he", "bəli", "qoş", "et", "keç", "yes", "yeah", "ok", "okay"}
+DECLINE = {"yox", "sonra", "no", "xeyr"}
+DECLINE_PHRASES = ("lazım deyil", "no thanks")
+WHY = {"niyə", "nəyə", "why"}
 
 # First match wins. (keywords, task, {lang: reply})
 SCREENS = [
     (
-        ("roaming", "rouminq", "роуминг"),
+        ("roaming", "rouminq"),
         "openRoaming",
         {
             "az": "Rouminq səhifəsini açıram.",
             "en": "Opening roaming.",
-            "ru": "Открываю роуминг.",
         },
     ),
     (
-        ("pack", "paket", "пакет"),
+        ("pack", "paket"),
         "openInternetPacks",
         {
             "az": "İnternet paketlərini açıram.",
             "en": "Opening internet packs.",
-            "ru": "Открываю интернет-пакеты.",
         },
     ),
     (
-        ("top up", "top-up", "topup", "balansı artır", "пополни"),
+        ("top up", "top-up", "topup", "balansı artır"),
         "topUp",
         {
             "az": "Balans artırma səhifəsini açıram.",
             "en": "Opening top-up.",
-            "ru": "Открываю пополнение.",
         },
     ),
     (
-        ("balance", "balans", "баланс"),
+        ("balance", "balans"),
         "checkBalance",
         {
             "az": "Balansınıza baxıram.",
             "en": "Checking your balance.",
-            "ru": "Смотрю ваш баланс.",
         },
     ),
     (
-        ("internet", "qalıq", "qaliq", "remaining", "left", "остат", "интернет"),
+        ("internet", "qalıq", "qaliq", "remaining", "left"),
         "checkRemaining",
         {
             "az": "Qalan limitlərinizə baxıram.",
             "en": "Checking what you have left.",
-            "ru": "Смотрю остаток.",
         },
     ),
     (
-        ("tariff", "tarif", "тариф"),
+        ("tariff", "tarif"),
         "openTariff",
         {
             "az": "Tarifinizi açıram.",
             "en": "Opening your tariff.",
-            "ru": "Открываю ваш тариф.",
         },
     ),
     (
-        ("notification", "bildiriş", "уведомл"),
+        ("notification", "bildiriş"),
         "openNotifications",
         {
             "az": "Bildirişləri açıram.",
             "en": "Opening notifications.",
-            "ru": "Открываю уведомления.",
         },
     ),
     (
-        ("support", "dəstək", "помощь", "поддержк"),
+        ("support", "dəstək"),
         "openSupport",
         {
             "az": "Dəstək səhifəsini açıram.",
             "en": "Opening support.",
-            "ru": "Открываю поддержку.",
         },
     ),
 ]
 
-ASK = {"az": "Nəyi edim?", "en": "What should I do?", "ru": "Что сделать?"}
+ASK = {"az": "Nəyi edim?", "en": "What should I do?"}
 DISMISSED = {
     "az": "Yaxşı, fikrinizi dəyişsəniz deyin.",
     "en": "Okay, tell me if you change your mind.",
-    "ru": "Хорошо, скажите, если передумаете.",
 }
 EXPLAIN = {
     "az": "Sübutu göstərirəm.",
     "en": "Here is what I based that on.",
-    "ru": "Показываю, на чём это основано.",
 }
-DOING = {"az": "Edirəm.", "en": "On it.", "ru": "Делаю."}
+DOING = {"az": "Edirəm.", "en": "On it."}
 LOST = {
     "az": "Bunu başa düşmədim. Balans, internet qalığı, paket və tarif barədə kömək edə bilərəm.",
     "en": "I did not get that. I can help with balance, remaining internet, packs and tariff.",
-    "ru": "Не поняла. Могу помочь с балансом, остатком интернета, пакетами и тарифом.",
 }
 TELL = {
     "az": "Sizə bir təklifim var. Baxım?",
     "en": "I have a suggestion for you. Shall I?",
-    "ru": "У меня есть предложение. Рассказать?",
 }
 
 
 def detect(text):
     lowered = text.replace("İ", "i").lower()  # "I".lower() is "i", never the dotless "ı"
-    if re.search(r"[а-яё]", lowered):
-        return "ru"
     if re.search(r"[əıöüşçğ]", lowered):
         return "az"
     words = set(re.findall(r"[a-z']+", lowered))

@@ -771,7 +771,7 @@ def test_the_recommendation_route_through_the_api(people):
     conversation = client.post_json("/api/assistant/conversations/").json()["id"]
     response = client.post(
         f"/api/assistant/conversations/{conversation}/messages/",
-        {"content": "Какой тариф мне подходит?"},
+        {"content": "Which tariff suits me?"},
         format="json",
         HTTP_ACCEPT="application/json",
     )

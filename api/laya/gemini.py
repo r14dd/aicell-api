@@ -15,7 +15,10 @@ def _ask(system, schema, payload):
 
 
 def plan(payload):
-    return _ask(tasks.PLAN_SYSTEM, tasks.PLAN_SCHEMA, payload)
+    answer = _ask(tasks.PLAN_SYSTEM, tasks.PLAN_SCHEMA, payload)
+    if answer.get("task") == "topUp" and not isinstance(answer.get("amount"), int | float):
+        answer["task"] = "none"  # the reply already asks how much
+    return answer
 
 
 def narrate(payload):

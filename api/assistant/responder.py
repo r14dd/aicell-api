@@ -119,17 +119,16 @@ def _recommendation(subscriber):
 ROUTES = [
     (
         ("suits me", "suit me", "recommend", "cheaper", "best for me", "save money")
-        + ("uyğun", "tövsiy", "məsləhət", "sərfəli")
-        + ("подход", "посовет", "рекоменд", "выгодн"),
+        + ("uyğun", "tövsiy", "məsləhət", "sərfəli"),
         _recommendation,
     ),
-    (("roaming", "rouminq", "роуминг", "abroad"), _roaming),
-    (("kredit", "credit", "loan", "borc", "кредит"), _kredit),
-    (("pack", "paket", "пакет"), _packs),
+    (("roaming", "rouminq", "abroad"), _roaming),
+    (("kredit", "credit", "loan", "borc"), _kredit),
+    (("pack", "paket"), _packs),
     # "qalı" covers qalıq / qalığım (the q softens to ğ before a suffix).
-    (("internet", "qalı", "qali", "left", "remaining", "остал", "интернет"), _usage),
-    (("balance", "balans", "баланс", "top up", "top-up", "money"), _balance),
-    (("tariff", "tarif", "тариф", "renew"), _tariff),
+    (("internet", "qalı", "qali", "left", "remaining"), _usage),
+    (("balance", "balans", "top up", "top-up", "money"), _balance),
+    (("tariff", "tarif", "renew"), _tariff),
 ]
 
 FALLBACK = (

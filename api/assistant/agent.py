@@ -46,7 +46,7 @@ KNOWLEDGE = {
 }
 
 ROUTE_SYSTEM = (
-    "Route a mobile-operator customer message (Azerbaijani, English or Russian) to one route:\n"
+    "Route a mobile-operator customer message (Azerbaijani or English) to one route:\n"
     + "\n".join(f"{name}: {about}" for name, about in ROUTES.items())
 )
 ROUTE_SCHEMA = {
