@@ -18,8 +18,8 @@ COPY . .
 
 # Run as an unprivileged user that owns only what the app writes to.
 RUN useradd --create-home --uid 1000 app \
-    && mkdir -p /app/staticfiles /app/media/content \
-    && chown -R app:app /app/staticfiles /app/media
+    && mkdir -p /app/staticfiles /app/media/content /app/data \
+    && chown -R app:app /app/staticfiles /app/media /app/data
 USER app
 
 EXPOSE 8000

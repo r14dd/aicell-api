@@ -93,7 +93,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- database, cache, queue --------------------------------------------------
 
-# PostgreSQL when DATABASE_URL is set (Docker), SQLite for a plain local run.
+# SQLite by default, here and in Docker; DATABASE_URL may point at PostgreSQL instead.
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=60, conn_health_checks=True
@@ -101,6 +101,16 @@ DATABASES = {
 }
 
 REDIS_URL = env.text("REDIS_URL")
+if DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3":
+    # SQLite has no row locks, so `select_for_update` does nothing on it. Taking
+    # the write lock when a transaction begins does the same job for the wallet:
+    # two requests cannot both read a balance and then both write it. WAL lets
+    # readers carry on meanwhile; a writer waits up to `timeout` for its turn.
+    DATABASES["default"]["OPTIONS"] = {
+        "transaction_mode": "IMMEDIATE",
+        "timeout": 20,
+        "init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;",
+    }
 if REDIS_URL:
     CACHES = {
         "default": {
