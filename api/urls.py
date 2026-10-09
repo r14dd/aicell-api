@@ -11,6 +11,7 @@ urlpatterns = [
     path("health/ready/", ReadyView.as_view(), name="health-ready"),
     path("users/", include("api.users.urls")),
     path("billing/", include("api.billing.urls")),
+    path("tariffs/", include("api.tariffs.urls")),
     # Unknown API paths answer in the JSON error shape, in DEBUG too.
     re_path(r"^.*$", not_found_view),
 ]
