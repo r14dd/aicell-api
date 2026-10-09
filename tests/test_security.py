@@ -164,3 +164,31 @@ def test_cors_lets_the_api_headers_through(client, settings):
     )
     allowed = preflight["Access-Control-Allow-Headers"].lower()
     assert all(name in allowed for name in ("idempotency-key", "accept-language", "authorization"))
+
+
+# Read by the settings but not meant to be set per deployment: switches for
+# tests and local runs, and values the compose file fixes itself.
+NOT_FOR_COMPOSE = {
+    "ASSISTANT_RESPONDER",
+    "ASSISTANT_STREAM_DELAY",
+    "CATALOGUE_CACHE_SECONDS",
+    "CELERY_BROKER_URL",
+    "DEMO_MSISDN",
+    "DJANGO_READ_DOT_ENV",
+    "IDEMPOTENCY_KEY_DAYS",
+    "LAYA_BRAIN",
+}
+
+
+def test_compose_passes_every_setting_a_deployment_may_change():
+    """A variable the settings read but compose does not pass cannot be set from `.env`
+    in Docker: the containers only see what `docker-compose.yml` lists."""
+    import re
+
+    read = set(
+        re.findall(r'env\.\w+\(\s*"([A-Z_]+)"', (ROOT / "config" / "settings.py").read_text())
+    )
+    compose = (ROOT / "docker-compose.yml").read_text()
+    passed = set(re.findall(r"^    ([A-Z_]+):", compose, flags=re.M))
+    assert read - passed - NOT_FOR_COMPOSE == set()
+    assert "ANTHROPIC_API_KEY" in passed  # without it Laya can never reach its model
