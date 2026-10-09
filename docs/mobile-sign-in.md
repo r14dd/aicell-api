@@ -39,7 +39,7 @@ Gələcəkdə SMS qoşulanda 2-ci addımda istifadəçidən kod soruşulacaq. Ko
 
 ## Sorğular
 
-Giriş endpoint-lərinə `Authorization` başlığı göndərilmir. Bütün sorğular `Content-Type: application/json` ilə gedir; `Accept-Language: az` (və ya `ru`, `en`) xəta mətnlərinin dilini seçir.
+Giriş endpoint-lərinə `Authorization` başlığı göndərilmir. Bütün sorğular `Content-Type: application/json` ilə gedir; `Accept-Language: az` (və ya `en`) xəta mətnlərinin dilini seçir.
 
 ```http
 POST /api/users/otp/send/

@@ -3,7 +3,7 @@
 
     python scripts/smoke.py http://localhost:8010 --token "$(docker compose exec -T web python manage.py demo_token)"
 
-Calls every endpoint of docs/api/*.md in az, ru and en, then signs in to the
+Calls every endpoint of docs/api/*.md in az and en, then signs in to the
 admin panel as each seeded role. Uses only the standard library, so it runs
 anywhere Python does. Exits non-zero when anything is off.
 """
@@ -22,7 +22,7 @@ from pathlib import Path
 
 DOCS = Path(__file__).resolve().parent.parent / "docs" / "api"
 ROW = re.compile(r"^\| (GET|POST|PATCH|DELETE) \| `([^`]*)`[^|]*\| `([^`]+)` \|")
-LANGUAGES = ("az", "ru", "en")
+LANGUAGES = ("az", "en")
 
 PARAMS = {
     "billing": {"<id>": "1"},
@@ -240,7 +240,7 @@ def main():
 
     print("health")
     problems = check_health(api)
-    print("api: every documented endpoint in az, ru and en")
+    print("api: every documented endpoint in az and en")
     api_problems, counts = check_api(api)
     problems += api_problems + check_auth(api)
     total = sum(counts.values())

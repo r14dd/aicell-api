@@ -94,11 +94,12 @@ def test_order_is_editable(client):
 
 def test_a_translation_is_editable_per_language(client):
     plan = TariffPlan.objects.get(slug="digimax-5")
-    plan.title_ru = "ДиджиМакс 5ГБ"
+    plan.title_az = "DigiMax 5GB (az)"
     plan.save()
     path = "/api/tariffs/catalogue/digimax/"
     assert (
-        client.get(path, HTTP_ACCEPT_LANGUAGE="ru").json()["plans"][0]["title"] == "ДиджиМакс 5ГБ"
+        client.get(path, HTTP_ACCEPT_LANGUAGE="az").json()["plans"][0]["title"]
+        == "DigiMax 5GB (az)"
     )
     assert client.get(path, HTTP_ACCEPT_LANGUAGE="en").json()["plans"][0]["title"] == "DigiMax 5GB"
 
@@ -162,7 +163,7 @@ def test_catalogue_reads_are_served_from_the_cache(client, path):
 def test_the_cache_is_kept_per_language(client):
     path = "/api/packs/roaming/"
     assert catalogue_queries(client, path, HTTP_ACCEPT_LANGUAGE="az")
-    assert catalogue_queries(client, path, HTTP_ACCEPT_LANGUAGE="ru"), "ru must not reuse az"
+    assert catalogue_queries(client, path, HTTP_ACCEPT_LANGUAGE="en"), "en must not reuse az"
     assert catalogue_queries(client, path, HTTP_ACCEPT_LANGUAGE="az") == []
 
 

@@ -1,4 +1,4 @@
-"""Copy comes back in the language of `Accept-Language`: az, ru or en."""
+"""Copy comes back in the language of `Accept-Language`: az or en."""
 
 import re
 
@@ -8,7 +8,6 @@ from modeltranslation.translator import translator
 
 from .test_docs_conformance import ROWS
 
-CYRILLIC = re.compile(r"[а-яё]", re.IGNORECASE)
 AZERBAIJANI = re.compile(r"[əğıöüçşƏĞİÖÜÇŞ]")
 READS = [row for row in ROWS if row[0] == "GET" and row[2] != ":todo"]
 
@@ -27,12 +26,10 @@ def get(client, path, language=None):
         (None, "en"),
         ("en", "en"),
         ("az", "az"),
-        ("ru", "ru"),
         ("az-AZ,az;q=0.9,en;q=0.8", "az"),
-        ("ru-RU", "ru"),
         ("de", "en"),  # unsupported
         ("de-DE,fr;q=0.9", "en"),
-        ("fr;q=0.9,ru;q=0.8,en;q=0.7", "ru"),  # the best supported one
+        ("fr;q=0.9,az;q=0.8,en;q=0.7", "az"),  # the best supported one
         ("*", "en"),
         ("not a language", "en"),
     ],
@@ -45,12 +42,12 @@ def test_language_comes_from_the_header(client, header, expected):
 
 
 def test_a_cookie_does_not_change_the_language(client):
-    client.cookies["django_language"] = "ru"
+    client.cookies["django_language"] = "az"
     assert get(client, "/api/sim/")["Content-Language"] == "en"
     assert get(client, "/api/sim/", "az")["Content-Language"] == "az"
 
 
-@pytest.mark.parametrize("language", ["az", "ru", "en"])
+@pytest.mark.parametrize("language", ["az", "en"])
 @pytest.mark.parametrize("method,path,status", READS)
 def test_every_read_answers_in_every_language(client, method, path, status, language):
     response = get(client, path, language)
@@ -64,18 +61,16 @@ def test_every_read_answers_in_every_language(client, method, path, status, lang
 def test_fixed_screen_copy_is_translated(client):
     en = get(client, "/api/sim/").json()
     az = get(client, "/api/sim/", "az").json()
-    ru = get(client, "/api/sim/", "ru").json()
     assert en["rows"][0]["label"] == "Line settings"
     assert az["rows"][0]["label"] == "Xətt ayarları"
-    assert ru["rows"][0]["label"] == "Настройки линии"
     assert az["badge"] == "4G (LTE) aktivdir"
     # values that are not copy stay the same
-    assert en["details"][0]["value"] == az["details"][0]["value"] == ru["details"][0]["value"]
+    assert en["details"][0]["value"] == az["details"][0]["value"]
 
 
 def test_catalogue_content_is_translated(client):
     path = "/api/tariffs/catalogue/digimax/?plan=digimax-10"
-    en, az, ru = (get(client, path, language).json() for language in ("en", "az", "ru"))
+    en, az = (get(client, path, language).json() for language in ("en", "az"))
     assert en["plans"][0]["features"][0] == {
         "kind": "internet",
         "label": "Internet",
@@ -86,17 +81,11 @@ def test_catalogue_content_is_translated(client):
         "label": "İnternet",
         "value": "5 GB",
     }
-    assert ru["plans"][0]["features"][0] == {
-        "kind": "internet",
-        "label": "Интернет",
-        "value": "5 ГБ",
-    }
     assert az["cta"] == "18.00 ₼-a abunə ol"
-    assert ru["total_price"][0]["heading"].startswith("После использования")
     # ids, prices and brand names are not translated
-    assert en["id"] == az["id"] == ru["id"] == "digimax"
-    assert en["name"] == az["name"] == ru["name"] == "DigiMax"
-    assert [plan["price"] for plan in en["plans"]] == [plan["price"] for plan in ru["plans"]]
+    assert en["id"] == az["id"] == "digimax"
+    assert en["name"] == az["name"] == "DigiMax"
+    assert [plan["price"] for plan in en["plans"]] == [plan["price"] for plan in az["plans"]]
 
 
 @pytest.mark.parametrize(
@@ -125,21 +114,17 @@ def test_catalogue_content_is_translated(client):
         "/api/assistant/inbox/",
     ],
 )
-def test_screens_read_in_azerbaijani_and_russian(client, path):
+def test_screens_read_in_azerbaijani(client, path):
     en = get(client, path, "en").content.decode()
     az = get(client, path, "az").content.decode()
-    ru = get(client, path, "ru").content.decode()
-    assert not CYRILLIC.search(en)
-    assert CYRILLIC.search(ru), "no Russian text in the Russian answer"
-    assert AZERBAIJANI.search(az) and not CYRILLIC.search(az)
-    assert len({en, az, ru}) == 3
+    assert AZERBAIJANI.search(az)
+    assert en != az
 
 
 def test_dates_are_named_in_the_language(client):
     path = "/api/tariffs/my/usage/"
     assert get(client, path, "en").json()["renewal_label"] == "Renews 25 October, 08:00"
     assert get(client, path, "az").json()["renewal_label"] == "25 Oktyabr, 08:00-da yenilənir"
-    assert get(client, path, "ru").json()["renewal_label"] == "Продление 25 октября, 08:00"
 
 
 # --- messages ---------------------------------------------------------------
@@ -150,7 +135,6 @@ def test_dates_are_named_in_the_language(client):
     [
         ("en", "Voucher redemption is not part of this prototype yet"),
         ("az", "Vauçerin istifadəsi hələ bu prototipdə yoxdur"),
-        ("ru", "Активации ваучера пока нет в этом прототипе"),
     ],
 )
 def test_todo_notice(client, language, detail):
@@ -163,7 +147,6 @@ def test_todo_notice(client, language, detail):
     [
         ("en", "SimTaksit 2.00 ₼ will be added to your balance (prototype)"),
         ("az", "SimTaksit 2.00 ₼ balansınıza əlavə olunacaq (prototip)"),
-        ("ru", "SimTaksit 2.00 ₼ будет зачислен на баланс (прототип)"),
     ],
 )
 def test_todo_notice_with_values(client, language, detail):
@@ -178,7 +161,6 @@ def test_todo_notice_with_values(client, language, detail):
     [
         ("en", "This field is required.", "Enter an amount between 1.00 and 500.00 ₼"),
         ("az", "Bu sahə tələb edilir.", "1.00 ilə 500.00 ₼ arasında məbləğ daxil edin"),
-        ("ru", "Обязательное поле.", "Введите сумму от 1.00 до 500.00 ₼"),
     ],
 )
 def test_validation_errors(client, language, required, amount):
@@ -202,7 +184,6 @@ def test_validation_errors(client, language, required, amount):
     [
         ("en", "Not enough balance for this pack"),
         ("az", "Bu paket üçün balans kifayət etmir"),
-        ("ru", "Недостаточно средств для этого пакета"),
     ],
 )
 def test_business_errors(client, language, detail):
@@ -221,7 +202,6 @@ def test_business_errors(client, language, detail):
     [
         ("en", "Thanks! Your rating helps us a lot"),
         ("az", "Təşəkkürlər! Qiymətiniz bizə çox kömək edir"),
-        ("ru", "Спасибо! Ваша оценка нам очень помогает"),
     ],
 )
 def test_success_messages(client, language, message):
@@ -236,7 +216,6 @@ def test_success_messages(client, language, message):
     [
         ("en", "Authentication required", "Not found."),
         ("az", "Avtorizasiya tələb olunur", "Tapılmadı."),
-        ("ru", "Требуется авторизация", "Не найдено."),
     ],
 )
 def test_401_and_404(anon, client, language, unauthenticated, missing):
@@ -248,8 +227,7 @@ def test_401_and_404(anon, client, language, unauthenticated, missing):
 def test_error_codes_never_change_with_the_language(client):
     """Clients branch on `code`; only `detail` is for people."""
     codes = {
-        get(client, "/api/packs/social/nope/", language).json()["code"]
-        for language in ("en", "az", "ru")
+        get(client, "/api/packs/social/nope/", language).json()["code"] for language in ("en", "az")
     }
     assert codes == {"not_found"}
 
@@ -266,7 +244,7 @@ def test_a_receipt_is_written_in_the_language_of_the_purchase(client):
     assert response["activation"]["label"] == "Limitsiz 1 saat"
     assert response["transaction"]["title"] == "Limitsiz 1 saat paketi"
     # ... and stays that way when the history is read in another language
-    newest = get(client, "/api/billing/transactions/", "ru").json()["results"][0]
+    newest = get(client, "/api/billing/transactions/", "en").json()["results"][0]
     assert newest["title"] == "Limitsiz 1 saat paketi"
 
 
@@ -283,7 +261,7 @@ def test_compiled_catalogues_match_their_sources():
     import polib
     from django.conf import settings
 
-    for language in ("az", "ru"):
+    for language in ("az",):
         folder = settings.LOCALE_PATHS[0] / language / "LC_MESSAGES"
         source = {entry.msgid: entry.msgstr for entry in polib.pofile(str(folder / "django.po"))}
         compiled = {entry.msgid: entry.msgstr for entry in polib.mofile(str(folder / "django.mo"))}
@@ -302,7 +280,7 @@ def _strings(value):
 
 
 def test_no_seeded_text_is_left_untranslated(subscriber):
-    """Every translated field that has English text also has Azerbaijani and Russian."""
+    """Every translated field that has English text also has Azerbaijani."""
     checked = 0
     for model in translator.get_registered_models():
         fields = translator.get_options_for_model(model).get_field_names()
@@ -311,20 +289,19 @@ def test_no_seeded_text_is_left_untranslated(subscriber):
                 english = getattr(row, f"{field}_en")
                 if not english:
                     continue
-                for language in ("az", "ru"):
+                for language in ("az",):
                     value = getattr(row, f"{field}_{language}")
                     assert value, f"{model.__name__}.{field}_{language} is empty (id {row.pk})"
                     assert all(_strings(value)) or not any(_strings(english))
                     checked += 1
-    assert checked > 300
+    assert checked > 150
 
 
 def test_catalogue_cache_keeps_languages_apart(client):
     """The second read of each language comes from the cache and must not mix them up."""
     path = "/api/packs/roaming/"
-    first = {language: get(client, path, language).json() for language in ("en", "az", "ru")}
-    again = {language: get(client, path, language).json() for language in ("ru", "en", "az")}
+    first = {language: get(client, path, language).json() for language in ("en", "az")}
+    again = {language: get(client, path, language).json() for language in ("en", "az")}
     assert first == again
     assert first["en"]["results"][1]["sub"] == "10 days"
     assert first["az"]["results"][1]["sub"] == "10 gün"
-    assert first["ru"]["results"][1]["sub"] == "10 дн."

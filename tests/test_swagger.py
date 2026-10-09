@@ -77,7 +77,7 @@ def test_language_header_is_a_choice_on_every_api_operation(spec):
         )
         assert header, f"{method.upper()} {path}"
         assert header["in"] == "header"
-        assert sorted(header["schema"]["enum"]) == ["az", "en", "ru"]
+        assert sorted(header["schema"]["enum"]) == ["az", "en"]
 
 
 def test_idempotency_key_is_required_exactly_on_money_posts(spec):

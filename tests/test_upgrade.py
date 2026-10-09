@@ -18,7 +18,7 @@ def old_catalogue(catalogue):
     SocialPlan.objects.update(data_mb=0)
     RoamingPack.objects.update(data_mb=0)
     for group in PriceGroup.objects.all():
-        for field in ("rows", "rows_en", "rows_az", "rows_ru"):
+        for field in ("rows", "rows_en", "rows_az"):
             setattr(
                 group,
                 field,

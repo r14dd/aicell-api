@@ -76,7 +76,7 @@ three while `all=true` returns `400 validation_error`.
 ## `GET/PATCH sms/`
 
 ```json
-← 200 { "language": "az", "languages": [ { "id": "az", "name": "Azerbaijani" }, { "id": "en", "name": "English" }, { "id": "ru", "name": "Russian" } ],
+← 200 { "language": "az", "languages": [ { "id": "az", "name": "Azerbaijani" }, { "id": "en", "name": "English" } ],
        "toggles": { "ads": true, "campaigns": true, "partners": true } }
 → PATCH { "language": "en", "toggles": { "partners": false } }
 ```

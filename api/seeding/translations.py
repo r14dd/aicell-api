@@ -1,8 +1,7 @@
 """Stores seeded text in every language.
 
 The seed data is written in English. `localized` expands each translated field
-of a model into its `_en`, `_az` and `_ru` columns, looking the Azerbaijani and
-Russian text up in `data/translations.py`. A text with no translation stops the
+of a model into its `_en` and `_az` columns, looking the Azerbaijani text up in `data/translations.py`. A text with no translation stops the
 seed, so a catalogue row can never be saved half-translated.
 """
 
@@ -12,8 +11,7 @@ from modeltranslation.translator import NotRegistered, translator
 
 from .data.translations import SAME, TEXTS, UNITS
 
-LANGUAGES = ("az", "ru")
-INDEX = {"az": 0, "ru": 1}
+LANGUAGES = ("az",)
 
 # Keys of JSON content whose string values are shown to the subscriber.
 TEXT_KEYS = {"label", "value", "text", "bold", "title", "body", "sub", "heading"}
@@ -30,14 +28,14 @@ def _quantity(text: str, language: str) -> str | None:
     words = text.split(" ")
     if not all(NUMBER.match(word) or word in UNITS for word in words):
         return None
-    return " ".join(UNITS[word][INDEX[language]] if word in UNITS else word for word in words)
+    return " ".join(UNITS.get(word, word) for word in words)
 
 
 def translate(text: str, language: str) -> str:
     if not text or text in SAME:
         return text
     if text in TEXTS:
-        return TEXTS[text][INDEX[language]]
+        return TEXTS[text]
     quantity = _quantity(text, language)
     if quantity is not None:
         return quantity

@@ -67,7 +67,7 @@ class BearerScheme(SimpleJWTScheme):
 ACCEPT_LANGUAGE = OpenApiParameter(
     "Accept-Language",
     location=OpenApiParameter.HEADER,
-    enum=["az", "ru", "en"],
+    enum=["az", "en"],
     default="en",
     description="Language of the copy in the answer. Unsupported or missing: `en`.",
 )

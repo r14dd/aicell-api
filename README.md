@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/django-5.2-0C4B33.svg?logo=django" alt="Django 5.2">
   <img src="https://img.shields.io/badge/DRF-3.18-A30000.svg" alt="Django REST framework 3.18">
   <img src="https://img.shields.io/badge/tests-1506%20passing-brightgreen.svg" alt="1506 tests">
-  <img src="https://img.shields.io/badge/languages-az%20%7C%20ru%20%7C%20en-informational.svg" alt="az, ru, en">
+  <img src="https://img.shields.io/badge/languages-az%20%7C%20en-informational.svg" alt="az, en">
   <img src="https://img.shields.io/badge/docker-compose-2496ED.svg?logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
@@ -105,7 +105,7 @@ cheaper the answer is "your plan fits", and when a change saves less than
 | | |
 |---|---|
 | Endpoints | 82 working, documented in [docs/api](docs/api/overview.md) |
-| Languages | Azerbaijani, Russian, English, from `Accept-Language` |
+| Languages | Azerbaijani, English, from `Accept-Language` |
 | Tests | 1506, every documented endpoint checked against the docs in three languages |
 | Money | One code path for every balance change, row-locked, idempotent; parallel requests cannot overdraw |
 | Admin | django-unfold, four roles, a usage statistics page with trends, segments and offer results |
@@ -217,13 +217,13 @@ anyone who can reach the server can use that account; set `DEMO_AUTH=false` in
 
 ## Languages
 
-Send `Accept-Language: az`, `ru` or `en`. Anything else falls back to `en`, and
+Send `Accept-Language: az` or `en`. Anything else falls back to `en`, and
 the answer carries `Content-Language`.
 
 Error messages, success messages and catalogue copy are
 translated. Error `code`s, ids and prices never change.
 
-- Strings in code live in `locale/{az,ru}/LC_MESSAGES/django.po`.
+- Strings in code live in `locale/az/LC_MESSAGES/django.po`.
   `manage.py sync_locale` rewrites them from the code and compiles the `.mo`
   files without GNU gettext; with `--check` it fails on anything missing,
   untranslated or unused.

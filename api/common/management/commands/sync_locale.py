@@ -14,7 +14,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 CALLS = {"_", "gettext", "gettext_lazy"}
-LANGUAGES = ("az", "ru")
+LANGUAGES = ("az",)
 
 
 def source_messages(root: Path) -> dict[str, list[str]]:
@@ -59,7 +59,7 @@ def load(language: str) -> polib.POFile:
 
 
 class Command(BaseCommand):
-    help = "Update the az/ru .po files from the code and compile the .mo files."
+    help = "Update the az .po files from the code and compile the .mo files."
 
     def add_arguments(self, parser):
         parser.add_argument(

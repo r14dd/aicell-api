@@ -23,7 +23,7 @@ api/insights/      detectors, metrics, offers, advisor
 api/laya/          plan and narrate; Gemini or Claude brain, keyword fallback, number guard
 api/assistant/     inbox assistant: text, SSE, voice; Gemini agent, knowledge, per-subscriber memory
 api/seeding/       catalogue data, translations, seeded subscribers, staff roles
-locale/            az and ru catalogues
+locale/            az catalogue
 docs/api/          endpoint reference
 scripts/smoke.py   check of a running deployment
 ```
@@ -128,7 +128,7 @@ DATABASE_URL=postgres://user:password@127.0.0.1:5432/name uv run pytest tests/te
 | `test_isolation.py` | two subscribers: no read leaks, foreign ids are `404`, no token is `401` |
 | `test_robustness.py` | malformed bodies, queries and content types never give a `500` |
 | `test_concurrency.py` | PostgreSQL only: parallel purchases and top-ups, one key sent twice at once |
-| `test_languages.py` | every read in az/ru/en, nothing untranslated |
+| `test_languages.py` | every read in az/en, nothing untranslated |
 | `test_swagger.py` | schema validity, recorded examples against live answers |
 | `test_admin.py` | every model's pages open, roles see their share, money is read-only |
 | `test_catalogue.py` | admin edits reach the API; the cache is per language |

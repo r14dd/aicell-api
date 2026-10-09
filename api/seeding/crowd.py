@@ -147,7 +147,7 @@ def _account(index: int, segment: str) -> Subscriber:
         f"{PREFIX}{index:05d}",
         display_name=f"Abunəçi {index}",
         line_type="postpaid" if index % POSTPAID_EVERY == 0 else "prepaid",
-        language=("az", "az", "ru", "en")[index % 4],
+        language=("az", "az", "en")[index % 3],
     )
     SimProfile.objects.create(
         subscriber=subscriber,

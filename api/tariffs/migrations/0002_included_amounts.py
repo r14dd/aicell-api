@@ -22,7 +22,7 @@ def fill_amounts(apps, schema_editor):
             data_mb=data_mb, minutes=minutes, sms=sms, roaming_mb=roaming_mb
         )
     for group in apps.get_model("tariffs", "PriceGroup").objects.all():
-        for field in ("rows", "rows_en", "rows_az", "rows_ru"):
+        for field in ("rows", "rows_en", "rows_az"):
             rows = getattr(group, field) or []
             if len(rows) == len(ROW_KEYS) and not any("key" in row for row in rows):
                 setattr(group, field, [{"key": key, **row} for key, row in zip(ROW_KEYS, rows)])

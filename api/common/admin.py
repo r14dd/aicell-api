@@ -4,7 +4,7 @@ from modeltranslation.admin import TranslationAdmin
 from unfold.admin import ModelAdmin, TabularInline
 from unfold.contrib.filters.admin import BooleanRadioFilter
 
-LANGUAGE_TABS = (("az", "Azərbaycan"), ("ru", "Русский"), ("en", "English"))
+LANGUAGE_TABS = (("az", "Azərbaycan"), ("en", "English"))
 
 # Colours of status badges, by value.
 STATUS_COLOURS = {

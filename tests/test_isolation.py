@@ -117,7 +117,7 @@ def test_writes_change_only_the_callers_data(client, other, other_client):
         client.patch_json("/api/sim/line/", {"mobile_internet": False, "second_line": False}),
         client.patch_json("/api/sim/call-forwarding/", {"all": True}),
         client.patch_json("/api/sim/roaming/", {"enabled": True}),
-        client.patch_json("/api/sim/sms/", {"language": "ru", "toggles": {"ads": False}}),
+        client.patch_json("/api/sim/sms/", {"language": "en", "toggles": {"ads": False}}),
         client.post_json("/api/content/stories/gift-wheel/viewed/"),
         client.post_json("/api/content/notifications/wingz/read/"),
         client.post_json("/api/content/app-rating/", {"stars": 5}),

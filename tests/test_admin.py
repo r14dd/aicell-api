@@ -291,14 +291,14 @@ def test_translated_fields_sit_in_one_tab_per_language(panel):
     plan = TariffPlan.objects.get(slug="digimax-5")
     response = panel("superadmin").get(url(TariffPlan, "change", plan.pk))
     html = response.content.decode()
-    for tab in ("Azərbaycan", "Русский", "English"):
+    for tab in ("Azərbaycan", "English"):
         assert tab in html
-    for field in ("title_az", "title_ru", "title_en", "features_az", "features_ru", "features_en"):
+    for field in ("title_az", "title_en", "features_az", "features_en"):
         assert f'name="{field}"' in html
     assert 'name="title"' not in html  # only the per-language fields are edited
     fieldsets = response.context["adminform"].fieldsets
     assert [name for name, _ in fieldsets] == [
-        None, "Azərbaycan", "Русский", "English", "Hot offers shelf", "Placement",
+        None, "Azərbaycan", "English", "Hot offers shelf", "Placement",
     ]  # fmt: skip
 
 
@@ -319,7 +319,6 @@ def test_an_edit_in_the_admin_reaches_the_api(panel, client):
         {
             "key": "curator",
             "text_az": "Yeni mətn",
-            "text_ru": benefit.text_ru,
             "text_en": benefit.text_en,
             "order": 0,
             "is_active": "on",

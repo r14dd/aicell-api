@@ -309,10 +309,3 @@ def test_messages_are_translated(client, subscriber):
         HTTP_ACCEPT_LANGUAGE="az",
     )
     assert answer.json()["detail"] == "Bu tarif üçün balans kifayət etmir"
-    ru = client.post_json(
-        CHANGE,
-        {"tariff_id": "digimax-3gb"},
-        HTTP_IDEMPOTENCY_KEY=str(uuid.uuid4()),
-        HTTP_ACCEPT_LANGUAGE="ru",
-    )
-    assert ru.json()["transaction"]["title"] == "Тариф DigiMax 3GB"

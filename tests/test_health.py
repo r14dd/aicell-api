@@ -87,7 +87,7 @@ def test_probes_need_no_credentials_and_are_never_cached(anon, settings, path):
 def test_probes_do_not_depend_on_the_language_header(anon, settings, path):
     settings.REDIS_URL = settings.CELERY_BROKER_URL = ""
     plain = anon.get(path)
-    for language in ("az", "ru", "en", "de"):
+    for language in ("az", "en", "de"):
         localized = anon.get(path, HTTP_ACCEPT_LANGUAGE=language)
         assert localized.content == plain.content
         assert "Content-Language" not in localized

@@ -469,7 +469,6 @@ def test_recommendation_extras_by_kind(people):
     "language,label,evidence",
     [
         ("az", "İnternetdən çox istifadə edən", "5 əlavə paket, 20.98 ₼"),
-        ("ru", "Активный пользователь интернета", "Дополнительных пакетов: 5, 20.98 ₼"),
     ],
 )
 def test_usage_copy_is_translated(people, language, label, evidence):
@@ -639,7 +638,7 @@ def test_a_new_offer_is_announced_in_three_languages(people):
     offer = open_offers(people[VOICE]).get()
     note = Notification.objects.get(subscriber=people[VOICE], slug=f"offer-{offer.id}")
     assert note.title_en == "A personal offer for you"
-    assert note.title_az == "Sizə xüsusi təklif" and note.title_ru.startswith("Персональное")
+    assert note.title_az == "Sizə xüsusi təklif"
     assert note.body_en.startswith("Weekly 2 GB for 1.50 ₼ instead of 3.00 ₼.")
     assert "Həftəlik 2 GB" in note.body_az and "1.50 ₼" in note.body_az
     assert note.cta_en == {"label": "See the offer", "deep_link": f"/offers/{offer.id}"}

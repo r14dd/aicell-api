@@ -688,7 +688,6 @@ def test_offer_labels_follow_the_language(client):
         return [(offer["label"], offer["validity"]) for offer in results[0]["offers"]]
 
     assert labels("az")[1] == ("Instagram & Facebook 5 GB", "30 gün")
-    assert labels("ru")[1][1] == "30 дн."
 
 
 def test_an_offer_that_left_the_catalogue_is_not_shown(client, subscriber):

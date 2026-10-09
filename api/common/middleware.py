@@ -18,7 +18,7 @@ def language_from_header(request) -> str:
 
 
 class ApiLanguageMiddleware:
-    """Answer in the language of `Accept-Language`: `az`, `ru` or `en`.
+    """Answer in the language of `Accept-Language`: `az` or `en`.
 
     Only the header decides, never a cookie or the session. The chosen language
     is announced in `Content-Language`. Health probes are left alone: their

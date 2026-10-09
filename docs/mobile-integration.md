@@ -49,7 +49,7 @@ curl http://localhost:8010/api/users/me/ \
 | Başlıq | Nə vaxt | Dəyər | Qeyd |
 |---|---|---|---|
 | `Authorization` | hər sorğuda (giriş endpoint-ləri istisna) | `Bearer <access-jwt>` | Yoxdursa və ya səhvdirsə `401` |
-| `Accept-Language` | hər sorğuda | `az`, `ru` və ya `en` | Yoxdursa və ya başqa dildirsə `en` işləyir |
+| `Accept-Language` | hər sorğuda | `az` və ya `en` | Yoxdursa və ya başqa dildirsə `en` işləyir |
 | `Content-Type` | gövdəsi olan sorğularda (`POST`, `PATCH`) | `application/json` | Başqa tip `415 unsupported_media_type` qaytarır |
 | `Accept` | istəyə görə | `application/json` | Yalnız assistentin mesaj endpoint-ində fərq yaradır (bax [bölmə 20](#20-assistant)) |
 | `Idempotency-Key` | pul köçürən 12 `POST`-da məcburi | UUID, hər cəhd üçün yeni | Bax [bölmə 7](#7-pul-əməliyyatları-və-idempotency-key) |
@@ -61,7 +61,7 @@ curl http://localhost:8010/api/users/me/ \
 | Başlıq | Mənası |
 |---|---|
 | `Content-Type` | `application/json`; assistent axınında `text/event-stream` |
-| `Content-Language` | Cavabın yazıldığı dil: `az`, `ru` və ya `en` |
+| `Content-Language` | Cavabın yazıldığı dil: `az` və ya `en` |
 | `Vary` | `Accept-Language` daxildir: cavabı keşləyirsinizsə, dili açara daxil edin |
 | `Retry-After` | Yalnız `429` cavabında: neçə saniyədən sonra təkrar cəhd etmək olar |
 | `WWW-Authenticate` | Yalnız `401` cavabında: `Bearer realm="api"` |
@@ -316,7 +316,7 @@ Baza yolu: `/api/users/`
 | `display_msisdn` | sətir | Göstərmək üçün formatlanmış nömrə |
 | `display_name` | sətir | Ad və soyad |
 | `line_type` | sətir | `prepaid` və ya `postpaid` |
-| `language` | sətir | Abunəçinin dili: `az`, `ru`, `en` |
+| `language` | sətir | Abunəçinin dili: `az`, `en` |
 | `app_version` | sətir \| null | `X-App-Version` başlığının əksi: `"Version 5.1.0 (13557)"`. Başlıq yoxdursa `null` |
 | `is_premium` | bool | Premium abunəçidirmi |
 
@@ -1427,7 +1427,7 @@ Qəbul olunan sahələr: `mobile_internet`, `second_line` (ikisi də bool). Cava
 { "language": "en", "toggles": { "partners": false } }
 ```
 
-`language`: `az`, `en`, `ru`. Göndərilməyən açarlar olduğu kimi qalır.
+`language`: `az`, `en`. Göndərilməyən açarlar olduğu kimi qalır.
 
 ### `GET puk/`
 

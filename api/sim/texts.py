@@ -41,7 +41,6 @@ ROAMING_TEXTS = {
 SMS_LANGUAGES = [
     {"id": "az", "name": _("Azerbaijani")},
     {"id": "en", "name": _("English")},
-    {"id": "ru", "name": _("Russian")},
 ]
 
 # Rich text: a paragraph is a list of segments, some of them bold.

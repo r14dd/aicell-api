@@ -17,7 +17,7 @@ from api.usage import insights, offers
 
 class Command(BaseCommand):
     help = (
-        "Load the catalogue in az/ru/en, the demo subscriber (994516643342), four "
+        "Load the catalogue in az/en, the demo subscriber (994516643342), four "
         "test numbers with 30-day usage stories and the admin accounts. Safe to run on every start: what already exists is kept."
     )
 
@@ -56,7 +56,7 @@ class Command(BaseCommand):
             detected.refresh_all()
             staff = seed_staff()
 
-        self.stdout.write(self.style.SUCCESS("Catalogue: loaded in az, ru and en"))
+        self.stdout.write(self.style.SUCCESS("Catalogue: loaded in az and en"))
         if created:
             self.stdout.write(self.style.SUCCESS(f"Demo subscriber: {subscriber.msisdn} created"))
         else:

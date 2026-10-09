@@ -48,7 +48,7 @@ def test_the_429_uses_the_shared_error_shape_and_says_when_to_retry(anon, settin
 
 @pytest.mark.parametrize(
     "language,start",
-    [("az", "Həddən çox sorğu"), ("ru", "Слишком много запросов"), ("en", "Too many requests")],
+    [("az", "Həddən çox sorğu"), ("en", "Too many requests")],
 )
 def test_the_429_is_in_the_requested_language(anon, settings, language, start):
     limits(settings, otp_ip="1/min")

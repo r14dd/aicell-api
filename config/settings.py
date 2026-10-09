@@ -161,7 +161,7 @@ INSIGHTS_QUIET_HOURS = (23, 8) if env.flag("INSIGHTS_QUIET_HOURS", True) else No
 # --- language and time -------------------------------------------------------
 
 LANGUAGE_CODE = "en"
-LANGUAGES = [("az", _("Azerbaijani")), ("ru", _("Russian")), ("en", _("English"))]
+LANGUAGES = [("az", _("Azerbaijani")), ("en", _("English"))]
 LOCALE_PATHS = [BASE_DIR / "locale"]
 MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
 MODELTRANSLATION_FALLBACK_LANGUAGES = ("en",)
@@ -260,7 +260,7 @@ SPECTACULAR_SETTINGS = {
         "**Authorize** with `Bearer <access-jwt>`.\n\n"
         "Endpoints marked `:todo` are routed at their final path and answer "
         "`501 not_implemented`. Copy comes back in the language of "
-        "`Accept-Language` (`az`, `ru`, `en`)."
+        "`Accept-Language` (`az`, `en`)."
     ),
     "ENUM_NAME_OVERRIDES": {"LayaLanguageEnum": ["az", "en"]},
     "SERVE_INCLUDE_SCHEMA": False,

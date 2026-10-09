@@ -103,7 +103,7 @@ Təmiz stack-də alınan nəticə:
 - 36 miqrasiya (16 app) səhvsiz keçdi; `189 static files copied, 174 post-processed`; seed 5 abunəçi və 4 admin hesabı yaratdı.
 - Worker 5 task qeyd etdi (`purge_idempotency_keys`, `detect_insights`, `expire_activations`, `refresh_insights`, `refresh_offers`), beat başladı.
 - `check --deploy`: yalnız 3 xəbərdarlıq (`W008`, `W012`, `W016`), üçü də lokal `.env`-də `SECURE_SSL_REDIRECT=false` və `SECURE_COOKIES=false` olduğu üçündür. TLS arxasında ikisi `true` olanda xəbərdarlıq qalmır (`tests/test_security.py::test_deploy_check_passes_without_warnings`).
-- `smoke.py`: 378 çağırış (126 endpoint × az/ru/en), `All good.`; dörd rolun hər biri admin panelə daxil oldu, icazəsiz səhifə `403` verdi.
+- `smoke.py`: 378 çağırış (126 endpoint × az/en), `All good.`; dörd rolun hər biri admin panelə daxil oldu, icazəsiz səhifə `403` verdi.
 - Admin paneli `DEBUG=false` ilə: `/admin/`, statistika səhifəsi, insight-lar, abunəçilər, tariflər, tranzaksiyalar `200`; `/static/unfold/css/styles.css` və JS faylları `200` (WhiteNoise verir). Statistika səhifəsində iki qrafik render olunur.
 - Swagger `200`, sxem xətasız qurulur: 116 yol, 127 əməliyyat.
 
@@ -179,7 +179,7 @@ Real sorğularla, təmiz stack üzərində:
 - **İzolyasiya:** ikinci abunəçinin tokeni ilə birincinin insight-ı (`7001`), təklifi (`9001`) və söhbəti (`3513323`) → hamısı `404`.
 - **Təkrar sorğu:** eyni `Idempotency-Key` ilə iki alış → `201`, `201`, eyni gövdə, bir dəfə tutulub. Açarsız → `400`. Açarı başqa endpoint-də işlətmək → `400`.
 - **Paralel sorğu (SQLite):** 5.00 balansa eyni anda 12 dənə 1.00-lıq alış → 5 × `201`, 7 × `402`, balans `0.00`. Eyni açarla eyni anda 8 balans artımı → 8 × `201`, balans bir dəfə (2.00) artdı.
-- **Dil:** `Accept-Language: az|ru|en` → `Content-Language` eyni dil və tərcümə olunmuş mətn; `de` → `en`. `sync_locale --check`: 240 mesaj, hamısı tərcümə olunub.
+- **Dil:** `Accept-Language: az|en` → `Content-Language` eyni dil və tərcümə olunmuş mətn; `de` → `en`. `sync_locale --check`: 240 mesaj, hamısı tərcümə olunub.
 - **Limit:** pul endpoint-ində dəqiqədə 30 sorğudan sonra `429`, `Retry-After: 60`.
 - **Testlər:** `uv run pytest` (SQLite) → düzəlişlərdən əvvəl 1454 keçdi, sonra 1460 keçdi; hər ikisində 10 skip (PostgreSQL və Redis tələb edənlər). `ruff check` və `ruff format --check` təmiz.
 
@@ -241,7 +241,7 @@ Sənədlər (`docs/api/*.md`) real cavablarla avtomatik tutuşdurulur: `tests/te
 
 - **Auth:** `Authorization: Bearer <jwt>`. Səhv və ya vaxtı keçmiş token `401` (`not_authenticated` / `token_expired`). Başqasının obyekti `404`.
 - **`Idempotency-Key`:** balansı dəyişən 12 `POST`-da məcburidir (UUID). Yoxdursa `400`. Eyni açarla təkrar sorğu ilk cavabı qaytarır və heç nə tutmur; şəbəkə xətasında eyni açarla təkrar göndərin. Açarı başqa endpoint-də işlətmək `400`.
-- **Dil:** `Accept-Language: az | ru | en`; tanınmayan dil `en` sayılır. Cavabda `Content-Language` gəlir.
+- **Dil:** `Accept-Language: az | en`; tanınmayan dil `en` sayılır. Cavabda `Content-Language` gəlir.
 - **Limitlər:** pul əməliyyatları dəqiqədə 30, qalan hər şey dəqiqədə 300 (abunəçi üzrə). Aşanda `429` və `Retry-After` (saniyə).
 - **Pul** həmişə iki onluqlu sətirdir (`"16.21"`). Tarixlər UTC ISO 8601; `tariffs/my/` və `insights/` tarixləri Bakı vaxtı ilə (`+04:00`).
 - **Insight-lar gecə gəlmir:** 23:00–08:00 (Bakı) arasında `GET insights/` boş siyahı qaytarır. Yeni `info` insight 48 saatda bir verilir.

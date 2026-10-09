@@ -65,8 +65,7 @@ def estimate(values: dict) -> Decimal:
 
 def renewal_day(tariff) -> str:
     """Next payment day in Asia/Baku in the active language, e.g. `25 October`."""
-    # "E" is the month as it reads after a day number: Russian needs the
-    # genitive ("25 октября"), which the plain month name "F" does not give.
+    # "E" is the month as it reads after a day number (the genitive in some languages).
     return date_format(timezone.localtime(tariff.next_payment_at), "j E")
 
 

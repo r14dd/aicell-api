@@ -24,7 +24,7 @@ Schema: `GET /api/schema/`, Swagger UI: `GET /api/swagger/`.
 | Header | Value |
 |---|---|
 | `Authorization` | `Bearer <access-jwt>` (mobile) or `Token <key>` (services) |
-| `Accept-Language` | `en`, `az`, `ru` — copy fields are returned in that language when a translation exists, else `en` |
+| `Accept-Language` | `en`, `az` — copy fields are returned in that language when a translation exists, else `en` |
 | `X-App-Version` | `5.1.0 (13557)` |
 | `X-Platform` | `ios`, `android`, `web` |
 | `Idempotency-Key` | UUID, required on every `POST` that moves money |

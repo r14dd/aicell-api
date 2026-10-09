@@ -178,7 +178,7 @@ class SmsTogglesInput(serializers.Serializer):
 
 
 class SmsInput(serializers.Serializer):
-    language = serializers.ChoiceField(["az", "en", "ru"], required=False)
+    language = serializers.ChoiceField(["az", "en"], required=False)
     toggles = SmsTogglesInput(required=False)
 
 

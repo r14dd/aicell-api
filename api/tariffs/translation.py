@@ -1,4 +1,4 @@
-"""Fields stored once per language (az, ru, en) by django-modeltranslation."""
+"""Fields stored once per language (az, en) by django-modeltranslation."""
 
 from modeltranslation.translator import TranslationOptions, register
 

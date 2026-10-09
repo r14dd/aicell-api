@@ -548,10 +548,6 @@ msgid "Roaming settings"
 msgstr "Rouminq ayarları"
 
 #: api/sim/texts.py
-msgid "Russian"
-msgstr "Rus dili"
-
-#: api/sim/texts.py
 msgid "SMS settings"
 msgstr "SMS ayarları"
 
