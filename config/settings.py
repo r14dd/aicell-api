@@ -74,6 +74,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "api.common.demo_login.context",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -214,6 +215,8 @@ if not DEBUG:
 # Off unless switched on deliberately: it lets anyone use that account.
 DEMO_AUTH = env.flag("DEMO_AUTH", False)
 DEMO_MSISDN = env.text("DEMO_MSISDN", "994516643342")
+# One-click admin sign-in as each seeded staff account, no password (api/common/demo_login.py).
+DEMO_ADMIN_LOGIN = env.flag("DEMO_ADMIN_LOGIN", False)
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [

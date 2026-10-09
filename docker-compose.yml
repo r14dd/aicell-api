@@ -18,6 +18,7 @@ x-app: &app
     DATABASE_URL: sqlite:////app/data/db.sqlite3
     REDIS_URL: redis://redis:6379/0
     DEMO_AUTH: ${DEMO_AUTH:-false}
+    DEMO_ADMIN_LOGIN: ${DEMO_ADMIN_LOGIN:-false}
     GOOGLE_PAY_SIMULATED: ${GOOGLE_PAY_SIMULATED:-true}
     SEED_STAFF_PASSWORD: ${SEED_STAFF_PASSWORD:-aicell-demo}
     SECURE_HSTS_SECONDS: ${SECURE_HSTS_SECONDS:-31536000}
