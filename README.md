@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/python-3.13-blue.svg?logo=python&logoColor=white" alt="Python 3.13">
   <img src="https://img.shields.io/badge/django-5.2-0C4B33.svg?logo=django" alt="Django 5.2">
   <img src="https://img.shields.io/badge/DRF-3.18-A30000.svg" alt="Django REST framework 3.18">
-  <img src="https://img.shields.io/badge/tests-1506%20passing-brightgreen.svg" alt="1506 tests">
+  <img src="https://img.shields.io/badge/tests-1443%20passing-brightgreen.svg" alt="1443 tests">
   <img src="https://img.shields.io/badge/languages-az%20%7C%20en-informational.svg" alt="az, en">
   <img src="https://img.shields.io/badge/docker-compose-2496ED.svg?logo=docker&logoColor=white" alt="Docker Compose">
 </p>
@@ -62,6 +62,8 @@ so, with no offer at all.
 
 ## How it works
 
+![Architecture: the mobile app and staff call one Django service; Celery, Redis, SQLite, Claude, Gemini and Milvus sit behind it](docs/img/architecture.svg)
+
 ```
 usage per day and app ─┐
 pack purchases         ├─► figures ──► detectors ──► insight { evidence, offers[], task }
@@ -91,6 +93,11 @@ live catalogue ──────────►  shares,       thresholds as   
    through a single tool call, and any number in the answer that is not in the
    request is rejected. Without an API key Laya falls back to keyword rules.
 
+One insight from detection to a tap, with the checks the backend applies to
+what Laya says:
+
+![Sequence: insight, Laya narrate and plan, then the sale under an idempotency key](docs/img/laya-sequence.svg)
+
 ## What an answer means
 
 The backend can show that a cheaper option **existed for the last 30 days of
@@ -104,9 +111,9 @@ cheaper the answer is "your plan fits", and when a change saves less than
 
 | | |
 |---|---|
-| Endpoints | 82 working, documented in [docs/api](docs/api/overview.md) |
+| Endpoints | 86 working, documented in [docs/api](docs/api/overview.md) |
 | Languages | Azerbaijani, English, from `Accept-Language` |
-| Tests | 1506, every documented endpoint checked against the docs in three languages |
+| Tests | 1443, every documented endpoint checked against the docs in both languages |
 | Money | One code path for every balance change, row-locked, idempotent; parallel requests cannot overdraw |
 | Admin | django-unfold, four roles, a usage statistics page with trends, segments and offer results |
 | Run | `docker compose up -d --build` (API, Celery worker and beat, Redis, SQLite) |
@@ -159,7 +166,7 @@ file under the data volume by default (`MILVUS_URI`). To use a Milvus server ins
 | Readiness | <http://localhost:8010/api/health/ready/> |
 
 `scripts/smoke.py` checks a running deployment from outside: every endpoint in
-three languages, then an admin sign-in per role.
+both languages, then an admin sign-in per role.
 
 ```sh
 python scripts/smoke.py http://localhost:8010 \
@@ -179,7 +186,7 @@ uv run python manage.py seed
 uv run python manage.py runserver
 ```
 
-`seed` fills the catalogue (in three languages), five subscribers with a 30-day
+`seed` fills the catalogue (in both languages), five subscribers with a 30-day
 usage story each and the staff accounts. Running it again keeps existing rows,
 so edits made in the admin survive. `--refresh` restores the seeded catalogue
 rows and `--reset` recreates the five subscribers. `manage.py demo_token
