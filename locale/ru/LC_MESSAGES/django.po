@@ -161,6 +161,10 @@ msgid "Not found."
 msgstr "Не найдено."
 
 #: api/common/exceptions.py
+msgid "Server error"
+msgstr "Ошибка сервера"
+
+#: api/common/exceptions.py
 msgid "This is not part of this prototype yet"
 msgstr "Этого пока нет в прототипе"
 

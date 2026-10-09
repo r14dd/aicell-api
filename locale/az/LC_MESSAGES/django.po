@@ -162,6 +162,10 @@ msgid "Not found."
 msgstr "Tapılmadı."
 
 #: api/common/exceptions.py
+msgid "Server error"
+msgstr "Server xətası"
+
+#: api/common/exceptions.py
 msgid "This is not part of this prototype yet"
 msgstr "Bu hələ prototipdə yoxdur"
 

@@ -1,5 +1,5 @@
 import base64
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 
 from django.conf import settings
@@ -105,6 +105,11 @@ def date_range(query):
     """Validated `from` / `to` as an aware [start, end) pair in Asia/Baku; either may be None."""
     tz = timezone.get_current_timezone()
     start, end = query.get("from"), query.get("to")
+    # The first and last days bound nothing, and overflow once shifted to UTC or by a day.
+    if start == date.min:
+        start = None
+    if end == date.max:
+        end = None
     return (
         datetime.combine(start, time.min, tzinfo=tz) if start else None,
         datetime.combine(end + timedelta(days=1), time.min, tzinfo=tz) if end else None,

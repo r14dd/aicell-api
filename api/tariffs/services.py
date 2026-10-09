@@ -43,14 +43,12 @@ def plan(family: dict, plan_id=None) -> dict:
 def estimate(values: dict) -> Decimal:
     """Monthly price of a redesigned tariff."""
     pricing = {key: Decimal(value) for key, value in REDESIGN_PRICING.items()}
-    extra_gb = (
-        values["internet"]
-        - REDESIGN_INCLUDED["internet"]
-        + values["instagramFb"]
-        + values["youtube"]
-        + values["tiktok"]
-    )
-    extra_minutes = values["calls"] - REDESIGN_INCLUDED["calls"]
+    # A stored redesign may lack keys: the included amounts and no socials.
+    internet = values.get("internet", REDESIGN_INCLUDED["internet"])
+    calls = values.get("calls", REDESIGN_INCLUDED["calls"])
+    socials = sum(values.get(key, 0) for key in ("instagramFb", "youtube", "tiktok"))
+    extra_gb = internet - REDESIGN_INCLUDED["internet"] + socials
+    extra_minutes = calls - REDESIGN_INCLUDED["calls"]
     return pricing["base"] + pricing["per_gb"] * extra_gb + pricing["per_minute"] * extra_minutes
 
 

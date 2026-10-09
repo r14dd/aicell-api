@@ -68,6 +68,10 @@ def premium(request):
 # --- my tariff --------------------------------------------------------------
 
 
+def _ratio(remaining, total):
+    return round(float(remaining) / total, 2) if total else 0
+
+
 def usage_rows(tariff):
     return [
         {
@@ -77,7 +81,7 @@ def usage_rows(tariff):
             "remaining_unit": _("GB"),
             "total": str(tariff.data_total_gb),
             "total_unit": _("GB"),
-            "ratio": round(float(tariff.data_remaining_gb) / tariff.data_total_gb, 2),
+            "ratio": _ratio(tariff.data_remaining_gb, tariff.data_total_gb),
         },
         {
             "kind": "messaging",
@@ -86,7 +90,7 @@ def usage_rows(tariff):
             "remaining_unit": _("MB"),
             "total": str(tariff.messaging_total_gb),
             "total_unit": _("GB"),
-            "ratio": round(tariff.messaging_remaining_mb / (tariff.messaging_total_gb * 1024), 2),
+            "ratio": _ratio(tariff.messaging_remaining_mb, tariff.messaging_total_gb * 1024),
         },
         {
             "kind": "calls",
@@ -95,7 +99,7 @@ def usage_rows(tariff):
             "remaining_unit": _("MIN."),
             "total": str(tariff.minutes_total),
             "total_unit": _("MIN."),
-            "ratio": round(tariff.minutes_remaining / tariff.minutes_total, 2),
+            "ratio": _ratio(tariff.minutes_remaining, tariff.minutes_total),
         },
     ]
 

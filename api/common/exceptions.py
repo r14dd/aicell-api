@@ -118,3 +118,7 @@ def exception_handler(exc, context):
 
 def not_found_view(request, exception=None):
     return JsonResponse({"code": "not_found", "detail": str(_("Not found."))}, status=404)
+
+
+def server_error_view(request):
+    return JsonResponse({"code": "server_error", "detail": str(_("Server error"))}, status=500)
