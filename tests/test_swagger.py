@@ -2,13 +2,12 @@
 
 import io
 import json
-import uuid
 
 import pytest
 from django.core.management import call_command
 
 from api.common import schema
-from api.common.management.commands.record_examples import ready_endpoints
+from api.common.management.commands.record_examples import call, ready_endpoints
 from api.common.routing import Todo
 
 from .test_docs_conformance import ROWS
@@ -23,6 +22,10 @@ MONEY = {
     "/api/packs/social/{slug}/activate/",
     "/api/packs/roaming/purchase/",
     "/api/sim/services/{slug}/subscribe/",
+    "/api/usage/offers/{id}/accept/",
+    "/api/tariffs/subscribe/",
+    "/api/tariffs/change/",
+    "/api/tariffs/my/renew/",
 }
 
 
@@ -48,10 +51,10 @@ def test_schema_is_valid_and_free_of_warnings(db):
 
 
 def test_every_endpoint_of_the_docs_is_in_the_schema(spec):
-    assert len(operations(spec)) == 116  # the 114 documented paths x methods + 2 health probes
+    assert len(operations(spec)) == 120  # the 118 documented paths x methods + 2 health probes
     assert {tag for _, _, operation in operations(spec) for tag in operation["tags"]} == {
         "users", "billing", "tariffs", "packs", "kredit", "sim", "content", "referral",
-        "assistant", "health",
+        "assistant", "usage", "health",
     }  # fmt: skip
 
 
@@ -99,7 +102,7 @@ def test_error_responses_are_documented(spec):
         assert ("401" in responses) == (path not in PUBLIC), where
         if ":todo" in operation["summary"]:
             assert "501" in responses, where
-        if path in MONEY:
+        if path in MONEY and method == "post":
             assert {"400", "429"} <= set(responses), where
     purchase = spec["paths"]["/api/packs/internet/purchase/"]["post"]["responses"]
     assert set(purchase) == {"201", "400", "401", "402", "429"}
@@ -197,16 +200,7 @@ def test_recorded_examples_match_what_the_server_answers(client):
     """Swagger's response schemas come from the recordings; they must not drift."""
     recorded = schema.examples()
     for method, path, handler in ready_endpoints():
-        headers = {"HTTP_ACCEPT": "application/json"}
-        if getattr(handler, "idempotent", False):
-            headers["HTTP_IDEMPOTENCY_KEY"] = str(uuid.uuid4())
-        response = client.generic(
-            method.upper(),
-            path,
-            json.dumps(handler.doc.example or {}),
-            content_type="application/json",
-            **headers,
-        )
+        response = call(client, method, path, handler)
         key = schema.example_key(method, handler)
         same_shape(shape(response.json()), shape(recorded[key]), key)
 
