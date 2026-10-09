@@ -306,7 +306,7 @@ GOOGLE_PAY_SIMULATED = env.flag("GOOGLE_PAY_SIMULATED", DEBUG)
 # The assistant: Gemini routes, retrieves and writes when GEMINI_API_KEY is set, keyword rules otherwise.
 GEMINI_API_KEY = env.text("GEMINI_API_KEY")
 GEMINI_MODEL = env.text("GEMINI_MODEL", "gemini-3.1-flash-lite")
-GEMINI_STT_MODEL = env.text("GEMINI_STT_MODEL", "gemini-3.8-flash")
+GEMINI_STT_MODEL = env.text("GEMINI_STT_MODEL", "gemini-3.1-flash-lite")
 GEMINI_TTS_MODEL = env.text("GEMINI_TTS_MODEL", "gemini-3.8-flash-tts")
 GEMINI_EMBED_MODEL = env.text("GEMINI_EMBED_MODEL", "gemini-embedding-001")
 GEMINI_VOICE = env.text("GEMINI_VOICE", "Kore")

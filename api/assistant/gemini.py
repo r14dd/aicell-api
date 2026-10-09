@@ -84,8 +84,12 @@ def transcribe(audio: bytes, mime: str) -> str:
     return _parts(data)[0]["text"].strip()
 
 
+AZ_LETTERS = set("əƏıİöÖüÜşŞçÇğĞ")
+
+
 def speak(text: str) -> bytes:
-    """The text as a 24 kHz mono 16-bit WAV."""
+    """The text as a 24 kHz mono 16-bit WAV, in Azerbaijani when it has Azerbaijani letters."""
+    code = "az-AZ" if AZ_LETTERS & set(text) else "en-US"
     data = _post(
         settings.GEMINI_TTS_MODEL,
         "generateContent",
@@ -94,7 +98,8 @@ def speak(text: str) -> bytes:
             "generationConfig": {
                 "responseModalities": ["AUDIO"],
                 "speechConfig": {
-                    "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": settings.GEMINI_VOICE}}
+                    "languageCode": code,
+                    "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": settings.GEMINI_VOICE}},
                 },
             },
         },
