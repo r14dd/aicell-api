@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
@@ -22,19 +23,26 @@ if not SECRET_KEY:
 ALLOWED_HOSTS = env.items("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1" if DEBUG else "")
 
 INSTALLED_APPS = [
+    "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
+    "rest_framework.authtoken",
     "drf_spectacular",
+    "api.common",
+    "api.users",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "api.common.middleware.ApiLanguageMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
+
+AUTH_USER_MODEL = "users.Subscriber"
 
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
@@ -117,15 +125,62 @@ if not DEBUG:
 
 # --- API ----------------------------------------------------------------------
 
+# The app has no login screen yet (users/otp/* is :todo). While DEMO_AUTH is on,
+# requests without an Authorization header act as the seeded demo subscriber.
+# Off unless switched on deliberately: it lets anyone use that account.
+DEMO_AUTH = env.flag("DEMO_AUTH", False)
+DEMO_MSISDN = env.text("DEMO_MSISDN", "994516643342")
+
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "api.common.auth.BearerAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "api.common.auth.DemoAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    "EXCEPTION_HANDLER": "api.common.exceptions.exception_handler",
+    "DEFAULT_SCHEMA_CLASS": "api.common.schema.AutoSchema",
+}
+
+# Requests per period; an empty value switches a limit off.
+THROTTLE_RATES = {
+    "otp_ip": env.rate("THROTTLE_OTP_IP", "5/min"),
+    "otp_phone": env.rate("THROTTLE_OTP_PHONE", "5/min"),
+    "money": env.rate("THROTTLE_MONEY", "30/min"),
+    "subscriber": env.rate("THROTTLE_SUBSCRIBER", "300/min"),
+}
+
+SIMPLE_JWT = {
+    # token/refresh/ is :todo, so the prototype access token is long-lived.
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "aicell API",
     "VERSION": "0.1.0",
-    "DESCRIPTION": "Backend of the aicell mobile app.",
+    "DESCRIPTION": (
+        "Backend of the aicell mobile app.\n\n"
+        "**Authorize** with `Bearer <access-jwt>`.\n\n"
+        "Endpoints marked `:todo` are routed at their final path and answer "
+        "`501 not_implemented`. Copy comes back in the language of "
+        "`Accept-Language` (`az`, `ru`, `en`)."
+    ),
     "SERVE_INCLUDE_SCHEMA": False,
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
+    "SERVE_AUTHENTICATION": [],
+    "COMPONENT_SPLIT_REQUEST": True,
+    "AUTHENTICATION_WHITELIST": [
+        "api.common.auth.BearerAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    "SORT_OPERATIONS": False,
     "SCHEMA_PATH_PREFIX": r"/api/",
+    "TAGS": [
+        {"name": "users", "description": "Sign in and the subscriber's profile"},
+        {"name": "health", "description": "Liveness and readiness probes"},
+    ],
+    "SWAGGER_UI_SETTINGS": {"persistAuthorization": True, "docExpansion": "none"},
 }
