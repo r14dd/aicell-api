@@ -7,10 +7,13 @@ views: `respond(subscriber, text) -> Reply`.
 
 from dataclasses import dataclass
 
+from django.utils import translation
+
 from api.billing.services import balance_of
 from api.common.formatting import money
 from api.tariffs.models import SubscriberTariff
 from api.tariffs.services import renewal_day
+from api.usage import offers, recommendations
 
 
 @dataclass
@@ -83,8 +86,43 @@ def _kredit(subscriber):
     )
 
 
+def _recommendation(subscriber):
+    """What fits this subscriber, from the numbers `api.usage` computed."""
+    with translation.override("en"):  # this responder answers in English only
+        result = recommendations.recommend(subscriber)
+        offer = offers.open_offer(subscriber)
+        paid = money(result.current)
+        if not result.fits:
+            top = result.recommendations[0]
+            text = (
+                f"In the last 30 days you paid {paid} ₼. With {top.title} it would have "
+                f"been {money(top.projected)} ₼, which is {money(top.saving)} ₼ less. "
+                f"Why: {'; '.join(top.evidence)}."
+            )
+            return Reply(text, "recommendation", top.action)
+        text = (
+            f"Your current plan fits how you use your number: you paid {paid} ₼ in the "
+            "last 30 days and nothing in the catalogue would have cost less."
+        )
+        if offer is None:
+            return Reply(text, "recommendation")
+        target = offers.resolve(offer.target_kind, offer.target_id)
+        text += (
+            f" There is a personal offer for you: {target.title} for "
+            f"{money(offer.offer_price)} ₼ instead of {money(offer.normal_price)} ₼."
+        )
+        action = _navigate(f"/offers/{offer.id}", "See the offer")
+        return Reply(text, "recommendation", action)
+
+
 # First match wins, so the specific topics come before the generic ones.
 ROUTES = [
+    (
+        ("suits me", "suit me", "recommend", "cheaper", "best for me", "save money")
+        + ("uyğun", "tövsiy", "məsləhət", "sərfəli")
+        + ("подход", "посовет", "рекоменд", "выгодн"),
+        _recommendation,
+    ),
     (("roaming", "rouminq", "роуминг", "abroad"), _roaming),
     (("kredit", "credit", "loan", "borc", "кредит"), _kredit),
     (("pack", "paket", "пакет"), _packs),
