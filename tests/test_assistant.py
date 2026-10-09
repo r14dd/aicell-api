@@ -202,3 +202,26 @@ def test_empty_message_is_rejected(client):
         f"/api/assistant/conversations/{conversation}/messages/", {"content": ""}
     )
     assert response.status_code == 400
+
+
+def probe(subscriber, content):
+    from django.db import connection
+
+    probe.depth = len(connection.savepoint_ids)
+    return responder.respond(subscriber, content)
+
+
+def test_responder_runs_outside_the_turn_transaction(client, settings):
+    from django.db import connection
+
+    settings.ASSISTANT_RESPONDER = "tests.test_assistant.probe"
+    depth = len(connection.savepoint_ids)
+    conversation_id = start(client)
+    response = client.post(
+        f"/api/assistant/conversations/{conversation_id}/messages/",
+        {"content": "hi", "source": "mobile"},
+        format="json",
+        HTTP_ACCEPT="text/event-stream",
+    )
+    events(response)
+    assert probe.depth == depth
