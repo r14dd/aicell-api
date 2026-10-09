@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "api.content",
     "api.referral",
     "api.assistant",
+    "api.usage",
 ]
 
 MIDDLEWARE = [
@@ -120,6 +121,14 @@ CELERY_BEAT_SCHEDULE = {
     "expire-pack-activations": {
         "task": "api.packs.tasks.expire_activations",
         "schedule": timedelta(minutes=1),
+    },
+    "refresh-personal-offers": {
+        "task": "api.usage.tasks.refresh_offers",
+        "schedule": timedelta(minutes=15),
+    },
+    "refresh-subscriber-insights": {
+        "task": "api.usage.tasks.refresh_insights",
+        "schedule": timedelta(hours=1),
     },
     "purge-idempotency-keys": {
         "task": "api.billing.tasks.purge_idempotency_keys",
@@ -244,6 +253,7 @@ SPECTACULAR_SETTINGS = {
         },
         {"name": "referral", "description": "Invite & earn"},
         {"name": "assistant", "description": "Support inbox and the chat assistant"},
+        {"name": "usage", "description": "30-day usage profile, recommendations, personal offers"},
         {"name": "sim", "description": "Line, roaming, SMS, PUK, eSIM and paid services"},
         {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
         {"name": "health", "description": "Liveness and readiness probes"},
