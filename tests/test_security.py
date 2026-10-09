@@ -105,7 +105,7 @@ def test_every_origin_is_allowed_only_in_debug():
 
 @pytest.mark.parametrize("debug", ["true", "false"])
 def test_demo_auth_does_not_follow_debug(debug):
-    """It is its own switch, off by default in every mode."""
+    """It is its own switch, on by default in every mode."""
     base = {"DJANGO_DEBUG": debug, "DJANGO_SECRET_KEY": SECRET}
     assert settings(**base)["DEMO_AUTH"] is True
     assert settings(**base, DEMO_AUTH="false")["DEMO_AUTH"] is False
