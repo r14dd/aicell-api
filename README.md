@@ -26,6 +26,11 @@ The stack no longer runs PostgreSQL, and a database from an earlier `docker comp
 (the old `pgdata` volume) is not read: the first start creates an empty SQLite file. To
 keep using PostgreSQL, set `DATABASE_URL=postgres://user:password@host:5432/name` in `.env`.
 
+`GEMINI_API_KEY` in `.env` reaches the containers. The assistant's knowledge store is a
+file under the data volume by default (`MILVUS_URI`). To use a Milvus server instead, set
+`MILVUS_URI=http://milvus:19530` in `.env` and start the stack with
+`docker compose --profile milvus up`; the `milvus` service is not started otherwise.
+
 | | |
 |---|---|
 | API | <http://localhost:8010/api/> |

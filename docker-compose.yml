@@ -25,6 +25,9 @@ x-app: &app
     THROTTLE_OTP_PHONE: ${THROTTLE_OTP_PHONE:-5/min}
     THROTTLE_MONEY: ${THROTTLE_MONEY:-30/min}
     THROTTLE_SUBSCRIBER: ${THROTTLE_SUBSCRIBER:-300/min}
+    GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    # A file (Milvus Lite) by default; http://milvus:19530 with `--profile milvus`.
+    MILVUS_URI: ${MILVUS_URI:-/app/data/knowledge.db}
   volumes:
     - data:/app/data
     - media:/app/media
@@ -74,6 +77,29 @@ services:
       timeout: 3s
       retries: 10
 
+  # Optional Milvus server: docker compose --profile milvus up, MILVUS_URI=http://milvus:19530
+  milvus:
+    image: milvusdb/milvus:v2.5.4
+    profiles: ["milvus"]
+    command: ["milvus", "run", "standalone"]
+    environment:
+      ETCD_USE_EMBED: "true"
+      ETCD_DATA_DIR: /var/lib/milvus/etcd
+      ETCD_CONFIG_PATH: /milvus/configs/embedEtcd.yaml
+      COMMON_STORAGETYPE: local
+    volumes:
+      - milvus:/var/lib/milvus
+      - ./deploy/milvus/embedEtcd.yaml:/milvus/configs/embedEtcd.yaml:ro
+    ports:
+      - "127.0.0.1:19530:19530"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
 volumes:
   data:
   media:
+  milvus:
