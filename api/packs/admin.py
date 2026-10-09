@@ -69,7 +69,7 @@ class PackCategoryAdmin(CatalogueAdmin):
 
 @admin.register(InternetPack)
 class InternetPackAdmin(CatalogueAdmin):
-    general = ("category", "slug", "price", "hours", "renews", "top_position")
+    general = ("category", "slug", "price", ("hours", "data_mb"), "renews", "top_position")
     translated = ("name", "sub", "label")
     list_display = (
         "label",
@@ -122,7 +122,7 @@ class SocialPackAdmin(CatalogueAdmin):
 
 @admin.register(SocialPlan)
 class SocialPlanAdmin(CatalogueAdmin):
-    general = ("pack", "slug", "price", "days")
+    general = ("pack", "slug", "price", ("days", "data_mb"))
     translated = ("title", "validity")
     list_display = ("title", "pack", "price_display", "days", "order", "is_active")
     list_filter = (("pack", RelatedDropdownFilter), ("is_active", BooleanRadioFilter))
@@ -137,7 +137,7 @@ class SocialPlanAdmin(CatalogueAdmin):
 
 @admin.register(RoamingPack)
 class RoamingPackAdmin(CatalogueAdmin):
-    general = ("slug", "price", "days")
+    general = ("slug", "price", ("days", "data_mb"))
     translated = ("name", "sub")
     list_display = ("name", "slug", "price_display", "days", "order", "is_active")
     search_fields = ("slug", "name")

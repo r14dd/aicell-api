@@ -60,6 +60,7 @@ class InternetPack(CatalogueItem):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     renews = models.BooleanField(default=False)
     hours = models.PositiveIntegerField(help_text="Lifetime of an activation")
+    data_mb = models.PositiveIntegerField(null=True, blank=True, help_text="Empty = unlimited")
     top_position = models.PositiveSmallIntegerField(
         null=True, blank=True, help_text='Position in "TOP internet packs"; empty hides it'
     )
@@ -95,6 +96,7 @@ class SocialPlan(CatalogueItem):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     validity = models.CharField(max_length=20)
     days = models.PositiveSmallIntegerField(help_text="Lifetime of an activation")
+    data_mb = models.PositiveIntegerField(default=0, help_text="Traffic of the app it covers")
 
     objects = ActiveQuerySet.as_manager()
 
@@ -111,6 +113,7 @@ class RoamingPack(CatalogueItem):
     sub = models.CharField(max_length=40)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     days = models.PositiveSmallIntegerField(help_text="Lifetime of an activation")
+    data_mb = models.PositiveIntegerField(default=0)
 
     objects = ActiveQuerySet.as_manager()
 

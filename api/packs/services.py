@@ -43,7 +43,7 @@ def _activate(
 
 
 @transaction.atomic
-def purchase_internet(subscriber, pack_id) -> Purchase:
+def purchase_internet(subscriber, pack_id, price=None) -> Purchase:
     pack = InternetPack.objects.active().filter(slug=pack_id).first()
     if pack is None:
         raise InvalidInput(_("Unknown pack"))
@@ -53,14 +53,14 @@ def purchase_internet(subscriber, pack_id) -> Purchase:
         pack_id=pack.slug,
         label=pack.label,
         title=_("%(label)s pack") % {"label": pack.label},
-        price=pack.price,
+        price=pack.price if price is None else price,
         lifetime=timedelta(hours=pack.hours),
         auto_renew=pack.renews,
     )
 
 
 @transaction.atomic
-def activate_social(subscriber, slug, plan_id) -> Purchase:
+def activate_social(subscriber, slug, plan_id, price=None) -> Purchase:
     """An auto-renewing social pack can only be active once; the others stack."""
     pack = SocialPack.objects.active().filter(slug=slug).first()
     if pack is None:
@@ -89,14 +89,14 @@ def activate_social(subscriber, slug, plan_id) -> Purchase:
         pack_id=slug,
         label=label,
         title=label,
-        price=plan.price,
+        price=plan.price if price is None else price,
         lifetime=timedelta(days=plan.days),
         auto_renew=pack.auto_renew,
     )
 
 
 @transaction.atomic
-def purchase_roaming(subscriber, pack_id) -> Purchase:
+def purchase_roaming(subscriber, pack_id, price=None) -> Purchase:
     pack = RoamingPack.objects.active().filter(slug=pack_id).first()
     if pack is None:
         raise InvalidInput(_("Unknown pack"))
@@ -107,7 +107,7 @@ def purchase_roaming(subscriber, pack_id) -> Purchase:
         pack_id=pack.slug,
         label=label,
         title=_("%(label)s pack") % {"label": label},
-        price=pack.price,
+        price=pack.price if price is None else price,
         lifetime=timedelta(days=pack.days),
     )
 
