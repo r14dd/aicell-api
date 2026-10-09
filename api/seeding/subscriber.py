@@ -13,6 +13,8 @@ from django.utils import timezone
 from api.assistant.models import Conversation, Message
 from api.billing.models import SavedCard, SteamAccount, TopUp, Transaction, Wallet
 from api.content.models import Notification
+from api.insights import services as insights
+from api.insights.models import Insight
 from api.referral.models import ReferralProfile
 from api.sim.models import SimProfile
 from api.tariffs.models import SubscriberTariff
@@ -24,6 +26,7 @@ from .translations import localized
 
 BAKU = ZoneInfo("Asia/Baku")
 DEMO_CONVERSATION_ID = 3513323
+DEMO_INSIGHT_ID = 7001
 
 
 @dataclass(frozen=True)
@@ -39,6 +42,7 @@ class Profile:
     puk2: str = "88154421"
     conversation_id: int | None = DEMO_CONVERSATION_ID
     offer_id: int | None = DEMO_OFFER_ID
+    insight_id: int | None = DEMO_INSIGHT_ID
 
 
 def utc(*args):
@@ -174,7 +178,16 @@ def seed_subscriber(msisdn: str, profile: Profile | None = None) -> Subscriber:
     if profile.conversation_id:
         _conversation(subscriber, profile.conversation_id)
     _usage_and_offer(subscriber, profile.offer_id)
+    _insight(subscriber, profile.insight_id)
     return subscriber
+
+
+def _insight(subscriber, insight_id) -> None:
+    """The first thing the detectors find, under a fixed id so the docs have one to point at."""
+    found = insights.findings(subscriber)
+    if insight_id and found:
+        insights.store(subscriber, found[0], id=insight_id)
+        _advance_sequence(Insight)
 
 
 def _usage_and_offer(subscriber, offer_id) -> None:

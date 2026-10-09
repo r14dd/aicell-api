@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from django.utils import translation
 from rest_framework_simplejwt.tokens import AccessToken
 
+from api.insights import services as detected
 from api.seeding import (
     answer_offers,
     seed_catalogue,
@@ -52,6 +53,7 @@ class Command(BaseCommand):
             if crowd and crowd[1]:
                 answer_offers()
             insights.refresh()
+            detected.refresh_all()
             staff = seed_staff()
 
         self.stdout.write(self.style.SUCCESS("Catalogue: loaded in az, ru and en"))
