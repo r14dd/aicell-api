@@ -2,6 +2,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
+from celery.schedules import crontab
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     "api.assistant",
     "api.usage",
     "api.laya",
+    "api.insights",
 ]
 
 MIDDLEWARE = [
@@ -99,8 +101,6 @@ DATABASES = {
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=60, conn_health_checks=True
     )
 }
-
-REDIS_URL = env.text("REDIS_URL")
 if DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3":
     # SQLite has no row locks, so `select_for_update` does nothing on it. Taking
     # the write lock when a transaction begins does the same job for the wallet:
@@ -111,6 +111,8 @@ if DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3":
         "timeout": 20,
         "init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;",
     }
+
+REDIS_URL = env.text("REDIS_URL")
 if REDIS_URL:
     CACHES = {
         "default": {
@@ -141,12 +143,19 @@ CELERY_BEAT_SCHEDULE = {
         "task": "api.usage.tasks.refresh_insights",
         "schedule": timedelta(hours=1),
     },
+    "detect-insights": {
+        "task": "api.insights.tasks.detect_insights",
+        "schedule": crontab(hour=3, minute=0),  # nightly, Asia/Baku
+    },
     "purge-idempotency-keys": {
         "task": "api.billing.tasks.purge_idempotency_keys",
         "schedule": timedelta(hours=1),
     },
 }
 IDEMPOTENCY_KEY_DAYS = env.number("IDEMPOTENCY_KEY_DAYS", 7)
+
+# Insights are not delivered between these hours (Asia/Baku): from 23:00 to 08:00.
+INSIGHTS_QUIET_HOURS = (23, 8) if env.flag("INSIGHTS_QUIET_HOURS", True) else None
 
 # --- language and time -------------------------------------------------------
 
@@ -268,6 +277,10 @@ SPECTACULAR_SETTINGS = {
         {
             "name": "laya",
             "description": "Laya, the voice assistant: plan a task, narrate an insight",
+        },
+        {
+            "name": "insights",
+            "description": "What the usage shows, with priced offers; tariff advisor",
         },
         {"name": "sim", "description": "Line, roaming, SMS, PUK, eSIM and paid services"},
         {"name": "billing", "description": "Balance, top-ups, cards and Steam"},
