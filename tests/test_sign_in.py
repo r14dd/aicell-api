@@ -61,6 +61,15 @@ def test_a_second_send_within_a_minute_is_429(anon, subscriber):
     assert response.json()["code"] == "rate_limited"
 
 
+def test_a_zero_resend_wait_lets_the_same_number_ask_again(anon, subscriber, settings):
+    settings.OTP_RESEND_AFTER = 0
+    for _ in range(3):
+        response = anon.post_json(SEND, {"msisdn": subscriber.msisdn})
+        assert response.status_code == 200
+        assert response.json()["resend_after"] == 0
+    assert sign_in(anon, subscriber.msisdn).status_code == 200
+
+
 def test_wrong_codes_count_down_and_then_the_request_is_gone(anon, subscriber):
     request_id = anon.post_json(SEND, {"msisdn": subscriber.msisdn}).json()["request_id"]
     lefts = []
