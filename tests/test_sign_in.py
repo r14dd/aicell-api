@@ -100,3 +100,9 @@ def test_a_bad_refresh_token_is_refused(anon, token):
     response = anon.post_json(REFRESH, {"refresh": token})
     assert response.status_code == 400
     assert response.json()["code"] in ("invalid_token", "validation_error")
+
+
+def test_the_resend_wait_can_be_switched_off(anon, subscriber, settings):
+    settings.OTP_RESEND_AFTER = 0
+    statuses = [anon.post_json(SEND, {"msisdn": subscriber.msisdn}).status_code for _ in range(3)]
+    assert statuses == [200, 200, 200]

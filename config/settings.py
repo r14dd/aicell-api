@@ -220,7 +220,8 @@ DEMO_MSISDN = env.text("DEMO_MSISDN", "994516643342")
 # Sign-in (users/otp/*). No SMS provider yet: every code is OTP_TEST_CODE.
 OTP_TEST_CODE = env.text("OTP_TEST_CODE", "000000")
 OTP_TTL = 300  # seconds a sign-in request lives
-OTP_RESEND_AFTER = 60  # seconds before the same number may ask again
+# Seconds before the same number may ask again; 0 switches the wait off (demos).
+OTP_RESEND_AFTER = env.number("OTP_RESEND_AFTER", 60)
 OTP_ATTEMPTS = 5  # wrong codes allowed per request
 # One-click admin sign-in as each seeded staff account, no password (api/common/demo_login.py).
 DEMO_ADMIN_LOGIN = env.flag("DEMO_ADMIN_LOGIN", False)

@@ -21,6 +21,7 @@ x-app: &app
     DEMO_AUTH: ${DEMO_AUTH:-true}
     # The sign-in code every number accepts until an SMS provider is wired in.
     OTP_TEST_CODE: ${OTP_TEST_CODE:-000000}
+    OTP_RESEND_AFTER: ${OTP_RESEND_AFTER:-60}
     DEMO_ADMIN_LOGIN: ${DEMO_ADMIN_LOGIN:-false}
     GOOGLE_PAY_SIMULATED: ${GOOGLE_PAY_SIMULATED:-true}
     SEED_STAFF_PASSWORD: ${SEED_STAFF_PASSWORD:-aicell-demo}
